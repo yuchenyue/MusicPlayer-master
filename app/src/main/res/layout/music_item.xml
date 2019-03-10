@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="#d1def4"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:layout_below="@+id/view_item"
+            android:id="@+id/albumImage"
+
+            android:layout_width="55dp"
+            android:layout_height="59dp"
+            />
+
+
+        <TextView
+            android:id="@+id/t_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_item"
+            android:layout_toRightOf="@+id/albumImage"
+            android:text="歌曲名"
+            android:textSize="15dp"
+            android:textColor="@color/textcolor"
+            android:textStyle="normal|bold|italic"/>
+
+        <TextView
+            android:id="@+id/t_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/t_songer"
+            android:textColor="@color/textcolor"
+            android:text="时长"/>
+
+        <TextView
+            android:id="@+id/t_songer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/albumImage"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/textcolor"
+            android:text="歌唱者"/>
+
+        <View
+            android:id="@+id/view_item"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d7d5d5">
+        </View>
+    </RelativeLayout>
+
+
+
+</LinearLayout>
