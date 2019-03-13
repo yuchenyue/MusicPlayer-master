@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:background="#d1def4"
+              android:background="@color/item_color"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
@@ -9,20 +9,17 @@
         android:layout_height="60dp">
 
         <ImageView
-            android:layout_below="@+id/view_item"
             android:id="@+id/albumImage"
-
-            android:layout_width="55dp"
-            android:layout_height="59dp"
-            />
-
+            android:layout_margin="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
 
         <TextView
             android:id="@+id/t_song"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/view_item"
-            android:layout_toRightOf="@+id/albumImage"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="5dp"
             android:text="歌曲名"
             android:textSize="15dp"
             android:textColor="@color/textcolor"
@@ -32,6 +29,7 @@
             android:id="@+id/t_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/t_songer"
             android:textColor="@color/textcolor"
@@ -41,8 +39,9 @@
             android:id="@+id/t_songer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/albumImage"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="80dp"
             android:textColor="@color/textcolor"
             android:text="歌唱者"/>
 
@@ -50,6 +49,8 @@
             android:id="@+id/view_item"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_alignBottom="@+id/albumImage"
+            android:layout_marginLeft="60dp"
             android:background="#d7d5d5">
         </View>
     </RelativeLayout>

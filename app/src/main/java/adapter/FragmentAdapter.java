@@ -24,6 +24,12 @@ public class FragmentAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
+        switch (position){
+            case 0:
+                return fragmentList.get(position);
+            case 1:
+                return fragmentList.get(position);
+        }
         return fragmentList.get(position);
     }
 

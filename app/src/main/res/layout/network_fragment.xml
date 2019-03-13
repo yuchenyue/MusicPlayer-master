@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <SearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:queryHint="点击搜索歌曲"
-            android:iconifiedByDefault="false"
-            android:background="#ff4081">
-        </SearchView>
-        <ListView
-            android:id="@+id/network_fragment_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/r1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:maxLength="50"
+                android:textSize="20dp"
+                android:hint="输入歌曲"
+                android:textColorHighlight="#f26c6c"/>
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="搜索"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/r1"
+            android:id="@+id/web_musicList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+
+</FrameLayout>

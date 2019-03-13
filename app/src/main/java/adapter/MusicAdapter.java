@@ -30,7 +30,6 @@ public class MusicAdapter extends BaseAdapter {
 
     public MusicAdapter(Context context, List<Music> musics){
         this.context = context;
-        this.mainActivity = mainActivity;
         this.musics = musics;
     }
     public List<Music> getMusics(){

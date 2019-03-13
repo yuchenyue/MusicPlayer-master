@@ -73,6 +73,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
         musics = MusicUtil.getmusics(mainActivity);
         musicAdapter = new MusicAdapter(mainActivity, musics);
         local_fragment_list.setAdapter(musicAdapter);
+        Log.i(TAG,"歌曲数量" + musics.size());
     }
 
     @Override

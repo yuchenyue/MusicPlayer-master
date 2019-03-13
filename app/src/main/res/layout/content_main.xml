@@ -47,7 +47,13 @@
                 android:gravity="center"
                 android:text="@string/online_music"
                 android:textSize="20sp" />
+
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d7d5d5">
+        </View>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/main_viewpager"

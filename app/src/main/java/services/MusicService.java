@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.example.ycy.musicplayer.MainActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,9 +26,8 @@ public class MusicService extends Service {
     public static final String TAG = "PlayService";
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-    private int currentPosition = 0;//记录播放歌曲位置
+    private int currentPosition = 0;//记录播放歌曲position
     public boolean isPause = false;
-
     public boolean isPause(){
         return isPause;
     }
@@ -46,6 +48,7 @@ public class MusicService extends Service {
         super.onCreate();
         mediaPlayer = new MediaPlayer();
         musics = MusicUtil.getmusics(this);
+
     }
 
     //获取当前进度值
@@ -63,10 +66,11 @@ public class MusicService extends Service {
         mediaPlayer.seekTo(msec);
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         return super.onStartCommand(intent, flags, startId);
-        
     }
     @Override
     public void onDestroy() {
@@ -106,10 +110,11 @@ public class MusicService extends Service {
                 e.printStackTrace();
             }
         }
+
     }
     //暂停
     public void pause(){
-        if (mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             isPause = true;
         }
@@ -137,5 +142,6 @@ public class MusicService extends Service {
             mediaPlayer.start();
         }
     }
+
 
 }

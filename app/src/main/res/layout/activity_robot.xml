@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.ycy.musicplayer.RobotActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_robot"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+        <ImageView
+            android:id="@+id/robot_back"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="机器人"
+            android:textSize="30sp"
+            android:typeface="sans"/>
+    </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/lv_chat_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#00000000"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="#aaaaaa">
+
+        <EditText
+            android:id="@+id/et_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="输入" />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="66dp"
+            android:layout_height="36dp"
+            android:layout_margin="5dp"
+            android:background="#444444"
+            android:text="发送"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>

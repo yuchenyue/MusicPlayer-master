@@ -3,12 +3,15 @@ package com.example.ycy.musicplayer;
 import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
+import android.view.WindowManager;
 
 import services.MusicService;
 
@@ -53,6 +56,17 @@ public class BaseActivity extends AppCompatActivity {
             unbindService(serviceConnection);
             isBound = false;
         }
+    }
+
+    public static int getScreenWidth(Context context){
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        return display.getWidth();
+    }
+    public static int getScreenHeight(Context context){
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        return display.getHeight();
     }
 
 }
