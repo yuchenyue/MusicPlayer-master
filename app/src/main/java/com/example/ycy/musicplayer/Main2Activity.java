@@ -10,14 +10,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.nio.file.FileStore;
 
 public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG="Main2Activity";
 
     ImageView use_giveup,use_save;
-    TextView tv_use_name;
-    EditText et_use_name;
+    TextView tv_use_name,tv_use_log;
+    EditText et_use_name,et_use_log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +34,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
-
         et_use_name = (EditText) findViewById(R.id.et_use_name);
         tv_use_name = (TextView) findViewById(R.id.tv_use_name);
         use_giveup = (ImageView) findViewById(R.id.use_giveup);
@@ -44,16 +46,21 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.use_giveup:
-                setResult(RESULT_CANCELED, null);
+                setResult(RESULT_CANCELED,null);
                 finish();
                 break;
             case R.id.use_save:
-                String usename = et_use_name.getText().toString().trim();
-                Uri data = Uri.parse(usename);
-                Intent result = new Intent(null,data);
-                setResult(RESULT_OK,result);
+                String usename = et_use_name.getText().toString();
+                if (usename.equals("")){
+                    Toast.makeText(getApplicationContext(),"昵称不能为空，还是取个名字吧~",Toast.LENGTH_LONG).show();
+                }else {
+                    Uri data = Uri.parse(usename);
+                    Intent intent = new Intent(null,data);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
                 Log.i(TAG,"用户信息" + usename);
-                finish();
+
                 break;
             default:
                 break;

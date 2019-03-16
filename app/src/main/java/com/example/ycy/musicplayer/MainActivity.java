@@ -1,15 +1,14 @@
 package com.example.ycy.musicplayer;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -26,30 +25,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.FragmentAdapter;
 import entity.Music;
-import entity.NetMusic;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
-import okhttp3.internal.Util;
 import utils.MusicUtil;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener , LocalFragment.CallBackValue, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "MainActivity";
     private static final int SUBACTIVITY = 1;//子Activity回传标记
-    public static final String ACTION_UPDATEUI = "action.updateUI";
-    BroadcastReceiver broadcastReceiver;
-    int p =0;
-    private static boolean state = false;//播放状态
-    TextView main_my_music_tv,main_online_music_tv;//本地音乐、在线音乐
+    public MyReceiver receiver = null;
+    int p = 0;
+    private static int state = 2;//播放状态
+    TextView main_my_music_tv, main_online_music_tv;//本地音乐、在线音乐
     ViewPager main_viewpager;
-    TextView main_musicName,main_author;
+    TextView main_musicName, main_author;
     ImageView main_image;//底部常驻栏图片
     ImageView main_up;//上一首
     ImageView main_pause_play;//暂停播放
@@ -58,7 +52,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     List<Fragment> fragmentList;
     List<Music> musics;
     private static boolean isExit = false;
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -83,6 +77,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         navigationView.setNavigationItemSelectedListener(this);
 
         //动态注册广播
+        receiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("services.MusicService");
+        registerReceiver(receiver, filter);
+        Log.i(TAG, "MainActivity--create");
 
 
         //初始化控件
@@ -94,9 +93,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         fragmentList.add(new LocalFragment());
         fragmentList.add(new NetworkFragment());
         //设置适配器
-        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(),fragmentList,musics);
+        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragmentList, null);
         main_viewpager.setAdapter(fragmentAdapter);
+
+        musics = MusicUtil.getmusics(this);
     }
+
     //初始化控件
     private void initView() {
 
@@ -116,47 +118,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         main_next.setOnClickListener(this);
 
     }
+
     //本地、网络选择
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.main_my_music_tv:
-                Log.d(TAG,"本地音乐");
+                Log.d(TAG, "本地音乐");
                 main_viewpager.setCurrentItem(0);
                 break;
             case R.id.main_online_music_tv:
-                Log.d(TAG,"网络音乐");
+                Log.d(TAG, "网络音乐");
                 main_viewpager.setCurrentItem(1);
                 break;
             //主界面上一首键
             case R.id.main_up:
                 if (musicService.isPlaying()) {
                     musicService.up();
-                    state = true;
+                    state = 1;
                 } else if (musicService.isPause()) {
                     musicService.up();
-                    state = true;
+                    state = 1;
                     main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                 }
-                Log.d(TAG,"up");
+                Log.d(TAG, "up");
                 break;
             //主界面暂停播放键
             case R.id.main_pause_play:
                 if (musicService.isPlaying()) {
                     musicService.pause();
-                    Log.d(TAG,"pasue");
-                    state = false;
+                    Log.d(TAG, "pasue");
+                    state = 1;
                     main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
                 } else {
                     if (musicService.isPause()) {
                         musicService.start();
-                        Log.d(TAG,"play");
-                        state = true;
+                        Log.d(TAG, "play");
+                        state = 1;
                         main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                     } else {
                         musicService.play(0);
-                        Log.d(TAG,"play0");
-                        state = true;
+                        Log.d(TAG, "play0");
+                        state = 1;
                         main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                     }
                 }
@@ -165,24 +168,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
             case R.id.main_next:
                 if (musicService.isPlaying()) {
                     musicService.next();
-                    state = true;
+                    state = 1;
                 } else if (musicService.isPause()) {
                     musicService.next();
-                    state = true;
+                    state = 1;
                     main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                 }
-                Log.d(TAG,"next");
+                Log.d(TAG, "next");
 
                 break;
             case R.id.main_image:
-                Log.d(TAG,"点击了图片");
-                Intent intent = new Intent(this,PlayActivity.class);
+                Log.d(TAG, "点击了图片");
+                Intent intent = new Intent(this, PlayActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("state",state);
-                bundle.putInt("po",p);
+                bundle.putInt("state", state);
+                bundle.putInt("po", p);
                 intent.putExtras(bundle);
+                Log.i(TAG, "----" + p + state);
                 startActivity(intent);
-                Log.i(TAG,"----" + p + state);
             default:
                 break;
         }
@@ -190,19 +193,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
 
     //按两次返回键退出程序
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if (keyCode == KeyEvent.KEYCODE_BACK){
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
             return false;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
-    private void exit(){
-        if (!isExit){
+
+    private void exit() {
+        if (!isExit) {
             isExit = true;
-            Toast.makeText(getApplicationContext(),"再按一次退出程序",Toast.LENGTH_SHORT).show();
-            mHandler.sendEmptyMessageDelayed(0,2000);
-        }else{
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
             finish();
             System.exit(0);
         }
@@ -211,25 +215,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
-    }
-
-    //实现Fragment回调方法，实现与Fragment进行传值
-    @Override
-    public void SendMessageValue(int strValue) {
-        p = strValue;//fragment传来的位置position
-        Log.i(TAG,"从LocalFragment点击的item传递过来的position---" + strValue);
-    }
-
-    @Override
-    public void SendMessageValue(boolean strValue_1) {
-        state = strValue_1;
-        Log.i(TAG,"从MainActivity传递过来的播放状态---" + strValue_1);
+        unregisterReceiver(receiver);
+        Log.i(TAG, "MainActivity--destroy");
     }
 
 
     /**
      * 侧滑
+     *
      * @param
      */
     @Override
@@ -239,12 +232,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
         if (id == R.id.robot) {
             //对话机器人
-            Intent intent = new Intent(this,RobotActivity.class);
+            Intent intent = new Intent(this, RobotActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             //修改信息
-            Intent intent = new Intent(this,Main2Activity.class);
-            startActivityForResult(intent,SUBACTIVITY);
+            Intent intent = new Intent(this, Main2Activity.class);
+            startActivityForResult(intent, SUBACTIVITY);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -260,15 +253,93 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     //子activity带回的信息更新
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        switch (requestCode){
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
             case SUBACTIVITY:
-                Uri uriData = data.getData();
-                tv_name = (TextView) findViewById(R.id.tv_name);
-                tv_name.setText(uriData.toString());
+                Log.i(TAG, "259");
+                if (resultCode == Activity.RESULT_OK){
+                    Log.i(TAG, "261");
+                    Uri uriData = data.getData();
+                    tv_name = (TextView) findViewById(R.id.tv_name);
+                    tv_name.setText(uriData.toString());
+                }else if (resultCode == Activity.RESULT_CANCELED){
+                    Log.i(TAG, "266");
+                }
+                break;
+            default:
+                break;
         }
     }
 
     //广播接收器
+    private class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            final int position = bundle.getInt("count");
+            final int state_s = bundle.getInt("state");
+            state = state_s;
+            p = position;
+            Log.i(TAG, "MainActivity得到的值" + position);
+            Log.i(TAG, "MainActivity得道的状态" + state_s);
+            if (position != -1) {
+                final Music music = musics.get(position);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        main_musicName.setText(music.getSong());
+                        main_author.setText(music.getSonger());
+                        main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                        if (state == 1) {
+                            main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                        } else {
+                            main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
+                        }
 
+                    }
+                });
+            }
+
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "MainActivity--pause");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        receiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("services.MusicService");
+        registerReceiver(receiver, filter);
+
+        if (p != -1) {
+            p = musicService.getCurrentProgress();
+            Log.i(TAG, "MainActivity--runUiThread" + musicService.getCurrentProgress());
+            state = musicService.getState();
+            Log.i(TAG, "MainActivity--runUiThread" + musicService.getState());
+            final Music music = musics.get(p);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i(TAG, "MainActivity--runUiThread---" + p);
+                    main_musicName.setText(music.getSong());
+                    main_author.setText(music.getSonger());
+                    main_image.setImageBitmap(MusicUtil.getArtwork(getApplicationContext(), music.getId(), music.getAlbum_id(), true, false));
+                    if (state == 1) {
+                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                    } else {
+                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
+                    }
+
+                }
+            });
+        }
+        Log.i(TAG, "MainActivity--restart");
+    }
 }

@@ -1,5 +1,11 @@
 package utils;
 
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ClickableSpan;
+import android.view.View;
+import android.widget.TextView;
+
 import com.google.gson.Gson;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +23,7 @@ import entity.Result;
 public class RobotUtils {
 
     private static final String URL="http://www.tuling123.com/openapi/api";
-    private static final String API_KEY = "8e2ff59ee44846bf93d621c5e29bf53e";
+    private static final String API_KEY = "ba585e8f3db74bfba4c1d4edb7a86144";
     /**
      * 发送消息到服务器
      *
@@ -31,7 +37,12 @@ public class RobotUtils {
         if (gsonResult != null) {
             try {
                 Result result = gson.fromJson(gsonResult, Result.class);
-                chatMessage.setMessage(result.getText() + result.getUrl());
+                if (result.getUrl() == null){
+                    chatMessage.setMessage(result.getText());
+                }else{
+                    chatMessage.setMessage(result.getText() + result.getUrl());
+
+                }
             } catch (Exception e) {
                 chatMessage.setMessage("服务器繁忙，请稍候再试...");
             }
@@ -69,7 +80,6 @@ public class RobotUtils {
                 baos.write(buff, 0, len);
             }
             System.out.println("------------result = " + baos.size());
-
             baos.flush();
             result = new String(baos.toByteArray());
 

@@ -2,22 +2,30 @@ package com.example.ycy.musicplayer;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import entity.Music;
 import utils.MusicUtil;
 
-public class PlayActivity extends BaseActivity implements View.OnClickListener {
+public class PlayActivity extends BaseActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     public static final String TAG = "PlayActivity";
     ImageView imageView_back, play_background;//返回,中心图片
@@ -26,10 +34,13 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
     TextView listen_title_tv, Listen_artist_tv;//歌名，歌手
     TextView listen_current, listen_length;//时间，总时长
     SeekBar listen_jindutiao;//进度条
-    int positions;
+    int positions = 0;
+    int totaTime;
     ObjectAnimator animator, animator_zz, animator_pb;
     List<Music> musics;
-    private static boolean state;
+    private static int state = 2;
+    public PlayReceiver preceiver = null;
+    private Handler mHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,28 +49,72 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
         Log.d(TAG, "PlayActivity绑定服务");
         bindMusicService();
         //接收传值
-        state = getIntent().getBooleanExtra("state", false);
+        state = getIntent().getIntExtra("state",2);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的播放状态---" + state);
-
         positions = getIntent().getIntExtra("po", 0);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的position---" + positions);
+
+        //动态注册广播
+        preceiver = new PlayReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("services.MusicService");
+        registerReceiver(preceiver, filter);
 
         musics = MusicUtil.getmusics(this);
         //绑定ID
         initView();
         onDraw();
     }
+
+    //广播接收器
+    private class PlayReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            final int position = bundle.getInt("count");
+            final int state_s = bundle.getInt("state");
+            state = state_s;
+            positions = position;
+            Log.i(TAG, "PlayActivity得到的值" + position);
+            Log.i(TAG, "PlayActivity得道的状态" + state_s);
+            if (position != -1) {
+                final Music music = musics.get(position);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listen_title_tv.setText(music.getSong());
+                        Listen_artist_tv.setText(music.getSonger());
+                        listen_length.setText(MusicUtil.formatTime(music.getDuration()));
+                        play_background.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                        if (state == 1) {
+                            listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                        } else {
+                            listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
+                        }
+
+                    }
+                });
+            }
+
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
         Log.d(TAG, "解绑服务 onPause");
-        unbindMusicService();
+
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "解绑服务 onDestroy");
+        mHandler.removeCallbacks(mRunnable);
+        unregisterReceiver(preceiver);
+        unbindMusicService();
     }
+
     //黑胶唱片
     public void onDraw() {
         //唱盘
@@ -68,12 +123,11 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
         animator.setInterpolator(new LinearInterpolator());
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.INFINITE);
-//        animator.start();
         //唱针
-        animator_zz = ObjectAnimator.ofFloat(listen_zhizhen, "rotation", -20, 0);
+        animator_zz = ObjectAnimator.ofFloat(listen_zhizhen, "rotation", 0, 20);
         listen_zhizhen.setPivotX(0);
         listen_zhizhen.setPivotY(0);
-        animator_zz.setDuration(800);
+        animator_zz.setDuration(1000);
         animator_zz.setInterpolator(new LinearInterpolator());
         //中心图
         animator_pb = ObjectAnimator.ofFloat(play_background, "rotation", 0, 360);
@@ -82,11 +136,9 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
         animator_pb.setRepeatCount(ValueAnimator.INFINITE);
         animator_pb.setRepeatMode(ValueAnimator.INFINITE);
 //        animator_pb.start();
-        Log.i(TAG,"ZZ1---" + state);
-        if (state != false){
-            Log.i(TAG,"ZZ2---" + state);
-//            animator_zz.start();
-            animator_pb.start();
+        Log.i(TAG, "ZZ1---" + state);
+        if (state == 1) {
+            onDraw_play();
         }
     }
     //动态黑胶唱片
@@ -95,6 +147,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
         animator_pb.start();
         animator_zz.start();
     }
+
     private void initView() {
         Music music = musics.get(positions);
         //唱片中间专辑图
@@ -119,16 +172,46 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
         listen_length.setText(MusicUtil.formatTime(music.getDuration()));
         //进度条
         listen_jindutiao = (SeekBar) findViewById(R.id.listen_jindutiao);
-        listen_jindutiao.setProgress(0);
         listen_jindutiao.setMax(music.getDuration());
+        listen_jindutiao.setOnSeekBarChangeListener(this);
+        mHandler.post(mRunnable);
 
         listen_pause = (ImageView) findViewById(R.id.listen_pause);
+        if (state == 1){
+            listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+        }else{
+            listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
+        }
         listen_up = (ImageView) findViewById(R.id.listen_up);
         listen_next = (ImageView) findViewById(R.id.listen_next);
         listen_pause.setOnClickListener(this);
         listen_up.setOnClickListener(this);
         listen_next.setOnClickListener(this);
     }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser){
+            musicService.seekToPosition(seekBar.getProgress());
+        }
+    }
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
+
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            listen_jindutiao.setProgress(musicService.getCurrentPosition());
+            listen_current.setText(MusicUtil.formatTime(musicService.getCurrentPosition()));
+            mHandler.postDelayed(mRunnable,1000);
+            Log.i(TAG,"当前时间---" + MusicUtil.formatTime(musicService.getCurrentPosition()));
+        }
+    };
+
 
     @Override
     public void onClick(View v) {
@@ -138,13 +221,13 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.listen_up:
                 Log.d(TAG, "点击了上一首");
-                change_up();
+                change();
                 if (musicService.isPlaying()) {
                     musicService.up();
-                    state = true;
+                    state = 1;
                 } else if (musicService.isPause()) {
                     musicService.up();
-                    state = true;
+                    state = 1;
                     onDraw_play();
                     listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                 }
@@ -156,16 +239,16 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
                     animator_pb.cancel();
                     listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
                     musicService.pause();
-                    state = false;
+                    state = 2;
                 } else {
                     if (musicService.isPause()) {
                         onDraw_play();
                         listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                         musicService.start();
-                        state = true;
+                        state = 1;
                     } else {
                         musicService.play(positions);
-                        state = true;
+                        state = 1;
                         onDraw_play();
                         listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                     }
@@ -173,13 +256,13 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.listen_next:
                 Log.d(TAG, "点击了下一曲");
-                change_next();
+                change();
                 if (musicService.isPlaying()) {
                     musicService.next();
-                    state = true;
+                    state = 1;
                 } else if (musicService.isPause()) {
                     musicService.next();
-                    state = true;
+                    state = 1;
                     onDraw_play();
                     listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
                 }
@@ -190,53 +273,15 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
     }
 
     //切换中心图
-    public void change_next() {
-        int ps;
-        if (state = true) {
-            ps = musicService.getCurrentPosition();
-            if (ps + 1 <= musics.size() - 1) {
-                ps = ps + 1;
-            } else {
-                ps = 0;
-            }
-            Music music = musics.get(ps);
-            Log.i(TAG, "中心图的id---" + ps + "歌名" + music.getSong());
-            Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, true);
-            play_background.setImageBitmap(play_backgroundBitmap);
-            listen_title_tv.setText(music.getSong());
-            Listen_artist_tv.setText(music.getSonger());
-            listen_length.setText(MusicUtil.formatTime(music.getDuration()));
-        } else if (state = false) {
-            ps = positions;
-            if (ps + 1 <= musics.size() - 1) {
-                ps = ps + 1;
-            } else {
-                ps = 0;
-            }
-            Music music = musics.get(ps);
-            Log.i(TAG, "中心图的id---" + ps + "歌名" + music.getSong());
-            Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, true);
-            play_background.setImageBitmap(play_backgroundBitmap);
-            listen_title_tv.setText(music.getSong());
-            Listen_artist_tv.setText(music.getSonger());
-            listen_length.setText(MusicUtil.formatTime(music.getDuration()));
-        }
-    }
-
-    public void change_up() {//ps 0-11
-        int ps = musicService.getCurrentPosition();
-        if (ps - 1 >= 0) {
-            ps = ps - 1;
-        } else {
-            ps = musics.size() - 1;
-        }
-        Music music = musics.get(ps);
-        Log.i(TAG, "中心图的id---" + ps + "歌曲ID" + music.getSong());
+    public void change() {
+        Music music = musics.get(musicService.getCurrentProgress());
+        Log.i(TAG, "中心图的id---" + musicService.getCurrentProgress() + "歌曲ID" + music.getSong());
         Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, true);
         play_background.setImageBitmap(play_backgroundBitmap);
         listen_title_tv.setText(music.getSong());
         Listen_artist_tv.setText(music.getSonger());
-        listen_length.setText(MusicUtil.formatTime(music.getDuration()));
+        listen_jindutiao.setProgress(0);
+        listen_jindutiao.setMax(music.getDuration());
     }
 
 }

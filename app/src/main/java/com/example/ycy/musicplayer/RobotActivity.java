@@ -4,7 +4,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.Window;
 
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +50,7 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_robot);
         initView();
         initDate();
+
     }
 
     private void initDate() {

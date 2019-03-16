@@ -6,7 +6,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 
 import com.example.ycy.musicplayer.MainActivity;
@@ -26,7 +28,8 @@ public class MusicService extends Service {
     public static final String TAG = "PlayService";
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-    private int currentPosition = 0;//记录播放歌曲position
+    public int currentProgress;//歌曲位置
+    private static int state = 2;
     public boolean isPause = false;
     public boolean isPause(){
         return isPause;
@@ -37,39 +40,43 @@ public class MusicService extends Service {
         }
         return false;
     }
-    public MusicService(){
-
+    //歌曲位置
+    public int getCurrentProgress(){
+        return currentProgress;
     }
+
+    public void seekToPosition(int msec){
+        mediaPlayer.seekTo(msec);
+    }
+    //播放进度
     public int getCurrentPosition(){
-            return currentPosition;
+        if (mediaPlayer != null && mediaPlayer.isPlaying()){
+            return mediaPlayer.getCurrentPosition();
+        }
+        return 0;
+    }
+
+    public MusicService(){
+    }
+
+    public int getState(){
+        return state;
     }
     @Override
     public void onCreate() {
         super.onCreate();
         mediaPlayer = new MediaPlayer();
         musics = MusicUtil.getmusics(this);
-
+       mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+           @Override
+           public void onCompletion(MediaPlayer mp) {
+               next();
+           }
+       });
     }
-
-    //获取当前进度值
-    public int getCurrentProgress() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()){
-            return mediaPlayer.getCurrentPosition();
-        }
-        return 0;
-    }
-    //getDduration获取文件的持续时间
-    public int getDuration(){
-        return mediaPlayer.getDuration();
-    }
-    public void seekto(int msec){
-        mediaPlayer.seekTo(msec);
-    }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         return super.onStartCommand(intent, flags, startId);
     }
     @Override
@@ -96,6 +103,9 @@ public class MusicService extends Service {
             return MusicService.this;
         }
     }
+
+
+
     //播放
     public void play(int position){
         if (position >= 0 && position < musics.size()){
@@ -105,43 +115,67 @@ public class MusicService extends Service {
                 mediaPlayer.setDataSource(this, Uri.parse(music.getUrl()));
                 mediaPlayer.prepare();
                 mediaPlayer.start();
-                currentPosition = position;
+                currentProgress = position;
+                state = 1;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
+        chuandi();
     }
+
+
     //暂停
     public void pause(){
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             isPause = true;
+            state = 2;
         }
+        chuandi();
     }
     //下一首
     public void next(){
-        if (currentPosition >= musics.size()-1){
-            currentPosition=0;
+        if (currentProgress >= musics.size()-1){
+            currentProgress=0;
         }else{
-            currentPosition++;
+            currentProgress++;
         }
-        play(currentPosition);
+        play(currentProgress);
+        chuandi();
     }
     //上一首
     public void up(){
-        if (currentPosition-1 < 0){
-            currentPosition = musics.size()-1;
+        if (currentProgress-1 < 0){
+            currentProgress = musics.size()-1;
         }else{
-            currentPosition--;
+            currentProgress--;
         }
-        play(currentPosition);
+        play(currentProgress);
     }
     public void start(){
         if (mediaPlayer!=null&&!mediaPlayer.isPlaying()){
             mediaPlayer.start();
+            state = 1;
         }
     }
 
+    public void chuandi(){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putInt("count",currentProgress);
+        if (mediaPlayer.isPlaying()){
+            state = 1;
+            bundle.putInt("state",state);
+        }else {
+            state = 2;
+            bundle.putInt("state",state);
+        }
+        intent.putExtras(bundle);
+        intent.setAction("services.MusicService");
+        Log.i(TAG,"Service传出的currentPosition" + currentProgress);
+        Log.i(TAG,"Service传出的播放状态" + state);
+        sendBroadcast(intent);
+    }
 
 }

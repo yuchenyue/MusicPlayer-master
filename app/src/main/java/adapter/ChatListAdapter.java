@@ -20,10 +20,6 @@ public class ChatListAdapter extends BaseAdapter {
     private List<ChatMessage> mList;
     private LayoutInflater inflater;
 
-    //定义常量,区分收发信息
-    public static final int chat_left = 1;//收
-    public static final int chat_right = 2;//发
-
     //构造器
     public ChatListAdapter(Context context,List<ChatMessage> mList) {
         inflater = LayoutInflater.from(context);

@@ -26,24 +26,19 @@ import utils.MusicUtil;
 
 public class LocalFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "LocalFragment";
     ListView local_fragment_list;
     public List<Music> musics;
     public MusicAdapter musicAdapter;
     public HashMap<String, String> map;
     MainActivity mainActivity;
-    CallBackValue callBackValue;
-    private static boolean state = false;
+//    CallBackValue callBackValue;
+    public static int state = 2;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) context;
-        if (context instanceof CallBackValue) {//回调
-            callBackValue = (CallBackValue) context;
-        }else {
-            throw new RuntimeException(context.toString()+"chuandicuowu");
-        }
     }
 
     @Override
@@ -79,18 +74,9 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mainActivity.musicService.play(position);//点击这个item
-        state = true;
+        state = 1;
         Log.i(TAG, "LocalFragment传出position----" + position);
-        int strValue = position;
-        boolean strValue_1 = state;
-        callBackValue.SendMessageValue(strValue);
-        callBackValue.SendMessageValue(strValue_1);
-
     }
 
-    //回调接口,实现与activity传值
-    public interface CallBackValue {
-        public void SendMessageValue(int strValue);
-        public void SendMessageValue(boolean strValue_1);
-    }
+
 }

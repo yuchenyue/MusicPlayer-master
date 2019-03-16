@@ -63,13 +63,13 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.btn_search:
                 search_s = search_text.getText().toString().trim();
-                if (netMusicList == null) {
-                    getNetMusicList(search_s);
-                    Log.d(TAG,"NetworkFragment--11--" +search_s);
-                } else {
+//                if (netMusicList == null) {
+//                    getNetMusicList(search_s);
+//                    Log.d(TAG,"NetworkFragment--11--" +search_s);
+//                } else {
                     getNetMusicList(search_s);
                     Log.d(TAG,"NetworkFragment--22--" +search_s);
-                }
+//                }
                 break;
             default:
                 break;
@@ -79,7 +79,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
 
     private void getNetMusicList(String s) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<NetMusic> musicCall = mApi.getMusic("579621905",s,"song",100,0);
+        Call<NetMusic> musicCall = mApi.getMusic("579621905",s,"song",50,0);
         musicCall.enqueue(new Callback<NetMusic>() {
             @Override
             public void onResponse(Call<NetMusic> call, final Response<NetMusic> response) {
@@ -87,8 +87,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                     netMusicList = response.body().getData();
 
                     Log.i(TAG,"歌名--" + netMusicList.get(0).getName() +netMusicList.get(0).getSinger());
-                    Log.i(TAG,"歌名--" + netMusicList.get(1).getName() +netMusicList.get(1).getSinger());
-                    Log.i(TAG,"歌名--" + netMusicList.get(2).getName() +netMusicList.get(2).getSinger());
+                    Log.i(TAG,"显示了--" + netMusicList.size() + "首歌曲");
 
                     //写个适配器
                     web_musicList.setLayoutManager(layoutManager);
