@@ -28,44 +28,58 @@ public class SplashActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
-        //权限申请
+
         quanxian();
         //启动服务
         startService(new Intent(this, MusicService.class));
+        //点击跳过按钮直接进入主界面
         button_splash = findViewById(R.id.button_splash);
         button_splash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InMainActivity = true;
-                startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
         });
-        handler.sendEmptyMessageDelayed(START_ACTIVITY,3000);
+
+        handler.sendEmptyMessageDelayed(START_ACTIVITY, 3000);
     }
-    //申请权限
+
+    /**
+     * 申请权限
+     */
     private void quanxian() {
         try {
             if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 权限申请回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
-    public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-        }else {
+        } else {
             //回调实现
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    //延时自动进入MainActivity
-    public Handler handler = new Handler(){
+    /**
+     * 延时3s自动进入MainActivity
+     */
+    public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             //如果InMainActivity == false，则进入MainActivity，为了避免重复进入MainActivity

@@ -7,7 +7,7 @@ import java.util.List;
 
 import entity.NetMusic;
 
-public class MyApplication extends Application{
+public class MyApplication extends Application {
 
     public static Boolean getIsWeb() {
         return isWeb;
@@ -39,6 +39,7 @@ public class MyApplication extends Application{
     }
 
     private static List<NetMusic.DataBean> musicList;
+
     @Override
     public void onCreate() {
         super.onCreate();

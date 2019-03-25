@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="360dp"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="360dp"
+    android:orientation="vertical">
 
     //背景图
 
@@ -12,8 +11,7 @@
         android:layout_width="168dp"
         android:layout_height="168dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="142dp"
-        android:background="@drawable/btn_circle"/>
+        android:layout_marginTop="142dp" />
 
     //设置唱片圆盘
 
@@ -23,7 +21,7 @@
         android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:src="@drawable/ic_disc"/>
+        android:src="@drawable/ic_disc" />
 
     //设置圆盘上的指针
 
@@ -31,9 +29,9 @@
         android:id="@+id/listen_zhizhen"
         android:layout_width="100dp"
         android:layout_height="150dp"
-        android:src="@drawable/ic_needle"
-        android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/listen_changpian"
-        android:layout_marginTop="-10dp" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="-10dp"
+        android:src="@drawable/ic_needle" />
 
 </RelativeLayout>

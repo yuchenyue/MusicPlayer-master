@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,15 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import com.example.ycy.musicplayer.MainActivity;
+import android.widget.Toast;
+
 import com.example.ycy.musicplayer.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import adapter.WebRecyclerViewAdapter;
 import entity.NetMusic;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,22 +35,23 @@ import utils.MyApplication;
 
 public class NetworkFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG ="NetworkFragment";
+    private static final String TAG = "NetworkFragment";
     private RecyclerView web_musicList;
     public LinearLayoutManager layoutManager;
     public WebRecyclerViewAdapter adapter;
-    public List<NetMusic.DataBean> netMusicList = new ArrayList<>();
+    public List<NetMusic.DataBean> netMusicList = new ArrayList<NetMusic.DataBean>();
     private EditText search_text;
     private Button btn_search;
     private String search_s;
+    Context context;
+
     public NetworkFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.network_fragment,container,false);
+        View view = inflater.inflate(R.layout.network_fragment, container, false);
 
         web_musicList = view.findViewById(R.id.web_musicList);
         layoutManager = new LinearLayoutManager(MyApplication.getContext());
@@ -60,16 +64,21 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_search:
                 search_s = search_text.getText().toString().trim();
-//                if (netMusicList == null) {
-//                    getNetMusicList(search_s);
-//                    Log.d(TAG,"NetworkFragment--11--" +search_s);
-//                } else {
-                    getNetMusicList(search_s);
-                    Log.d(TAG,"NetworkFragment--22--" +search_s);
-//                }
+                if (search_s.equals("")){
+                    Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "可能没有这首歌" + search_s);
+                }else{
+                    if (netMusicList == null) {
+                        getNetMusicList(search_s);
+                    }else{
+                        getNetMusicList(search_s);
+                    }
+                }
+
+                Log.d(TAG, "NetworkFragment--22--" + search_s);
                 break;
             default:
                 break;
@@ -79,20 +88,27 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
 
     private void getNetMusicList(String s) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<NetMusic> musicCall = mApi.getMusic("579621905",s,"song",50,0);
+        Call<NetMusic> musicCall = mApi.getMusic("579621905", s, "song", 20, 0);
         musicCall.enqueue(new Callback<NetMusic>() {
             @Override
             public void onResponse(Call<NetMusic> call, final Response<NetMusic> response) {
                 if (response.code() != 400) {
+                    Log.d(TAG, "NetworkFragment--87--");
                     netMusicList = response.body().getData();
+                    if (netMusicList != null) {
+                        //写个适配器
+                        web_musicList.setLayoutManager(layoutManager);
+                        adapter = new WebRecyclerViewAdapter(getContext(), netMusicList);
+                        web_musicList.setAdapter(adapter);
+                    } else {
+                        nList();
+                        Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
+                    }
 
-                    Log.i(TAG,"歌名--" + netMusicList.get(0).getName() +netMusicList.get(0).getSinger());
-                    Log.i(TAG,"显示了--" + netMusicList.size() + "首歌曲");
+                    Log.i(TAG, "歌名--" + netMusicList.get(0).getName() + netMusicList.get(0).getSinger());
+                    Log.i(TAG, "显示了--" + netMusicList.size() + "首歌曲");
 
-                    //写个适配器
-                    web_musicList.setLayoutManager(layoutManager);
-                    adapter = new WebRecyclerViewAdapter(getContext(),netMusicList);
-                    web_musicList.setAdapter(adapter);
+
                 }
 
             }
@@ -103,6 +119,10 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    public List nList() {
+        List nList = Collections.EMPTY_LIST;
+        return nList;
+    }
 
     public void setNetMusicList(String s) {
         getNetMusicList(s);

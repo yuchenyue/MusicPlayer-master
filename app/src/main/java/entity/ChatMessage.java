@@ -7,6 +7,7 @@ public class ChatMessage {
     private String message;
     private Type type;
     private Date date;
+
     public ChatMessage() {
 
     }

@@ -12,10 +12,11 @@ import entity.Music;
  * Created by Administrator on 2019/1/16.
  */
 
-public class FragmentAdapter extends FragmentPagerAdapter{
+public class FragmentAdapter extends FragmentPagerAdapter {
 
     List<Fragment> fragmentList;
     List<Music> musics;
+
     public FragmentAdapter(FragmentManager fm, List<Fragment> fragmentList, List<Music> musics) {
         super(fm);
         this.fragmentList = fragmentList;
@@ -24,7 +25,7 @@ public class FragmentAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return fragmentList.get(position);
             case 1:

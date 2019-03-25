@@ -7,14 +7,12 @@
     android:orientation="vertical"
     tools:context="com.example.ycy.musicplayer.Main2Activity">
 
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay">
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,16 +22,15 @@
                 android:id="@+id/use_giveup"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/giveup"/>
+                android:src="@drawable/giveup" />
 
             <ImageView
                 android:id="@+id/use_save"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/save"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:src="@drawable/save" />
         </RelativeLayout>
-
 
     </android.support.v7.widget.Toolbar>
 

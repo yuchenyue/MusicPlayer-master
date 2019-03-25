@@ -19,6 +19,7 @@ import java.util.List;
 import adapter.MusicAdapter;
 import entity.Music;
 import utils.MusicUtil;
+import utils.MyApplication;
 
 /**
  * Created by Administrator on 2019/1/14.
@@ -30,9 +31,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     ListView local_fragment_list;
     public List<Music> musics;
     public MusicAdapter musicAdapter;
-    public HashMap<String, String> map;
     MainActivity mainActivity;
-//    CallBackValue callBackValue;
     public static int state = 2;
 
     @Override
@@ -47,20 +46,17 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
         local_fragment_list = view.findViewById(R.id.local_fragment_list);
         local_fragment_list.setOnItemClickListener(this);
         loadData();
-        mainActivity.bindMusicService();
         return view;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mainActivity.unbindMusicService();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mainActivity.unbindMusicService();
     }
 
     //加载本地音乐列表
@@ -68,12 +64,13 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
         musics = MusicUtil.getmusics(mainActivity);
         musicAdapter = new MusicAdapter(mainActivity, musics);
         local_fragment_list.setAdapter(musicAdapter);
-        Log.i(TAG,"歌曲数量" + musics.size());
+        Log.i(TAG, "歌曲数量" + musics.size());
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mainActivity.musicService.play(position);//点击这个item
+        mainActivity.musicService.play(position);
+        MyApplication.setIsWeb(false);
         state = 1;
         Log.i(TAG, "LocalFragment传出position----" + position);
     }

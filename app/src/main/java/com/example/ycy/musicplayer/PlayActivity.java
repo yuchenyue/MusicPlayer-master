@@ -9,17 +9,13 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import entity.Music;
@@ -35,7 +31,6 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
     TextView listen_current, listen_length;//时间，总时长
     SeekBar listen_jindutiao;//进度条
     int positions = 0;
-    int totaTime;
     ObjectAnimator animator, animator_zz, animator_pb;
     List<Music> musics;
     private static int state = 2;
@@ -49,7 +44,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         Log.d(TAG, "PlayActivity绑定服务");
         bindMusicService();
         //接收传值
-        state = getIntent().getIntExtra("state",2);
+        state = getIntent().getIntExtra("state", 2);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的播放状态---" + state);
         positions = getIntent().getIntExtra("po", 0);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的position---" + positions);
@@ -66,7 +61,9 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         onDraw();
     }
 
-    //广播接收器
+    /**
+     * 广播接收器 更新UI
+     */
     private class PlayReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, Intent intent) {
@@ -91,7 +88,6 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
                         } else {
                             listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
                         }
-
                     }
                 });
             }
@@ -103,7 +99,6 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
     public void onPause() {
         super.onPause();
         Log.d(TAG, "解绑服务 onPause");
-
     }
 
     @Override
@@ -115,11 +110,13 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         unbindMusicService();
     }
 
-    //黑胶唱片
+    /**
+     * 黑胶唱片
+     */
     public void onDraw() {
         //唱盘
         animator = ObjectAnimator.ofFloat(listen_changpian, "rotation", 0, 360);
-        animator.setDuration(10000);
+        animator.setDuration(15000);
         animator.setInterpolator(new LinearInterpolator());
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.INFINITE);
@@ -127,27 +124,31 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         animator_zz = ObjectAnimator.ofFloat(listen_zhizhen, "rotation", 0, 20);
         listen_zhizhen.setPivotX(0);
         listen_zhizhen.setPivotY(0);
-        animator_zz.setDuration(1000);
+        animator_zz.setDuration(500);
         animator_zz.setInterpolator(new LinearInterpolator());
         //中心图
         animator_pb = ObjectAnimator.ofFloat(play_background, "rotation", 0, 360);
-        animator_pb.setDuration(10000);
+        animator_pb.setDuration(15000);
         animator_pb.setInterpolator(new LinearInterpolator());
         animator_pb.setRepeatCount(ValueAnimator.INFINITE);
         animator_pb.setRepeatMode(ValueAnimator.INFINITE);
-//        animator_pb.start();
-        Log.i(TAG, "ZZ1---" + state);
         if (state == 1) {
             onDraw_play();
         }
     }
-    //动态黑胶唱片
+
+    /**
+     * 动态黑胶唱片
+     */
     public void onDraw_play() {
         animator.start();
         animator_pb.start();
         animator_zz.start();
     }
 
+    /**
+     * 实例化组件
+     */
     private void initView() {
         Music music = musics.get(positions);
         //唱片中间专辑图
@@ -177,9 +178,9 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         mHandler.post(mRunnable);
 
         listen_pause = (ImageView) findViewById(R.id.listen_pause);
-        if (state == 1){
+        if (state == 1) {
             listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
-        }else{
+        } else {
             listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
         }
         listen_up = (ImageView) findViewById(R.id.listen_up);
@@ -189,9 +190,15 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         listen_next.setOnClickListener(this);
     }
 
+    /**
+     * 进度条
+     * @param seekBar
+     * @param progress
+     * @param fromUser
+     */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser){
+        if (fromUser) {
             musicService.seekToPosition(seekBar.getProgress());
         }
     }
@@ -207,12 +214,16 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         public void run() {
             listen_jindutiao.setProgress(musicService.getCurrentPosition());
             listen_current.setText(MusicUtil.formatTime(musicService.getCurrentPosition()));
-            mHandler.postDelayed(mRunnable,1000);
-            Log.i(TAG,"当前时间---" + MusicUtil.formatTime(musicService.getCurrentPosition()));
+            mHandler.postDelayed(mRunnable, 1000);
+            Log.i(TAG, "当前时间---" + MusicUtil.formatTime(musicService.getCurrentPosition()));
         }
     };
 
 
+    /**
+     * 实现上一首、暂停、下一首点击事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -272,7 +283,9 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    //切换中心图
+    /**
+     * 中心旋转图随着歌曲切换而切换
+     */
     public void change() {
         Music music = musics.get(musicService.getCurrentProgress());
         Log.i(TAG, "中心图的id---" + musicService.getCurrentProgress() + "歌曲ID" + music.getSong());

@@ -22,7 +22,7 @@ public class Music {
     //专辑图片ID
     public long album_id;
 
-    public Music(long id, String song, String songer, String url, int duration,long size,String album,long album_id) {
+    public Music(long id, String song, String songer, String url, int duration, long size, String album, long album_id) {
         super();
         this.id = id;
         this.song = song;
@@ -34,37 +34,46 @@ public class Music {
         this.album_id = album_id;
     }
 
-   public Music(){
+    public Music() {
 
-   }
+    }
 
     public String getSong() {
         return song;
     }
+
     public void setSong(String song) {
         this.song = song;
     }
+
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
+
     public void setSonger(String songer) {
         this.songer = songer;
     }
+
     public String getSonger() {
         return songer;
     }
+
     public int getDuration() {
         return duration;
     }
+
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
     public String getUrl() {
         return url;
     }
+
     public void setUrl(String url) {
         this.url = url;
     }

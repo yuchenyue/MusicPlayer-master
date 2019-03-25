@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_item"
-    android:background="@color/item_color"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/item_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -11,9 +11,9 @@
 
         <ImageView
             android:id="@+id/image_net"
-            android:layout_margin="5dp"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_margin="5dp" />
 
         <TextView
             android:id="@+id/musicName"
@@ -24,17 +24,17 @@
             android:text="歌曲名称"
             android:textColor="@color/textcolor"
             android:textSize="15dp"
-            android:textStyle="normal|bold|italic"/>
+            android:textStyle="normal|bold|italic" />
 
         <TextView
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="80dp"
             android:text="歌手名称"
-            android:textColor="@color/textcolor"/>
+            android:textColor="@color/textcolor" />
 
         <View
             android:layout_width="match_parent"

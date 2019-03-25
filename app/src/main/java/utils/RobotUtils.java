@@ -1,12 +1,7 @@
 package utils;
 
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ClickableSpan;
-import android.view.View;
-import android.widget.TextView;
-
 import com.google.gson.Gson;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,8 +17,9 @@ import entity.Result;
 
 public class RobotUtils {
 
-    private static final String URL="http://www.tuling123.com/openapi/api";
+    private static final String URL = "http://www.tuling123.com/openapi/api";
     private static final String API_KEY = "ba585e8f3db74bfba4c1d4edb7a86144";
+
     /**
      * 发送消息到服务器
      *
@@ -37,9 +33,9 @@ public class RobotUtils {
         if (gsonResult != null) {
             try {
                 Result result = gson.fromJson(gsonResult, Result.class);
-                if (result.getUrl() == null){
+                if (result.getUrl() == null) {
                     chatMessage.setMessage(result.getText());
-                }else{
+                } else {
                     chatMessage.setMessage(result.getText() + result.getUrl());
 
                 }
@@ -51,7 +47,6 @@ public class RobotUtils {
         chatMessage.setType(ChatMessage.Type.INCOUNT);
         return chatMessage;
     }
-
 
     /**
      * get请求
@@ -67,7 +62,7 @@ public class RobotUtils {
         ByteArrayOutputStream baos = null;
         try {
             URL urlNet = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection)urlNet.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) urlNet.openConnection();
             connection.setReadTimeout(5 * 1000);
             connection.setConnectTimeout(5 * 1000);
             connection.setRequestMethod("GET");
@@ -82,7 +77,6 @@ public class RobotUtils {
             System.out.println("------------result = " + baos.size());
             baos.flush();
             result = new String(baos.toByteArray());
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -93,7 +87,6 @@ public class RobotUtils {
                     e.printStackTrace();
                 }
             }
-
             if (baos != null) {
                 try {
                     baos.close();
@@ -106,7 +99,6 @@ public class RobotUtils {
         return result;
     }
 
-
     /**
      * 设置参数
      *
@@ -116,7 +108,7 @@ public class RobotUtils {
     private static String setParmat(String message) {
         String url = "";
         try {
-            url =URL + "?key=" + API_KEY + "&info="
+            url = URL + "?key=" + API_KEY + "&info="
                     + URLEncoder.encode(message, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

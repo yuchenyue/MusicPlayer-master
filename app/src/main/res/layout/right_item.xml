@@ -18,24 +18,24 @@
         android:id="@+id/Lin_right"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_toLeftOf="@+id/right_lin"
             android:id="@+id/chat_right_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/right_lin"
             android:background="@drawable/chat_bg_user"
+            android:maxWidth="250dp"
             android:text="can i help me ?"
-            android:textSize="15sp"
             android:textColor="#ffffff"
-            android:maxWidth="250dp"/>
+            android:textSize="15sp" />
 
         <LinearLayout
-            android:layout_alignParentBottom="true"
             android:id="@+id/right_lin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:orientation="vertical">
 
@@ -49,8 +49,8 @@
                 android:id="@+id/chat_right_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="me"
                 android:layout_gravity="center_horizontal"
+                android:text="me"
                 android:textSize="15sp" />
         </LinearLayout>
     </RelativeLayout>

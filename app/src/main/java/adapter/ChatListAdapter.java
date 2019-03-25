@@ -21,14 +21,14 @@ public class ChatListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
 
     //构造器
-    public ChatListAdapter(Context context,List<ChatMessage> mList) {
+    public ChatListAdapter(Context context, List<ChatMessage> mList) {
         inflater = LayoutInflater.from(context);
         this.mList = mList;
     }
 
     @Override
     public int getCount() {
-        return mList.isEmpty()? 0:mList.size();
+        return mList.isEmpty() ? 0 : mList.size();
     }
 
     @Override
@@ -48,18 +48,18 @@ public class ChatListAdapter extends BaseAdapter {
         if (convertView == null) {
             // 通过ItemType加载不同的布局
             if (getItemViewType(position) == 0) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.left_item, parent,false);
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.left_item, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.chat_time = (TextView) convertView.findViewById(R.id.chat_left_time);
                 viewHolder.chat_message = (TextView) convertView.findViewById(R.id.chat_left_message);
             } else {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.right_item, parent,false);
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.right_item, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.chat_time = (TextView) convertView.findViewById(R.id.chat_right_time);
                 viewHolder.chat_message = (TextView) convertView.findViewById(R.id.chat_right_message);
             }
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         // 设置数据
@@ -70,11 +70,16 @@ public class ChatListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    //获取当前Item的类型
+    /**
+     * 获取当前Item的类型
+     *
+     * @param position
+     * @return
+     */
     @Override
     public int getItemViewType(int position) {
         ChatMessage chatMessage = mList.get(position);
-        if (chatMessage.getType() == ChatMessage.Type.INCOUNT){
+        if (chatMessage.getType() == ChatMessage.Type.INCOUNT) {
             return 0;
         }
         return 1;
@@ -84,7 +89,11 @@ public class ChatListAdapter extends BaseAdapter {
         private TextView chat_time, chat_message;
     }
 
-    //返回所有Layout数据
+    /**
+     * 返回所有Layout数据
+     *
+     * @return
+     */
     @Override
     public int getViewTypeCount() {
         return 2;

@@ -1,23 +1,33 @@
 package com.example.ycy.musicplayer;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,20 +35,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.FragmentAdapter;
+import de.hdodenhof.circleimageview.CircleImageView;
 import entity.Music;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
 import utils.MusicUtil;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Popwindow.OnItemClickListener {
 
     public static final String TAG = "MainActivity";
-    private static final int SUBACTIVITY = 1;//子Activity回传标记
-    public MyReceiver receiver = null;
+    private static final int SUBACTIVITY = 4;//子Activity回传标记
+    private Popwindow popwindow;
+    //相册请求码
+    private static final int ALBUM_REQUEST_CODE = 1;
+    //相机请求码
+    private static final int CAMERA_REQUEST_CODE = 2;
+    //剪裁请求码
+    private static final int CROP_REQUEST_CODE = 3;
+
+    private File tempFile;
+    public Uri cropImageUri;
+    public MyReceiver receiver = null;//广播
     int p = 0;
     private static int state = 2;//播放状态
     TextView main_my_music_tv, main_online_music_tv;//本地音乐、在线音乐
@@ -48,6 +72,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     ImageView main_up;//上一首
     ImageView main_pause_play;//暂停播放
     ImageView main_next;//下一首
+    CircleImageView iv_touxiang;
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
     List<Music> musics;
@@ -76,13 +101,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //绑定服务
+        bindMusicService();
+
         //动态注册广播
         receiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("services.MusicService");
         registerReceiver(receiver, filter);
         Log.i(TAG, "MainActivity--create");
-
 
         //初始化控件
         initView();
@@ -97,11 +124,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         main_viewpager.setAdapter(fragmentAdapter);
 
         musics = MusicUtil.getmusics(this);
+
+        popwindow = new Popwindow(this);
+        popwindow.setOnItemClickListener(this);
     }
 
     //初始化控件
     private void initView() {
-
         main_musicName = (TextView) findViewById(R.id.main_musicName);
         main_author = (TextView) findViewById(R.id.main_author);
         main_my_music_tv = (TextView) findViewById(R.id.main_my_music_tv);
@@ -191,7 +220,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-
     //按两次返回键退出程序
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -215,10 +243,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        unbindMusicService();
+//        unregisterReceiver(receiver);
         Log.i(TAG, "MainActivity--destroy");
     }
-
 
     /**
      * 侧滑
@@ -235,20 +263,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Intent intent = new Intent(this, RobotActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-            //修改信息
+            //修改个人信息
             Intent intent = new Intent(this, Main2Activity.class);
             startActivityForResult(intent, SUBACTIVITY);
         } else if (id == R.id.nav_manage) {
-
+            //换头像
+//            backgroundAlpha(0.5f);
+            popwindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+            Log.i(TAG, "切换头像");
         } else if (id == R.id.nav_share) {
-
+            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_send) {
-
+            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_LONG).show();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
-        drawer.closeDrawer(GravityCompat.START);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     //子activity带回的信息更新
     @Override
@@ -256,20 +288,194 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case SUBACTIVITY:
-                Log.i(TAG, "259");
-                if (resultCode == Activity.RESULT_OK){
-                    Log.i(TAG, "261");
+                Log.i(TAG, "SUBACTIVITY");
+                if (resultCode == Activity.RESULT_OK) {
                     Uri uriData = data.getData();
                     tv_name = (TextView) findViewById(R.id.tv_name);
                     tv_name.setText(uriData.toString());
-                }else if (resultCode == Activity.RESULT_CANCELED){
-                    Log.i(TAG, "266");
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+
                 }
+                break;
+            case CAMERA_REQUEST_CODE://相机
+                if (resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Uri contentUri = FileProvider.getUriForFile(MainActivity.this, "com.example.ycy.musicplayer.fileprovider", tempFile);
+                        cropPhoto(contentUri);
+                    } else {
+                        cropPhoto(Uri.fromFile(tempFile));
+                    }
+                }
+                break;
+            case ALBUM_REQUEST_CODE://相册
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    cropPhoto(uri);
+                }
+                break;
+            case CROP_REQUEST_CODE://裁剪
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(cropImageUri));
+                        iv_touxiang = (CircleImageView) findViewById(R.id.iv_touxiang);
+                        iv_touxiang.setImageBitmap(bitmap);
+                        Log.e(TAG, "裁剪" + bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.e(TAG, "裁剪");
                 break;
             default:
                 break;
         }
     }
+
+    //切换头像事件
+    @Override
+    public void setOnItemClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_xiangji:
+                popwindow.dismiss();
+                takePhoto();
+                break;
+            case R.id.bt_xiangce:
+                choosePhoto();
+                Log.i(TAG, "相册");
+                break;
+            case R.id.bt_quxiao:
+                popwindow.dismiss();
+                Log.i(TAG, "取消选择");
+                break;
+            default:
+                break;
+        }
+    }
+
+//    /**
+//     * 拍照检查权限
+//     */
+//    public void takePhoneAndCheckPermissions(){
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.CAMERA)
+//                != PackageManager.PERMISSION_GRANTED)
+//        {
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.CAMERA, android.Manifest.permission.CAMERA},
+//                    MY_PERMISSIONS_REQUEST_CALL_PHONE_TAKE_PHOTO);
+//        }else {
+//            takePhoto();
+//        }
+//
+//    }
+//
+//    /**
+//     * 相册选图检查权限
+//     */
+//    public void choosePhoneAndCheckPermissions(){
+//        if (ContextCompat.checkSelfPermission(this,
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED)
+//        {
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                    MY_PERMISSIONS_REQUEST_CALL_PHONE_CHOOSE_IMAGE);
+//        }else {
+//            choosePhoto();
+//        }
+//    }
+
+    /**
+     * 相册选图
+     */
+    private void choosePhoto() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");//相片类型
+        startActivityForResult(intent, ALBUM_REQUEST_CODE);
+    }
+
+    /**
+     * 拍照
+     */
+    private void takePhoto() {
+//        //最后一个参数是文件夹的名称，可以随便起
+//        File file = new File(Environment.getExternalStorageDirectory(), "MemberShipAvatars");
+//        if(!file.exists()){
+//            file.mkdir();
+//        }
+//        //这里将时间作为不同照片的名称
+//        fileImage = new File(file, System.currentTimeMillis()+".jpg");
+//        //如果该文件夹已经存在，则删除它，否则创建一个
+//        try {
+//            if (fileImage.exists()) {
+//                fileImage.delete();
+//            }
+//            fileImage.createNewFile();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        //隐式打开拍照的Activity，并且传入CROP_PHOTO常量作为拍照结束后回调的标志
+//        imageUri = Uri.fromFile(fileImage);
+//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//        startActivityForResult(intent, CROP_PHOTO);
+//        Log.i(TAG,"相机被调用了");
+        tempFile = new File(Environment.getExternalStorageDirectory().getPath(), System.currentTimeMillis() + ".jpg");
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            Uri contentUri = FileProvider.getUriForFile(MainActivity.this, "com.example.ycy.musicplayer.fileprovider", tempFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+        } else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+        }
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+    }
+
+    /**
+     * 裁剪图片
+     */
+    private void cropPhoto(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 300);
+        intent.putExtra("outputY", 300);
+//        intent.putExtra("scale", true);
+//        intent.putExtra("return-data", true);
+        cropImageUri = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        startActivityForResult(intent, CROP_REQUEST_CODE);
+    }
+
+//    /**
+//     * 权限判断返回
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+//    {
+//        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            switch (requestCode) {
+//                case MY_PERMISSIONS_REQUEST_CALL_PHONE_TAKE_PHOTO: {
+//                    takePhoto();
+//                    break;
+//                }
+//                case MY_PERMISSIONS_REQUEST_CALL_PHONE_CHOOSE_IMAGE: {
+//                    choosePhoto();
+//                    break;
+//                }
+//                default:break;
+//            }
+//        }
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
+
 
     //广播接收器
     private class MyReceiver extends BroadcastReceiver {
@@ -307,6 +513,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
+        unbindMusicService();
         Log.i(TAG, "MainActivity--pause");
     }
 

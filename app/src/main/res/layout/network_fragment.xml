@@ -19,23 +19,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:maxLength="50"
-                android:textSize="20dp"
                 android:hint="输入歌曲"
-                android:textColorHighlight="#f26c6c"/>
+                android:maxLength="50"
+                android:textColorHighlight="#f26c6c"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btn_search"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:text="搜索"/>
+                android:text="搜索" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:layout_below="@+id/r1"
             android:id="@+id/web_musicList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/r1">
 
         </android.support.v7.widget.RecyclerView>
 

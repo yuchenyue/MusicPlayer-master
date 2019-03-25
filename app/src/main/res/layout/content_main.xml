@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#eadfe7"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ycy.musicplayer.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:orientation="vertical"
-    android:background="#eadfe7">
+    tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
         android:id="@+id/main"
@@ -49,18 +49,17 @@
                 android:textSize="20sp" />
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#d7d5d5">
-        </View>
+            android:background="#d7d5d5"></View>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/main_viewpager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-        </android.support.v4.view.ViewPager>
+            android:layout_weight="1"></android.support.v4.view.ViewPager>
 
     </LinearLayout>
 

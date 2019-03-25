@@ -16,11 +16,12 @@ import java.nio.file.FileStore;
 
 public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG="Main2Activity";
+    private static final String TAG = "Main2Activity";
 
-    ImageView use_giveup,use_save;
-    TextView tv_use_name,tv_use_log;
-    EditText et_use_name,et_use_log;
+    ImageView use_giveup, use_save;
+    TextView tv_use_name;
+    EditText et_use_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,22 +45,22 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.use_giveup:
-                setResult(RESULT_CANCELED,null);
+                setResult(RESULT_CANCELED, null);
                 finish();
                 break;
             case R.id.use_save:
                 String usename = et_use_name.getText().toString();
-                if (usename.equals("")){
-                    Toast.makeText(getApplicationContext(),"昵称不能为空，还是取个名字吧~",Toast.LENGTH_LONG).show();
-                }else {
+                if (usename.equals("")) {
+                    Toast.makeText(getApplicationContext(), "昵称不能为空，还是取个名字吧~", Toast.LENGTH_LONG).show();
+                } else {
                     Uri data = Uri.parse(usename);
-                    Intent intent = new Intent(null,data);
-                    setResult(RESULT_OK,intent);
+                    Intent intent = new Intent(null, data);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
-                Log.i(TAG,"用户信息" + usename);
+                Log.i(TAG, "用户信息" + usename);
 
                 break;
             default:
