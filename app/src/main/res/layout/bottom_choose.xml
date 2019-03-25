@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_profile_share_mask"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/bt_xiangji"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:background="@drawable/white_btn_top"
+            android:text="相机"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:background="#b6b2b2" />
+
+        <Button
+            android:id="@+id/bt_xiangce"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:background="@drawable/white_btn_bottom"
+            android:text="相册"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/bt_quxiao"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/white_btn"
+            android:text="取消"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</RelativeLayout>
