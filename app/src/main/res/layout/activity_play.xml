@@ -30,7 +30,7 @@
             android:layout_toRightOf="@id/imageView_back"
             android:text="song"
             android:textColor="#3d3939"
-            android:textSize="28sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/listen_artist_tv"

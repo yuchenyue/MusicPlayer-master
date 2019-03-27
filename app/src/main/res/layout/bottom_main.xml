@@ -2,14 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bottom_color"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:id="@+id/design_bottom_sheet"
+    android:visibility="gone">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/main_image"
         android:layout_width="60dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:civ_border_color="#999999"
+        app:civ_border_width="2dp"/>
+
 
     <TextView
         android:id="@+id/main_musicName"
@@ -17,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="5dp"
-        android:text="歌曲名称"
+        android:text="~~~"
         android:textColor="@color/textcolor"
         android:textSize="15dp" />
 
@@ -28,7 +34,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="60dp"
-        android:text="歌手名称"
+        android:text="~~~"
         android:textColor="@color/textcolor" />
 
     <ImageView

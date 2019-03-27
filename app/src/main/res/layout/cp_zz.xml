@@ -6,10 +6,11 @@
 
     //背景图
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/play_background"
-        android:layout_width="168dp"
-        android:layout_height="168dp"
+        android:layout_width="165dp"
+        android:layout_height="166dp"
+        android:background="#da6060"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="142dp" />
 

@@ -46,7 +46,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         //接收传值
         state = getIntent().getIntExtra("state", 2);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的播放状态---" + state);
-        positions = getIntent().getIntExtra("po", 0);
+//        positions = getIntent().getIntExtra("po", 0);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的position---" + positions);
 
         //动态注册广播
@@ -58,7 +58,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         musics = MusicUtil.getmusics(this);
         //绑定ID
         initView();
-        onDraw();
+        onDraw_t();
     }
 
     /**
@@ -110,6 +110,17 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         unbindMusicService();
     }
 
+
+    public void onDraw_t(){
+        if (state == 1) {
+            Log.i(TAG,"动画"+ state);
+            onDraw();
+            onDraw_play();
+        }else if (state == 2){
+            onDraw();
+        }
+    }
+
     /**
      * 黑胶唱片
      */
@@ -132,9 +143,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         animator_pb.setInterpolator(new LinearInterpolator());
         animator_pb.setRepeatCount(ValueAnimator.INFINITE);
         animator_pb.setRepeatMode(ValueAnimator.INFINITE);
-        if (state == 1) {
-            onDraw_play();
-        }
+
     }
 
     /**

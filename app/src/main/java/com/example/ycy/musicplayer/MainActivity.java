@@ -1,12 +1,10 @@
 package com.example.ycy.musicplayer;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -18,9 +16,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -32,12 +28,12 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,20 +55,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private static final int CAMERA_REQUEST_CODE = 2;
     //剪裁请求码
     private static final int CROP_REQUEST_CODE = 3;
-
     private File tempFile;
     public Uri cropImageUri;
+
     public MyReceiver receiver = null;//广播
     int p = 0;
     private static int state = 2;//播放状态
     TextView main_my_music_tv, main_online_music_tv;//本地音乐、在线音乐
     ViewPager main_viewpager;
     TextView main_musicName, main_author;
-    ImageView main_image;//底部常驻栏图片
+    CircleImageView main_image;//底部常驻栏图片
     ImageView main_up;//上一首
     ImageView main_pause_play;//暂停播放
     ImageView main_next;//下一首
     CircleImageView iv_touxiang;
+
+    public RelativeLayout design_bottom_sheet;
+
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
     List<Music> musics;
@@ -131,13 +130,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     //初始化控件
     private void initView() {
+        design_bottom_sheet = (RelativeLayout) findViewById(R.id.design_bottom_sheet);
         main_musicName = (TextView) findViewById(R.id.main_musicName);
         main_author = (TextView) findViewById(R.id.main_author);
         main_my_music_tv = (TextView) findViewById(R.id.main_my_music_tv);
         main_online_music_tv = (TextView) findViewById(R.id.main_online_music_tv);
         main_viewpager = (ViewPager) findViewById(R.id.main_viewpager);
-        main_image = (ImageView) findViewById(R.id.main_image);
-        main_image.setImageDrawable(getResources().getDrawable(R.drawable.music));
+        main_image = (CircleImageView) findViewById(R.id.main_image);
+        main_image.setImageDrawable(getResources().getDrawable(R.drawable.app));
         main_up = (ImageView) findViewById(R.id.main_up);
         main_pause_play = (ImageView) findViewById(R.id.main_pause_play);
         main_next = (ImageView) findViewById(R.id.main_next);
@@ -145,7 +145,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         main_up.setOnClickListener(this);
         main_pause_play.setOnClickListener(this);
         main_next.setOnClickListener(this);
-
     }
 
     //本地、网络选择
@@ -268,13 +267,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startActivityForResult(intent, SUBACTIVITY);
         } else if (id == R.id.nav_manage) {
             //换头像
-//            backgroundAlpha(0.5f);
             popwindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
             Log.i(TAG, "切换头像");
         } else if (id == R.id.nav_share) {
-            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         }
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
 //        drawer.closeDrawer(GravityCompat.START);
@@ -353,39 +351,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-//    /**
-//     * 拍照检查权限
-//     */
-//    public void takePhoneAndCheckPermissions(){
-//        if (ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.CAMERA)
-//                != PackageManager.PERMISSION_GRANTED)
-//        {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.CAMERA, android.Manifest.permission.CAMERA},
-//                    MY_PERMISSIONS_REQUEST_CALL_PHONE_TAKE_PHOTO);
-//        }else {
-//            takePhoto();
-//        }
-//
-//    }
-//
-//    /**
-//     * 相册选图检查权限
-//     */
-//    public void choosePhoneAndCheckPermissions(){
-//        if (ContextCompat.checkSelfPermission(this,
-//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED)
-//        {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-//                    MY_PERMISSIONS_REQUEST_CALL_PHONE_CHOOSE_IMAGE);
-//        }else {
-//            choosePhoto();
-//        }
-//    }
-
     /**
      * 相册选图
      */
@@ -453,29 +418,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         startActivityForResult(intent, CROP_REQUEST_CODE);
     }
-
-//    /**
-//     * 权限判断返回
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-//    {
-//        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            switch (requestCode) {
-//                case MY_PERMISSIONS_REQUEST_CALL_PHONE_TAKE_PHOTO: {
-//                    takePhoto();
-//                    break;
-//                }
-//                case MY_PERMISSIONS_REQUEST_CALL_PHONE_CHOOSE_IMAGE: {
-//                    choosePhoto();
-//                    break;
-//                }
-//                default:break;
-//            }
-//        }
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
-
 
     //广播接收器
     private class MyReceiver extends BroadcastReceiver {
@@ -549,4 +491,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         Log.i(TAG, "MainActivity--restart");
     }
+
 }

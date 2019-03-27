@@ -35,6 +35,7 @@ public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerView
     public Context context;
     private List<NetMusic.DataBean> netMusicList = new ArrayList<>();
     private int nposition;
+    MainActivity mainActivity;
 
     public WebRecyclerViewAdapter(Context context, List<NetMusic.DataBean> netMusicList) {
         this.context = context;
@@ -56,16 +57,15 @@ public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerView
     }
 
     private void startMusic() {
-        MyApplication.setIsWeb(true);
-//        mainActivity.musicService.play(nposition);
         Log.i(TAG, "点击了--" + nposition);
-//        Intent intent = new Intent(context, MusicService.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("position",nposition);
-//        bundle.putInt("state",1);
-//        bundle.putSerializable("netMusicList",(Serializable) netMusicList);
-//        intent.putExtras(bundle);
-//        context.startService(intent);
+        Intent intent = new Intent(context, MusicService.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("position",nposition);
+        bundle.putInt("state",1);
+        bundle.putSerializable("netMusicList",(Serializable) netMusicList);
+        intent.putExtras(bundle);
+        MyApplication.setIsWeb(true);
+        context.startService(intent);
 
 //        plays();
 
