@@ -69,9 +69,9 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mainActivity.musicService.play(position);
         mainActivity.design_bottom_sheet.setVisibility(View.VISIBLE);
-        MyApplication.setIsWeb(false);
+        mainActivity.musicService.play(position);
+//        MyApplication.setIsLoc(true);
         state = 1;
         Log.i(TAG, "LocalFragment传出position----" + position);
     }

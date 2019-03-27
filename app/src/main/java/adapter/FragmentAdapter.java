@@ -13,31 +13,32 @@ import entity.Music;
  */
 
 public class FragmentAdapter extends FragmentPagerAdapter {
-
+    private String []titles;
     List<Fragment> fragmentList;
-    List<Music> musics;
 
-    public FragmentAdapter(FragmentManager fm, List<Fragment> fragmentList, List<Music> musics) {
+    public FragmentAdapter(FragmentManager fm){
         super(fm);
-        this.fragmentList = fragmentList;
-        this.musics = musics;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return fragmentList.get(position);
-            case 1:
-                return fragmentList.get(position);
-        }
         return fragmentList.get(position);
     }
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return titles.length;
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles[position];
+    }
+
+    //自定义一个添加title和fragment的方法，供Activity使用
+    public void addTitlesAndFragments(String []titles, List<Fragment> fragmentList) {
+        this.titles = titles;
+        this.fragmentList = fragmentList;
+    }
 
 }

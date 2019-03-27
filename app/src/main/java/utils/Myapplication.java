@@ -12,12 +12,20 @@ public class MyApplication extends Application {
     public static Boolean getIsWeb() {
         return isWeb;
     }
+    public static Boolean getisLoc() {
+        return isLoc;
+    }
 
     public static void setIsWeb(Boolean isWeb) {
         MyApplication.isWeb = isWeb;
     }
 
+    public static void setIsLoc(boolean isLoc) {
+        MyApplication.isLoc = isLoc;
+    }
+
     private static Boolean isWeb = false;
+    private static Boolean isLoc = false;
     private static Context context;
 
     private static int position;

@@ -33,10 +33,11 @@ public class MusicService extends Service {
     private NetworkInfo info;
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-//    List<NetMusic.DataBean> netMsuicList;
+    List<NetMusic.DataBean> netMsuicList;
     public int currentProgress;//歌曲位置
     private static int state = 2;
     public boolean isWeb;
+    public boolean isLoc;
     public boolean isPause = false;
 
 
@@ -113,6 +114,7 @@ public class MusicService extends Service {
             mediaPlayer = new MediaPlayer();
         }
         isWeb = false;
+        isLoc = false;
         musics = MusicUtil.getmusics(this);
         //自动播放下一首
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -177,9 +179,26 @@ public class MusicService extends Service {
                 e.printStackTrace();
             }
         }
-
         chuandi();
     }
+
+//    public void playweb(int position) {
+//        Bundle bundle = new Bundle();
+//        if (position >= 0 && position < musics.size()) {
+//            netMsuicList = (List<NetMusic.DataBean>) bundle.getSerializable("musicList");
+//            try {
+//                mediaPlayer.reset();
+//                position = bundle.getInt("nposition");
+//                mediaPlayer.setDataSource(netMsuicList.get(position).getUrl());
+//                mediaPlayer.prepare();
+//                mediaPlayer.start();
+//                currentProgress = position;
+//                state = 1;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     /**
      * 暂停

@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:hint="输入歌曲"
+                android:hint="输入歌曲、歌手"
                 android:maxLength="50"
                 android:textColorHighlight="#f26c6c"
                 android:textSize="20dp" />

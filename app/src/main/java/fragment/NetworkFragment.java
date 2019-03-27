@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
 
 import java.util.ArrayList;
@@ -44,9 +45,16 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
     private Button btn_search;
     private String search_s;
     Context context;
+    MainActivity mainActivity;
 
     public NetworkFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) getActivity();
     }
 
     @Override
