@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ycy.musicplayer.MainActivity;
@@ -75,13 +76,13 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_search:
                 search_s = search_text.getText().toString().trim();
-                if (search_s.equals("")){
+                if (search_s.equals("")) {
                     Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "可能没有这首歌" + search_s);
-                }else{
+                } else {
                     if (netMusicList == null) {
                         getNetMusicList(search_s);
-                    }else{
+                    } else {
                         getNetMusicList(search_s);
                     }
                 }
@@ -103,33 +104,20 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                 if (response.code() != 400) {
                     Log.d(TAG, "NetworkFragment--87--");
                     netMusicList = response.body().getData();
-                    if (netMusicList != null) {
-                        //写个适配器
-                        web_musicList.setLayoutManager(layoutManager);
-                        adapter = new WebRecyclerViewAdapter(getContext(), netMusicList);
-                        web_musicList.setAdapter(adapter);
-                    } else {
-                        nList();
-                        Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
-                    }
+                    //写个适配器
+                    web_musicList.setLayoutManager(layoutManager);
+                    adapter = new WebRecyclerViewAdapter(getContext(), netMusicList);
+                    web_musicList.setAdapter(adapter);
 
                     Log.i(TAG, "歌名--" + netMusicList.get(0).getName() + netMusicList.get(0).getSinger());
                     Log.i(TAG, "显示了--" + netMusicList.size() + "首歌曲");
-
-
                 }
-
             }
 
             @Override
             public void onFailure(Call<NetMusic> call, Throwable t) {
             }
         });
-    }
-
-    public List nList() {
-        List nList = Collections.EMPTY_LIST;
-        return nList;
     }
 
     public void setNetMusicList(String s) {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
@@ -29,6 +30,8 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
 
     private static final String TAG = "LocalFragment";
     ListView local_fragment_list;
+    TextView tv_empty;
+
     public List<Music> musics;
     public MusicAdapter musicAdapter;
     MainActivity mainActivity;
@@ -44,6 +47,9 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.local_fragment, container, false);
         local_fragment_list = view.findViewById(R.id.local_fragment_list);
+        tv_empty = view.findViewById(R.id.tv_empty);
+        local_fragment_list.setEmptyView(tv_empty);
+
         local_fragment_list.setOnItemClickListener(this);
         loadData();
         return view;

@@ -62,7 +62,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public MyReceiver receiver = null;//广播
     int p = 0;
     private static int state = 2;//播放状态
-    TextView main_my_music_tv, main_online_music_tv;//本地音乐、在线音乐
     ViewPager main_viewpager;
     TextView main_musicName, main_author;
     CircleImageView main_image;//底部常驻栏图片
@@ -74,6 +73,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public RelativeLayout design_bottom_sheet;
     TabLayout tablayout;
     private String[] titles = {"本地音乐", "在线音乐"};
+
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
     List<Music> musics;
@@ -114,8 +114,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         //初始化控件
         initView();
-//        main_my_music_tv.setOnClickListener(this);
-//        main_online_music_tv.setOnClickListener(this);
         //创建Fragment集合并添加
         addTabToTabLayout();
         fragmentList = new ArrayList<>();
@@ -146,8 +144,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         design_bottom_sheet = (RelativeLayout) findViewById(R.id.design_bottom_sheet);
         main_musicName = (TextView) findViewById(R.id.main_musicName);
         main_author = (TextView) findViewById(R.id.main_author);
-//        main_my_music_tv = (TextView) findViewById(R.id.main_my_music_tv);
-//        main_online_music_tv = (TextView) findViewById(R.id.main_online_music_tv);
         main_viewpager = (ViewPager) findViewById(R.id.main_viewpager);
         main_image = (CircleImageView) findViewById(R.id.main_image);
         main_image.setImageDrawable(getResources().getDrawable(R.drawable.app));
@@ -164,14 +160,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.main_my_music_tv:
-//                Log.d(TAG, "本地音乐");
-//                main_viewpager.setCurrentItem(0);
-//                break;
-//            case R.id.main_online_music_tv:
-//                Log.d(TAG, "网络音乐");
-//                main_viewpager.setCurrentItem(1);
-//                break;
             //主界面上一首键
             case R.id.main_up:
                 if (musicService.isPlaying()) {
