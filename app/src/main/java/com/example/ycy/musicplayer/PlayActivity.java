@@ -46,7 +46,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         //接收传值
         state = getIntent().getIntExtra("state", 2);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的播放状态---" + state);
-//        positions = getIntent().getIntExtra("po", 0);
+        positions = getIntent().getIntExtra("po", 0);
         Log.i(TAG, "PlayActivity接收到MainActivity传来的position---" + positions);
 
         //动态注册广播
