@@ -3,6 +3,7 @@ package fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
@@ -31,7 +33,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     private static final String TAG = "LocalFragment";
     ListView local_fragment_list;
     TextView tv_empty;
-
+    SwipeRefreshLayout swipeRefreshLayout;
     public List<Music> musics;
     public MusicAdapter musicAdapter;
     MainActivity mainActivity;
@@ -49,7 +51,17 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
         local_fragment_list = view.findViewById(R.id.local_fragment_list);
         tv_empty = view.findViewById(R.id.tv_empty);
         local_fragment_list.setEmptyView(tv_empty);
-
+        swipeRefreshLayout = view.findViewById(R.id.refreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getContext(),"刷新好了呀！",Toast.LENGTH_SHORT).show();
+                musics.clear();
+                Log.i(TAG, "歌曲数量" + musics.size());
+                loadData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         local_fragment_list.setOnItemClickListener(this);
         loadData();
         return view;

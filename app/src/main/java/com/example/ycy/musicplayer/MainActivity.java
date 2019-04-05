@@ -44,6 +44,7 @@ import entity.Music;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
 import utils.MusicUtil;
+import utils.Theme;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Popwindow.OnItemClickListener {
 
@@ -60,7 +61,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public Uri cropImageUri;
 
     public MyReceiver receiver = null;//广播
-    int p = 0;
+    int p;
     private static int state = 2;//播放状态
     ViewPager main_viewpager;
     TextView main_musicName, main_author;
@@ -124,8 +125,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         fragmentAdapter.addTitlesAndFragments(titles,fragmentList);
         main_viewpager.setAdapter(fragmentAdapter);
         tablayout.setupWithViewPager(main_viewpager);
-        musics = MusicUtil.getmusics(this);
+//        musics = MusicUtil.getmusics(this);
 
+        //底部弹出框
         popwindow = new Popwindow(this);
         popwindow.setOnItemClickListener(this);
     }
@@ -156,7 +158,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         main_next.setOnClickListener(this);
     }
 
-    //本地、网络选择
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -220,7 +221,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    //按两次返回键退出程序
+    /**
+     * 按两次返回键退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
@@ -228,7 +234,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         return super.onKeyDown(keyCode, event);
     }
-
     private void exit() {
         if (!isExit) {
             isExit = true;
@@ -244,7 +249,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onDestroy() {
         super.onDestroy();
         unbindMusicService();
-//        unregisterReceiver(receiver);
         Log.i(TAG, "MainActivity--destroy");
     }
 
@@ -255,7 +259,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.robot) {
@@ -271,6 +274,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             popwindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
             Log.i(TAG, "切换头像");
         } else if (id == R.id.nav_share) {
+            Theme.theme(this);
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
@@ -281,7 +285,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    //子activity带回的信息更新
+    /**
+     * 子activity带回的信息更新
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -331,7 +340,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    //切换头像事件
+    /**
+     * 切换头像事件
+     * @param v
+     */
     @Override
     public void setOnItemClick(View v) {
         switch (v.getId()) {
@@ -432,7 +444,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Log.i(TAG, "MainActivity得到的值" + position);
             Log.i(TAG, "MainActivity得道的状态" + state_s);
             if (position != -1) {
-                final Music music = musics.get(position);
+                final Music music =  MusicUtil.getmusics(getApplicationContext()).get(position);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -453,27 +465,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        unbindMusicService();
-        Log.i(TAG, "MainActivity--pause");
-    }
-
-    @Override
     protected void onRestart() {
         super.onRestart();
         receiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("services.MusicService");
         registerReceiver(receiver, filter);
-
         if (p != -1) {
             p = musicService.getCurrentProgress();
             Log.i(TAG, "MainActivity--runUiThread" + musicService.getCurrentProgress());
             state = musicService.getState();
             Log.i(TAG, "MainActivity--runUiThread" + musicService.getState());
-            final Music music = musics.get(p);
+
+            final Music music = MusicUtil.getmusics(getApplicationContext()).get(p);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -493,4 +497,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Log.i(TAG, "MainActivity--restart");
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        unbindMusicService();
+        Log.i(TAG, "MainActivity--pause");
+    }
 }

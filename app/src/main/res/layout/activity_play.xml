@@ -29,7 +29,7 @@
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@id/imageView_back"
             android:text="song"
-            android:textColor="#3d3939"
+            android:textColor="@color/white"
             android:textSize="22sp" />
 
         <TextView
@@ -40,14 +40,14 @@
             android:layout_marginTop="45dp"
             android:layout_toRightOf="@id/imageView_back"
             android:text="songer"
-            android:textColor="#aeabab"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="#bababa" />
+            android:background="@color/viewcolor" />
 
     </RelativeLayout>
 

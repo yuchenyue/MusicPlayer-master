@@ -17,16 +17,16 @@
             android:title="切换头像" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="other">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:icon="@drawable/theme"
+                android:title="Theme" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
         </menu>
     </item>
 

@@ -115,7 +115,7 @@ public class MusicService extends Service {
         }
         isWeb = false;
         isLoc = false;
-        musics = MusicUtil.getmusics(this);
+
         //自动播放下一首
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -166,6 +166,7 @@ public class MusicService extends Service {
      * @param position
      */
     public void play(int position) {
+        musics = MusicUtil.getmusics(this);
         if (position >= 0 && position < musics.size()) {
             Music music = musics.get(position);
             try {

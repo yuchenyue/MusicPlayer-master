@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#eadfe7"
+    android:background="@color/tolerate"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -24,16 +24,16 @@
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:tabIndicatorColor="@color/colorPrimaryDark"
+            app:tabIndicatorColor="@color/colorAccent"
             app:tabIndicatorHeight="3dp"
             app:tabTextColor="@android:color/black"
-            app:tabSelectedTextColor="@color/colorPrimaryDark">
+            app:tabSelectedTextColor="@color/colorAccent">
         </android.support.design.widget.TabLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#d7d5d5"></View>
+            android:background="@color/viewcolor"></View>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/main_viewpager"

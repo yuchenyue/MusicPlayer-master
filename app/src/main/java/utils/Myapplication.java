@@ -5,6 +5,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import entity.Music;
 import entity.NetMusic;
 
 public class MyApplication extends Application {
@@ -47,6 +48,15 @@ public class MyApplication extends Application {
     }
 
     private static List<NetMusic.DataBean> musicList;
+    private static List<Music> musics;
+
+    public static List<Music> getMusics() {
+        return musics;
+    }
+
+    public static void setMusics(List<Music> musics) {
+        MyApplication.musics = musics;
+    }
 
     @Override
     public void onCreate() {

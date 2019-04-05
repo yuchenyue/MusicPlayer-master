@@ -2,11 +2,8 @@ package adapter;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,17 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
-
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import entity.NetMusic;
 import services.MusicService;
-import utils.MyApplication;
 
 public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerViewAdapter.ViewHolder> {
 
@@ -56,36 +48,6 @@ public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerView
         return holder;
     }
 
-    private void startMusic() {
-        Log.i(TAG, "点击了--" + nposition);
-        Intent intent = new Intent(context, MusicService.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("nposition",nposition);
-        bundle.putInt("state",1);
-        bundle.putSerializable("netMusicList",(Serializable) netMusicList);
-        intent.putExtras(bundle);
-        MyApplication.setIsWeb(true);
-        context.startService(intent);
-//        musicService.playweb(nposition);
-//        plays();
-
-        Toast.makeText(context, netMusicList.get(nposition).getName(), Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "点击了--" + netMusicList.get(nposition).getName() + "--" + netMusicList.get(nposition).getUrl());
-        Log.i(TAG, "点击了--" + netMusicList.get(nposition));
-    }
-
-//    public void plays() {
-//        MediaPlayer nmediaPlayer = new MediaPlayer();
-//        try {
-//            nmediaPlayer.reset();
-//            nmediaPlayer.setDataSource(netMusicList.get(nposition).getUrl());
-//            nmediaPlayer.prepare();
-//            nmediaPlayer.start();
-//        } catch (IOException e) {
-//            //
-//        }
-//    }
-
     @Override
     public void onBindViewHolder(WebRecyclerViewAdapter.ViewHolder holder, int position) {
         NetMusic.DataBean music = netMusicList.get(position);
@@ -112,4 +74,32 @@ public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerView
             image_net = view.findViewById(R.id.image_net);
         }
     }
+
+    private void startMusic() {
+        Dialog();
+        Toast.makeText(context, netMusicList.get(nposition).getName(), Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "点击了-----" + netMusicList.get(nposition).getName());
+        Log.i(TAG, "点击了-----" + netMusicList.get(nposition).getUrl());
+        Log.i(TAG, "点击了-----" + netMusicList.get(nposition).getLrc());
+    }
+
+    public void Dialog(){
+        AlertDialog.Builder builder  = new AlertDialog.Builder(context);
+        builder.setTitle("是否下载歌曲？" ) ;
+        builder.setMessage(netMusicList.get(nposition).getSinger() +"__"+ netMusicList.get(nposition).getName() ) ;
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                download();
+            }
+        });
+        builder.setNegativeButton("否", null);
+        builder.show();
+    }
+
+    public void download(){
+        Toast.makeText(context, netMusicList.get(nposition).getLrc(), Toast.LENGTH_SHORT).show();
+
+    }
+
 }
