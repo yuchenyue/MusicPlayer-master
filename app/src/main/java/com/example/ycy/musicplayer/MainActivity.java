@@ -41,6 +41,7 @@ import java.util.List;
 import adapter.FragmentAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 import entity.Music;
+import fragment.LetworkFragment;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
 import utils.MusicUtil;
@@ -73,7 +74,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public RelativeLayout design_bottom_sheet;
     TabLayout tablayout;
-    private String[] titles = {"本地音乐", "在线音乐"};
+    private String[] titles = {"本地音乐", "在线试听","歌单"};
 
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         fragmentList = new ArrayList<>();
         fragmentList.add(new LocalFragment());
         fragmentList.add(new NetworkFragment());
+        fragmentList.add(new LetworkFragment());
         //设置适配器
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
         fragmentAdapter.addTitlesAndFragments(titles,fragmentList);

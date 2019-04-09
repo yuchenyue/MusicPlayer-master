@@ -39,12 +39,12 @@
 
         </android.support.v7.widget.RecyclerView>
         <TextView
-            android:id="@+id/tv_empty"
+            android:id="@+id/tv_empty_net"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="没有歌曲"
-            android:visibility="gone"/>
+            android:layout_below="@+id/r1"
+            android:text="暂无歌曲"/>
 
     </RelativeLayout>
 

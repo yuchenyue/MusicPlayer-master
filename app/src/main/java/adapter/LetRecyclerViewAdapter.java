@@ -16,39 +16,38 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ycy.musicplayer.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.LetMusic;
 import entity.NetMusic;
-import services.MusicService;
-import utils.DownloadUtils;
 
-public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerViewAdapter.ViewHolder> {
+public class LetRecyclerViewAdapter extends RecyclerView.Adapter<LetRecyclerViewAdapter.ViewHolder> {
+
 
     private static final String TAG = "WebRecyclerViewAdapter";
     public Context context;
-    private List<NetMusic.DataBean> netMusicList = new ArrayList<>();
-    private int nposition;
+    private List<LetMusic.DataBean> netMusicList = new ArrayList<>();
 
-    public WebRecyclerViewAdapter(Context context, List<NetMusic.DataBean> netMusicList) {
+    public LetRecyclerViewAdapter(Context context, List<LetMusic.DataBean> netMusicList) {
         this.context = context;
         this.netMusicList = netMusicList;
     }
 
     @Override
-    public WebRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.music_item_one, parent, false);
+    public LetRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_teo, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(WebRecyclerViewAdapter.ViewHolder holder, int position) {
-        NetMusic.DataBean music = netMusicList.get(position);
-        holder.music_Name.setText(music.getName());
-        holder.author.setText(music.getSinger());
-        holder.item_pause.setTag(position);
+    public void onBindViewHolder(LetRecyclerViewAdapter.ViewHolder holder, int position) {
+        LetMusic.DataBean music = netMusicList.get(position);
+        holder.music_Name.setText(music.getTitle());
+        holder.author.setText(music.getCreator());
         Glide.with(context)
-                .load(music.getPic())
+                .load(music.getCoverImgUrl())
                 .into(holder.image_net);
     }
     @Override
@@ -94,30 +93,6 @@ public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerView
     //定义方法并传给外面的使用者
     public void setOnItemClickListener(OnItemClickListener  listener) {
         this.mOnItemClickListener  = listener;
-    }
-
-    private void startMusic() {
-        Dialog();
-        Toast.makeText(context, netMusicList.get(nposition).getName(), Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "点击了-----" + netMusicList.get(nposition).getName());
-        Log.i(TAG, "点击了-----" + netMusicList.get(nposition).getUrl());
-        Log.i(TAG, "点击了-----" + netMusicList.get(nposition).getLrc());
-    }
-    public void Dialog(){
-        AlertDialog.Builder builder  = new AlertDialog.Builder(context);
-        builder.setTitle("是否下载歌曲？" ) ;
-        builder.setMessage(netMusicList.get(nposition).getSinger() +"__"+ netMusicList.get(nposition).getName() ) ;
-        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                download();
-            }
-        });
-        builder.setNegativeButton("否", null);
-        builder.show();
-    }
-    public void download() {
-        Toast.makeText(context, netMusicList.get(nposition).getLrc(), Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -7,12 +7,12 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/local_fragment_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#00000000">
-        </ListView>
+
+        <include
+            android:id="@+id/jp_gd"
+            layout="@layout/songsheet_fragment_list">
+        </include>
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="暂无歌曲"
+        android:text="暂无歌单"
         android:visibility="gone"/>
 
 </FrameLayout>

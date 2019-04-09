@@ -13,6 +13,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.Divider">
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
     <!-- Splash application theme -->
     <style name="Theme.Splash" parent="AppTheme">
         <item name="windowNoTitle">true</item>

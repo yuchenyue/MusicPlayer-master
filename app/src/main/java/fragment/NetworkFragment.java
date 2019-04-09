@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,8 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
     private String search_s;
     Context context;
     MainActivity mainActivity;
+    TextView tv_empty_net;
+    Button item_pause;
 
     public NetworkFragment() {
         // Required empty public constructor
@@ -61,12 +64,13 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.network_fragment, container, false);
-
         web_musicList = view.findViewById(R.id.web_musicList);
         layoutManager = new LinearLayoutManager(MyApplication.getContext());
         search_text = view.findViewById(R.id.search_text);
         btn_search = view.findViewById(R.id.btn_search);
         btn_search.setOnClickListener(this);
+        tv_empty_net = view.findViewById(R.id.tv_empty_net);
+        item_pause = view.findViewById(R.id.item_pause);
         return view;
 
     }
@@ -76,13 +80,17 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_search:
                 search_s = search_text.getText().toString().trim();
-                if (search_s.equals("")) {
-                    Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(search_s)) {
+//                    Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
+                    netMusicList.clear();
+                    tv_empty_net.setVisibility(View.VISIBLE);
                     Log.d(TAG, "可能没有这首歌" + search_s);
                 } else {
                     if (netMusicList == null) {
+                        tv_empty_net.setVisibility(View.GONE);
                         getNetMusicList(search_s);
                     } else {
+                        tv_empty_net.setVisibility(View.GONE);
                         getNetMusicList(search_s);
                     }
                 }
@@ -109,6 +117,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                     adapter = new WebRecyclerViewAdapter(getContext(), netMusicList);
                     web_musicList.setAdapter(adapter);
 
+                    adapter.setOnItemClickListener(MyItemClickListener);
                     Log.i(TAG, "歌名--" + netMusicList.get(0).getName() + netMusicList.get(0).getSinger());
                     Log.i(TAG, "显示了--" + netMusicList.size() + "首歌曲");
                 }
@@ -124,5 +133,23 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         getNetMusicList(s);
     }
 
+    private WebRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new WebRecyclerViewAdapter.OnItemClickListener(){
 
+        @Override
+        public void onItemClick(View v, int position) {
+            switch (v.getId()){
+                case R.id.item_pause:
+                    Toast.makeText(getContext(),"按钮"+(position+1),Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(getContext(),"item"+(position+1),Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+
+        @Override
+        public void onItemLongClick(View v) {
+            Toast.makeText(getContext(),"长按没用哦~",Toast.LENGTH_SHORT).show();
+        }
+    };
 }

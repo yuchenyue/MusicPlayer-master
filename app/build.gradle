@@ -38,12 +38,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
 
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-//    compile 'com.android.volley:volley:1.0.0'
     compile 'org.adw.library:discrete-seekbar:1.0.0'
-//    compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.google.code.gson:gson:2.7'
-
-//    compile 'com.kymjs.rxvolley:rxvolley:1.1.4'
     //圆形化图片
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
