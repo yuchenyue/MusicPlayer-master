@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public RelativeLayout design_bottom_sheet;
     TabLayout tablayout;
-    private String[] titles = {"本地音乐", "在线试听","歌单"};
+    private String[] titles = {"歌单","本地音乐", "在线试听"};
 
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
@@ -119,9 +119,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //创建Fragment集合并添加
         addTabToTabLayout();
         fragmentList = new ArrayList<>();
+        fragmentList.add(new LetworkFragment());
         fragmentList.add(new LocalFragment());
         fragmentList.add(new NetworkFragment());
-        fragmentList.add(new LetworkFragment());
         //设置适配器
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
         fragmentAdapter.addTitlesAndFragments(titles,fragmentList);

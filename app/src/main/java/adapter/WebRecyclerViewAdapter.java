@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.NetMusic;
-import services.MusicService;
-import utils.DownloadUtils;
 
 public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerViewAdapter.ViewHolder> {
 
@@ -37,7 +35,7 @@ public class WebRecyclerViewAdapter extends RecyclerView.Adapter<WebRecyclerView
 
     @Override
     public WebRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.music_item_one, parent, false);
+        View view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.music_item_net, parent, false);
         return new ViewHolder(view);
     }
 

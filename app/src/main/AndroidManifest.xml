@@ -46,7 +46,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".SongSheetActivity"></activity>
+        <activity android:name=".SongListActivity"></activity>
     </application>
 
 </manifest>

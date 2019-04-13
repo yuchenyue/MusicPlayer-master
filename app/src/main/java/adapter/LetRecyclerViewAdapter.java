@@ -2,17 +2,13 @@ package adapter;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ycy.musicplayer.R;
@@ -21,34 +17,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.LetMusic;
-import entity.NetMusic;
 
 public class LetRecyclerViewAdapter extends RecyclerView.Adapter<LetRecyclerViewAdapter.ViewHolder> {
 
 
     private static final String TAG = "WebRecyclerViewAdapter";
     public Context context;
-    private List<LetMusic.DataBean> netMusicList = new ArrayList<>();
+    private List<LetMusic.DataBean> letMusicList = new ArrayList<>();
 
-    public LetRecyclerViewAdapter(Context context, List<LetMusic.DataBean> netMusicList) {
+    public LetRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
         this.context = context;
-        this.netMusicList = netMusicList;
+        this.letMusicList = letMusicList;
     }
 
     @Override
     public LetRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_teo, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_let, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(LetRecyclerViewAdapter.ViewHolder holder, int position) {
-        LetMusic.DataBean music = netMusicList.get(position);
-        holder.music_Name.setText(music.getTitle());
-        holder.author.setText(music.getCreator());
+        LetMusic.DataBean music = letMusicList.get(position);
+        holder.let_name.setText(music.getTitle());
         Glide.with(context)
                 .load(music.getCoverImgUrl())
-                .into(holder.image_net);
+                .into(holder.image_let);
     }
     @Override
     public long getItemId(int position) {
@@ -56,28 +50,26 @@ public class LetRecyclerViewAdapter extends RecyclerView.Adapter<LetRecyclerView
     }
     @Override
     public int getItemCount() {
-        return netMusicList.size();
+        return letMusicList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView music_Name, author;
-        ImageView image_net;
-        Button item_pause;
+        TextView let_name;
+        ImageView image_let;
+        Button item_let;
         public ViewHolder(View view) {
             super(view);
-            music_Name = view.findViewById(R.id.musicName);
-            author = view.findViewById(R.id.author);
-            image_net = view.findViewById(R.id.image_net);
-            item_pause = view.findViewById(R.id.item_pause);
+            let_name = view.findViewById(R.id.let_name);
+            image_let = view.findViewById(R.id.image_let);
+            item_let = view.findViewById(R.id.item_let);
             view.setOnClickListener(this);
-            item_pause.setOnClickListener(this);
+            item_let.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (mOnItemClickListener != null){
                 mOnItemClickListener.onItemClick(v,getAdapterPosition());
-                item_pause.setVisibility(View.VISIBLE);
             }
         }
     }

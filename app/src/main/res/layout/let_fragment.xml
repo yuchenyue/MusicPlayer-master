@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/songsheet_fragment_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
 
-        <include
-            android:id="@+id/jp_gd"
-            layout="@layout/songsheet_fragment_list">
-        </include>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
+    </android.support.v7.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tv_empty"
@@ -22,6 +21,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="暂无歌单"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
 
 </FrameLayout>

@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class MusicAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         Musicholder musicholder = new Musicholder();
         if (view == null) {
-            view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.music_item, null);
+            view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.music_item_local, null);
             musicholder.albumImage = view.findViewById(R.id.albumImage);
             musicholder.t_song = view.findViewById(R.id.t_song);
             musicholder.t_songer = view.findViewById(R.id.t_songer);

@@ -1,6 +1,7 @@
 package serviceApi;
 
 import entity.LetMusic;
+import entity.ListMusic;
 import entity.NetMusic;
 import retrofit2.Call;
 import retrofit2.http.POST;
@@ -14,4 +15,6 @@ public interface Api {
     @POST("hotSongList")
     Call<LetMusic> getLMusic(@Query("key") String key, @Query("limit") int limit, @Query("offset") int offset);
 
+    @POST("songList")
+    Call<ListMusic> getListMusic(@Query("key") String key, @Query("id") String id, @Query("limit") int limit, @Query("offset") int offset);
 }
