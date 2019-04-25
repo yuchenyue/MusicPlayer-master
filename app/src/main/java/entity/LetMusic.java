@@ -23,7 +23,9 @@ public class LetMusic implements Serializable {
         private String id;
         private String title;
         private String creator;
+        private String description;
         private String coverImgUrl;
+        private String songNum;
         private String playCount;
 
         public String getId() {
@@ -50,12 +52,28 @@ public class LetMusic implements Serializable {
             this.creator = creator;
         }
 
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
         public String getCoverImgUrl() {
             return coverImgUrl;
         }
 
         public void setCoverImgUrl(String coverImgUrl) {
             this.coverImgUrl = coverImgUrl;
+        }
+
+        public String getSongNum() {
+            return songNum;
+        }
+
+        public void setSongNum(String songNum) {
+            this.songNum = songNum;
         }
 
         public String getPlayCount() {

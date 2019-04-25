@@ -46,12 +46,10 @@
         <Button
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/item_pause"
+            android:id="@+id/item_search"
             android:layout_centerVertical="true"
             android:layout_alignEnd="@+id/view"
-            android:text="P"
-            android:textSize="20dp"
-            android:visibility="gone"/>
+            android:background="@drawable/ic_music_list_icon_more"/>
     </RelativeLayout>
 
 </LinearLayout>

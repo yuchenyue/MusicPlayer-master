@@ -45,8 +45,7 @@ public class SplashActivity extends FragmentActivity {
         setContentView(R.layout.activity_splash);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         quanxian();
-        //启动服务
-        startService(new Intent(this, MusicService.class));
+
     }
 
     /**
@@ -72,6 +71,8 @@ public class SplashActivity extends FragmentActivity {
     }
 
     private void init(){
+        //启动服务
+        startService(new Intent(this, MusicService.class));
         //点击跳过按钮直接进入主界面
         button_splash = findViewById(R.id.button_splash);
         button_splash.setOnClickListener(new View.OnClickListener() {

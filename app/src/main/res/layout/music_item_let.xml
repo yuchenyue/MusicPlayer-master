@@ -7,34 +7,52 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="80dp">
 
         <ImageView
             android:id="@+id/image_let"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_margin="5dp" />
 
         <TextView
             android:id="@+id/let_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="80dp"
             android:layout_marginTop="5dp"
-            android:text="歌曲名称"
+            android:text="专辑"
             android:textColor="@color/textcolor"
             android:textSize="15dp"
             android:textStyle="normal|bold|italic" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/author"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:layout_marginLeft="80dp"-->
-            <!--android:text="歌手名称"-->
-            <!--android:textColor="@color/textcolor" />-->
+        <TextView
+            android:id="@+id/let_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="创建者"
+            android:textColor="@color/textcolor"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image_let"/>
+
+        <TextView
+            android:id="@+id/let_songnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="歌曲数"
+            android:textColor="@color/textcolor"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/image_let" />
+
+        <TextView
+            android:id="@+id/let_playnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="播放量"
+            android:textColor="@color/textcolor"
+            android:layout_alignTop="@+id/let_songnum"
+            android:layout_toEndOf="@+id/let_songnum"
+            android:layout_marginStart="30dp" />
 
         <View
             android:layout_width="match_parent"

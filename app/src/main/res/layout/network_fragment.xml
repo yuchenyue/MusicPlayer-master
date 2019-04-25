@@ -22,7 +22,8 @@
                 android:hint="输入歌曲、歌手"
                 android:maxLength="50"
                 android:textColorHighlight="#f26c6c"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:singleLine="true"/>
 
             <Button
                 android:id="@+id/btn_search"

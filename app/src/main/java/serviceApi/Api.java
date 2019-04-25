@@ -1,5 +1,6 @@
 package serviceApi;
 
+
 import entity.LetMusic;
 import entity.ListMusic;
 import entity.NetMusic;
@@ -16,5 +17,5 @@ public interface Api {
     Call<LetMusic> getLMusic(@Query("key") String key, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST("songList")
-    Call<ListMusic> getListMusic(@Query("key") String key, @Query("id") String id, @Query("limit") int limit, @Query("offset") int offset);
+    Call<ListMusic> getListMusic(@Query("key") String key, @Query("id") String id);
 }

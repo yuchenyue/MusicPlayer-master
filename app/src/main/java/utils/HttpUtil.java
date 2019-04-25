@@ -11,13 +11,6 @@ import serviceApi.Api;
  */
 
 public class HttpUtil {
-    public static void requestStringData(int topid, okhttp3.Callback callback) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("http://route.showapi.com/213-4?showapi_appid=88100&topid=\"+topid+\"&showapi_sign=0a363fadf62f4216ab2e865d17368a8b")
-                .build();
-        client.newCall(request).enqueue(callback);
-    }
 
     public static Api getWebMusic() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -27,4 +20,5 @@ public class HttpUtil {
         Api mApi = retrofit.create(Api.class);
         return mApi;
     }
+
 }

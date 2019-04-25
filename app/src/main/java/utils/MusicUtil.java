@@ -30,7 +30,8 @@ public class MusicUtil {
     private static final Uri albumArtUri = Uri.parse("content://media/external/audio/albumart");
 
     public static List<Music> getmusics(Context context) {
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = context.getContentResolver()
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null, null, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         List<Music> musics = new ArrayList<Music>();
         for (int i = 0; i < cursor.getCount(); i++) {
@@ -38,7 +39,8 @@ public class MusicUtil {
             Music music = new Music();
             long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
             String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-            String songer = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+            String songer = cursor
+                    .getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
             if ("<unknown>".equals(songer)) {
                 songer = "未知艺术家";
             }

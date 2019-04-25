@@ -1,8 +1,10 @@
 package fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -46,10 +48,9 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
     private EditText search_text;
     private Button btn_search;
     private String search_s;
-    Context context;
     MainActivity mainActivity;
     TextView tv_empty_net;
-    Button item_pause;
+    Button item_search;
 
     public NetworkFragment() {
         // Required empty public constructor
@@ -70,7 +71,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         btn_search = view.findViewById(R.id.btn_search);
         btn_search.setOnClickListener(this);
         tv_empty_net = view.findViewById(R.id.tv_empty_net);
-        item_pause = view.findViewById(R.id.item_pause);
+        item_search = view.findViewById(R.id.item_search);
         return view;
 
     }
@@ -138,8 +139,8 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onItemClick(View v, int position) {
             switch (v.getId()){
-                case R.id.item_pause:
-                    Toast.makeText(getContext(),"按钮"+(position+1),Toast.LENGTH_SHORT).show();
+                case R.id.item_search:
+                    searchdialog(position);
                     break;
                 default:
                     Toast.makeText(getContext(),"item"+(position+1),Toast.LENGTH_SHORT).show();
@@ -147,9 +148,18 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        @Override
-        public void onItemLongClick(View v) {
-            Toast.makeText(getContext(),"长按没用哦~",Toast.LENGTH_SHORT).show();
+        public void searchdialog(int position){
+            AlertDialog.Builder builder  = new AlertDialog.Builder(getContext());
+            builder.setTitle("是否下载歌曲？" ) ;
+            builder.setMessage(netMusicList.get(position).getSinger() +"__"+ netMusicList.get(position).getName() ) ;
+            builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //做下载
+                }
+            });
+            builder.setNegativeButton("否", null);
+            builder.show();
         }
     };
 }

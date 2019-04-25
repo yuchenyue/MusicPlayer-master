@@ -100,14 +100,14 @@
                 android:layout_toRightOf="@id/listen_pause"
                 android:src="@mipmap/ic_next" />
 
-            <ImageView
-                android:id="@+id/listen_mode"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@id/listen_next"
-                android:src="@drawable/mode_shun" />
+            <!--<ImageView-->
+                <!--android:id="@+id/listen_mode"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_toRightOf="@id/listen_next"-->
+                <!--android:src="@drawable/mode_shun" />-->
         </RelativeLayout>
 
         <LinearLayout

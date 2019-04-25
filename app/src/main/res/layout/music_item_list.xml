@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/item_color">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,7 +48,7 @@
             android:id="@+id/item_list"
             android:layout_centerVertical="true"
             android:layout_alignEnd="@+id/view"
-            android:background="@drawable/ic_stop"/>
+            android:background="@drawable/ic_music_list_icon_more"/>
     </RelativeLayout>
 
 </LinearLayout>

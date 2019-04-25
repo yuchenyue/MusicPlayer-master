@@ -77,14 +77,9 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
             }
         }
     }
-    //item里面有多个控件可以点击（item+item内部控件）
-    public enum ViewName{
-        ITEM,PRACTISE;
-    }
     //自定义一个回调接口来实现Click和LongClick事件
     public interface OnItemClickListener  {
         void onItemClick(View v, int position);
-        void onItemLongClick(View v);
     }
 
     private OnItemClickListener mOnItemClickListener;//声明自定义的接口

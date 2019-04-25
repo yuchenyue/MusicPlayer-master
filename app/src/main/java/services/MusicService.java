@@ -127,6 +127,7 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -182,10 +183,10 @@ public class MusicService extends Service {
         }
         chuandi();
     }
-
-//    public void playweb(int position) {
+//
+//    public void playweb() {
 //        Bundle bundle = new Bundle();
-//        if (position >= 0 && position < musics.size()) {
+//        if (isWeb == true) {
 //            netMsuicList = (List<NetMusic.DataBean>) bundle.getSerializable("musicList");
 //            try {
 //                mediaPlayer.reset();
