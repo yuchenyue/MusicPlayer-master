@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PointerIconCompat;
 import android.support.v4.view.ViewCompat;
@@ -34,6 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import serviceApi.Api;
+import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
 import utils.Theme;
@@ -42,18 +44,16 @@ import utils.Theme;
  * Created by Administrator on 2019/1/14.
  */
 
-public class LetworkFragment extends Fragment{
+public class LetworkFragment extends Fragment {
 
     private static final String TAG = "LetworkFragment";
-    private static final int SEARCH_MUSICLIST = 0x1;
     public List<LetMusic.DataBean> letMusicList = new ArrayList<LetMusic.DataBean>();
     private LetRecyclerViewAdapter ladapter;
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
     public LinearLayoutManager layoutManager;
     MainActivity mainActivity;
-    public int sum = 10;
-    private int lastVisibleItemPosition;
+    com.getbase.floatingactionbutton.FloatingActionButton to_top;
 
     @Override
     public void onAttach(Context context) {
@@ -64,35 +64,63 @@ public class LetworkFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.let_fragment, container, false);
-        layoutManager = new LinearLayoutManager(MyApplication.getContext());
+        layoutManager = new FastScrollManager(MyApplication.getContext(),LinearLayoutManager.VERTICAL,false);
+
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            boolean isSlidingToLasst = false;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE&&lastVisibleItemPosition + 1 == ladapter.getItemCount()){
-                        sum = sum + 3;
-                        getNetMusicList();
-                        Toast.makeText(getContext(), "加载成功11，下滑查看", Toast.LENGTH_SHORT).show();
+                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (firstVisibleItemPosition == 0) {
+                        to_top.setVisibility(View.INVISIBLE);
+                    } else {
+                        to_top.setVisibility(View.VISIBLE);
                     }
+                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    to_top.setVisibility(View.INVISIBLE);
                 }
+
+            }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView,dx,dy);
-                lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0){
+                    isSlidingToLasst = true;
+                }else {
+                    isSlidingToLasst = false;
+                }
             }
         });
+        //下拉刷新
         let_list_refreshLayout = view.findViewById(R.id.let_list_refreshLayout);
         let_list_refreshLayout.setRefreshing(true);
         let_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getNetMusicList();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getNetMusicList();
+                        let_list_refreshLayout.setRefreshing(false);
+                    }
+                }, 2000);
             }
         });
-
-        handler.sendEmptyMessageDelayed(SEARCH_MUSICLIST,1000);
+        to_top = view.findViewById(R.id.to_top);
+        //点击返回顶部
+        to_top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                songsheet_fragment_list.smoothScrollToPosition(0);
+            }
+        });
+        getNetMusicList();
         return view;
     }
 
@@ -107,41 +135,34 @@ public class LetworkFragment extends Fragment{
     }
 
     private void getNetMusicList() {
-        handler.sendEmptyMessageDelayed(SEARCH_MUSICLIST,500);
+        Api mApi = HttpUtil.getWebMusic();
+        Call<LetMusic> musicCall = mApi.getLMusic("579621905", 50, 0);
+        musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
+            @Override
+            public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
+                Log.d(TAG, "LetworkFragment--9089--");
+                letMusicList = response.body().getData();
+                songsheet_fragment_list.setLayoutManager(layoutManager);
+                ladapter = new LetRecyclerViewAdapter(getContext(), letMusicList);
+                songsheet_fragment_list.setAdapter(ladapter);
+                ladapter.setOnItemClickListener(MyItemClickListener);
+                let_list_refreshLayout.setRefreshing(false);
+                ladapter.notifyDataSetChanged();
+                Log.i(TAG, "显示了--" + letMusicList.size() + "首歌曲");
+            }
+
+            @Override
+            public void onFailure(Call<LetMusic> call, Throwable t) {
+            }
+        });
     }
 
-    public Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Api mApi = HttpUtil.getWebMusic();
-            Call<LetMusic> musicCall = mApi.getLMusic("579621905",sum,0);
-            musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
-                @Override
-                public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
-                    Log.d(TAG, "LetworkFragment--9089--");
-                    letMusicList = response.body().getData();
-                    songsheet_fragment_list.setLayoutManager(layoutManager);
-                    ladapter = new LetRecyclerViewAdapter(getContext(), letMusicList);
-                    songsheet_fragment_list.setAdapter(ladapter);
-                    ladapter.setOnItemClickListener(MyItemClickListener);
-                    let_list_refreshLayout.setRefreshing(false);
-                    ladapter.notifyDataSetChanged();
-                    Log.i(TAG, "显示了--" + letMusicList.size() + "首歌曲");
-                }
-                @Override
-                public void onFailure(Call<LetMusic> call, Throwable t) {
-                }
-            });
-        }
-    };
 
-
-
-    private LetRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new LetRecyclerViewAdapter.OnItemClickListener(){
+    private LetRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new LetRecyclerViewAdapter.OnItemClickListener() {
 
         @Override
         public void onItemClick(View v, int position) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.item_let:
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                     dialog.setTitle(letMusicList.get(position).getTitle());
@@ -150,14 +171,14 @@ public class LetworkFragment extends Fragment{
                     dialog.show();
                     break;
                 default:
-                    Intent intent = new Intent(getContext(),SongListActivity.class);
+                    Intent intent = new Intent(getContext(), SongListActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("id",letMusicList.get(position).getId());
-                    bundle.putString("pic",letMusicList.get(position).getCoverImgUrl());
-                    bundle.putString("description",letMusicList.get(position).getDescription());
+                    bundle.putString("id", letMusicList.get(position).getId());
+                    bundle.putString("pic", letMusicList.get(position).getCoverImgUrl());
+                    bundle.putString("description", letMusicList.get(position).getDescription());
                     intent.putExtras(bundle);
                     startActivity(intent);
-                    Toast.makeText(getContext(),"item"+(position+1),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "item" + (position + 1), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

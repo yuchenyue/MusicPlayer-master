@@ -19,6 +19,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -44,6 +45,9 @@ import entity.Music;
 import fragment.LetworkFragment;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
+import manage.ExitApplication;
+import manage.FileProviderUtils;
+import manage.SystemProgramUtils;
 import utils.MusicUtil;
 import utils.Theme;
 
@@ -52,12 +56,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public static final String TAG = "MainActivity";
     private static final int SUBACTIVITY = 4;//子Activity回传标记
     private Popwindow popwindow;
-    //相册请求码
-    private static final int ALBUM_REQUEST_CODE = 1;
-    //相机请求码
-    private static final int CAMERA_REQUEST_CODE = 2;
-    //剪裁请求码
-    private static final int CROP_REQUEST_CODE = 3;
+//    //相册请求码
+//    private static final int ALBUM_REQUEST_CODE = 1;
+//    //相机请求码
+//    private static final int CAMERA_REQUEST_CODE = 2;
+//    //剪裁请求码
+//    private static final int CROP_REQUEST_CODE = 3;
     private File tempFile;
     public Uri cropImageUri;
 
@@ -242,8 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
-            finish();
-            System.exit(0);
+            ExitApplication.getInstance().exit(this);
         }
     }
 
@@ -281,8 +284,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         }
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
-//        drawer.closeDrawer(GravityCompat.START);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -296,6 +299,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Uri filtUri;
+        File outputFile = new File("/mnt/sdcard/tupian_out.jpg");//裁切后输出的图片
         switch (requestCode) {
             case SUBACTIVITY:
                 Log.i(TAG, "SUBACTIVITY");
@@ -307,35 +312,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 }
                 break;
-            case CAMERA_REQUEST_CODE://相机
-                if (resultCode == RESULT_OK) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Uri contentUri = FileProvider.getUriForFile(MainActivity.this, "com.example.ycy.musicplayer.fileprovider", tempFile);
-                        cropPhoto(contentUri);
-                    } else {
-                        cropPhoto(Uri.fromFile(tempFile));
-                    }
-                }
+            case SystemProgramUtils.REQUEST_CODE_PAIZHAO:
+                //拍照完成，进行图片裁切
+                File file = new File("/mnt/sdcard/tupian.jpg");
+                filtUri = FileProviderUtils.uriFromFile(MainActivity.this, file);
+                SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
                 break;
-            case ALBUM_REQUEST_CODE://相册
-                if (resultCode == RESULT_OK) {
-                    Uri uri = data.getData();
-                    cropPhoto(uri);
+            case SystemProgramUtils.REQUEST_CODE_ZHAOPIAN:
+                //相册选择图片完毕，进行图片裁切
+                if (data == null ||  data.getData()==null) {
+                    return;
                 }
+                filtUri = data.getData();
+                SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
                 break;
-            case CROP_REQUEST_CODE://裁剪
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(cropImageUri));
-                        iv_touxiang = (CircleImageView) findViewById(R.id.iv_touxiang);
-                        iv_touxiang.setImageBitmap(bitmap);
-                        Log.e(TAG, "裁剪" + bitmap);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+            case SystemProgramUtils.REQUEST_CODE_CAIQIE:
+                //图片裁切完成，显示裁切后的图片
+                try {
+                    Uri uri = Uri.fromFile(outputFile);
+                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                    iv_touxiang = (CircleImageView) findViewById(R.id.iv_touxiang);
+                    iv_touxiang.setImageBitmap(bitmap);
+                }catch (Exception ex){
+                    ex.printStackTrace();
                 }
-                Log.e(TAG, "裁剪");
                 break;
             default:
                 break;
@@ -351,10 +351,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.bt_xiangji:
                 popwindow.dismiss();
-                takePhoto();
+                SystemProgramUtils.paizhao(this,new File("/mnt/sdcard/tupian.jpg"));
                 break;
             case R.id.bt_xiangce:
-                choosePhoto();
+                SystemProgramUtils.zhaopian(this);
                 Log.i(TAG, "相册");
                 break;
             case R.id.bt_quxiao:
@@ -364,74 +364,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             default:
                 break;
         }
-    }
-
-    /**
-     * 相册选图
-     */
-    private void choosePhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");//相片类型
-        startActivityForResult(intent, ALBUM_REQUEST_CODE);
-    }
-
-    /**
-     * 拍照
-     */
-    private void takePhoto() {
-//        //最后一个参数是文件夹的名称，可以随便起
-//        File file = new File(Environment.getExternalStorageDirectory(), "MemberShipAvatars");
-//        if(!file.exists()){
-//            file.mkdir();
-//        }
-//        //这里将时间作为不同照片的名称
-//        fileImage = new File(file, System.currentTimeMillis()+".jpg");
-//        //如果该文件夹已经存在，则删除它，否则创建一个
-//        try {
-//            if (fileImage.exists()) {
-//                fileImage.delete();
-//            }
-//            fileImage.createNewFile();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        //隐式打开拍照的Activity，并且传入CROP_PHOTO常量作为拍照结束后回调的标志
-//        imageUri = Uri.fromFile(fileImage);
-//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//        startActivityForResult(intent, CROP_PHOTO);
-//        Log.i(TAG,"相机被调用了");
-        tempFile = new File(Environment.getExternalStorageDirectory().getPath(), System.currentTimeMillis() + ".jpg");
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            Uri contentUri = FileProvider.getUriForFile(MainActivity.this, "com.example.ycy.musicplayer.fileprovider", tempFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-        } else {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
-        }
-        startActivityForResult(intent, CAMERA_REQUEST_CODE);
-    }
-
-    /**
-     * 裁剪图片
-     */
-    private void cropPhoto(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 300);
-        intent.putExtra("outputY", 300);
-//        intent.putExtra("scale", true);
-//        intent.putExtra("return-data", true);
-        cropImageUri = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        startActivityForResult(intent, CROP_REQUEST_CODE);
     }
 
     //广播接收器

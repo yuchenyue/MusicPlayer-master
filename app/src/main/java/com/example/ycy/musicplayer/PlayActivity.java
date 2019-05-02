@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import entity.Music;
+import manage.ExitApplication;
 import utils.MusicUtil;
 
 public class PlayActivity extends BaseActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
@@ -41,6 +42,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        ExitApplication.getInstance().addActivity(this);
         Log.d(TAG, "PlayActivity绑定服务");
         bindMusicService();
         //接收传值

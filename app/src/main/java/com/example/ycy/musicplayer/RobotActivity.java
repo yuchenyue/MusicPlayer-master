@@ -24,6 +24,7 @@ import java.util.List;
 
 import adapter.ChatListAdapter;
 import entity.ChatMessage;
+import manage.ExitApplication;
 import utils.RobotUtils;
 
 public class RobotActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,6 +50,7 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_robot);
+        ExitApplication.getInstance().addActivity(this);
         initView();
         initDate();
 

@@ -39,7 +39,7 @@ public class MusicService extends Service {
     public boolean isWeb;
     public boolean isLoc;
     public boolean isPause = false;
-
+    private int position;
 
     /**
      * 暂停播放
@@ -183,24 +183,23 @@ public class MusicService extends Service {
         }
         chuandi();
     }
-//
-//    public void playweb() {
-//        Bundle bundle = new Bundle();
-//        if (isWeb == true) {
-//            netMsuicList = (List<NetMusic.DataBean>) bundle.getSerializable("musicList");
-//            try {
-//                mediaPlayer.reset();
-//                position = bundle.getInt("nposition");
-//                mediaPlayer.setDataSource(netMsuicList.get(position).getUrl());
-//                mediaPlayer.prepare();
-//                mediaPlayer.start();
-//                currentProgress = position;
-//                state = 1;
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
+    public void playweb() {
+        Bundle bundle = new Bundle();
+        if (isWeb == true) {
+            netMsuicList = (List<NetMusic.DataBean>) bundle.getSerializable("musicList");
+            try {
+                position = bundle.getInt("position");
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(netMsuicList.get(position).getUrl());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+                state = 1;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 暂停
