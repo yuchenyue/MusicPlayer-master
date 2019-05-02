@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 import manage.DBHelper;
 
+/**
+ * 用户注册
+ */
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edit_register, edit_setpassword, edit_resetpassword;
