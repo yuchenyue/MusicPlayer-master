@@ -248,6 +248,10 @@ public class MusicService extends Service {
         }
     }
 
+    public void stop(){
+        mediaPlayer.stop();
+    }
+
     /**
      * 当播放改变是发送广播
      */
