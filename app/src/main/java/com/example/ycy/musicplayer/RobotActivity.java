@@ -58,7 +58,7 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
 
     private void initDate() {
         mlist = new ArrayList<ChatMessage>();
-        mlist.add(new ChatMessage("您好!", ChatMessage.Type.INCOUNT, new Date()));
+        mlist.add(new ChatMessage("您好!什么我都可以回答你哦！我可是无所不知的！", ChatMessage.Type.INCOUNT, new Date()));
         chatAdapter = new ChatListAdapter(this, mlist);
         lv_chat_list.setAdapter(chatAdapter);
     }

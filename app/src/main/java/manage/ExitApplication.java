@@ -30,9 +30,7 @@ public class ExitApplication extends Application {
         list.add(activity);
     }
     public void exit(Context context){
-        musicService.stop();
-        Intent intent = new Intent(this,MusicService.class);
-        stopService(intent);
+
         for (Activity activity : list){
             activity.finish();
         }

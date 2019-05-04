@@ -21,8 +21,9 @@
             android:id="@+id/left_lin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:layout_alignParentBottom="false"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
 
             <TextView
                 android:id="@+id/chat_left_name"
@@ -43,12 +44,12 @@
         <TextView
             android:id="@+id/chat_left_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_toRightOf="@id/left_lin"
             android:background="@drawable/chat_bg_cloud"
             android:maxWidth="250dp"
             android:text="您好"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:textSize="15sp" />
     </RelativeLayout>
 

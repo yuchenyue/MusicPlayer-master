@@ -21,8 +21,8 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/theme"
-                android:title="Theme" />
+                android:icon="@drawable/eixt_app"
+                android:title="退出" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_share"

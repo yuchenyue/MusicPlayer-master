@@ -226,7 +226,6 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
             listen_jindutiao.setProgress(musicService.getCurrentPosition());
             listen_current.setText(MusicUtil.formatTime(musicService.getCurrentPosition()));
             mHandler.postDelayed(mRunnable, 1000);
-            Log.i(TAG, "当前时间---" + MusicUtil.formatTime(musicService.getCurrentPosition()));
         }
     };
 

@@ -5,18 +5,23 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-public class Theme {
-    public static void theme(Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("请选择主题");
-        builder.setSingleChoiceItems(new String[]{"默认","黑暗系"}, 0,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+import manage.ExitApplication;
 
-                    }
-                });
-        builder.setNegativeButton("取消",null);
+public class Theme {
+    public static void theme(final Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("退出登录？");
+        builder.setNeutralButton("残忍退出",new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ExitApplication.getInstance().exit(context);
+            }
+        });
+        builder.setPositiveButton("我点错了",new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
         builder.show();
     }
 }

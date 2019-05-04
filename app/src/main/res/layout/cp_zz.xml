@@ -10,7 +10,7 @@
         android:id="@+id/play_background"
         android:layout_width="165dp"
         android:layout_height="166dp"
-        android:background="#da6060"
+        android:background="@drawable/play_page_default_cover"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="142dp" />
 

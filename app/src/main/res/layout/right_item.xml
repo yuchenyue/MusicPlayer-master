@@ -23,21 +23,22 @@
         <TextView
             android:id="@+id/chat_right_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/right_lin"
             android:background="@drawable/chat_bg_user"
             android:maxWidth="250dp"
-            android:text="can i help me ?"
-            android:textColor="#ffffff"
+            android:text="-------------"
+            android:textColor="#000"
             android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/right_lin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentBottom="false"
             android:layout_alignParentRight="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
 
             <ImageView
                 android:id="@+id/chat_right_image"

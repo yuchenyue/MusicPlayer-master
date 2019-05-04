@@ -25,6 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import manage.DBHelper;
 import manage.ExitApplication;
 import permission.PermissionUtils;
@@ -38,12 +42,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText edit_account, edit_password;
     private TextView text_msg;
     private Button btn_login, btn_register;
-    private CheckBox checkBox;
+    private CheckBox checkBox,checkBox2;
     private ImageButton openpwd;
     Context context;
     private boolean flag = false;
     private String account, password;
     private DBHelper dbHelper;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private boolean isRemember;
+
     IRequestPermissions requestPermissions = RequestPermissions.getInstance();//动态权限请求
     IRequestPermissionsResult requestPermissionsResult = RequestPermissionsResultSetApp.getInstance();//动态权限请求结果处理
 
@@ -53,8 +61,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ExitApplication.getInstance().addActivity(this);
+        sharedPreferences = getSharedPreferences("remember",MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        dbHelper = new DBHelper(this, "Data.db", null, 1);
+
         initView();
+        isRemember();
     }
+
+
 
     private void initView() {
         edit_account = (EditText) findViewById(R.id.edit_account);
@@ -81,13 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         checkBox = (CheckBox) findViewById(R.id.checkBox);
-        checkBox.setOnClickListener(this);
-        if (checkBox.isChecked()){
-            readUsersInfo();
-        }else {
-
-        }
-
+//        checkBox2 = (CheckBox) findViewById(R.id.checkBox2);
         text_msg = (TextView) findViewById(R.id.text_msg);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_register = (Button) findViewById(R.id.btn_register);
@@ -96,7 +105,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btn_login.setOnClickListener(this);
         btn_register.setOnClickListener(this);
         openpwd.setOnClickListener(this);
-        dbHelper = new DBHelper(this, "Data.db", null, 1);
+    }
+
+    /**
+     * 判断是否是否保存过密码
+     */
+    public void isRemember() {
+        SharedPreferences prefer = getSharedPreferences("remember", MODE_PRIVATE);
+        boolean isRemember = prefer.getBoolean("remember", false);
+        if (isRemember) {
+            edit_account.setText(prefer.getString("name", ""));
+            edit_password.setText(prefer.getString("pass", ""));
+            checkBox.setChecked(true);
+        }
     }
 
     @Override
@@ -111,6 +132,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this, "请输入账号或者注册账号！", Toast.LENGTH_SHORT).show();
                 } else {
                     readUserInfo();
+
                 }
                 break;
             case R.id.btn_register:
@@ -129,11 +151,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.text_msg:
+
 //                Intent i = new Intent(LoginActivity.this, ForgotInfo_activity.class);
 //                startActivity(i);
                 break;
             case R.id.checkBox:
-                readUsersInfo();
+//                readUsersInfo();
                 break;
         }
     }
@@ -171,10 +194,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String sql = "Select * from usertable where username=? and password=?";
         Cursor cursor = db.rawQuery(sql, new String[]{username, password});
-        if (cursor.moveToFirst()) {
+        boolean login = false;
+        while (cursor.moveToFirst()) {
             cursor.close();
+            login = true;
+            if (login){
+                SharedPreferences.Editor editor = getSharedPreferences("remember",MODE_PRIVATE).edit();
+                if (checkBox.isChecked()){
+                    editor.putBoolean("remember",true);
+                    editor.putString("name",edit_account.getText().toString().trim());
+                    editor.putString("pass",edit_password.getText().toString().trim());
+                    editor.commit();
+                }else {
+                    editor.clear();
+                }
+                editor.commit();
+            }
             return true;
         }
+
         return false;
     }
 

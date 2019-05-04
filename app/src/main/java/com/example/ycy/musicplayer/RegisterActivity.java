@@ -84,13 +84,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>10){
-                    edit_setpassword.setError("输入超长");
+                if (s.length()>=11){
+                    edit_setpassword.setError("输入超长：请输入小于11位的密码！");
+                    edit_setpassword.clearFocus();
+                    InputMethodManager imm =
+                            (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(edit_setpassword.getWindowToken(), 0);
                 }
-                edit_setpassword.clearFocus();
-                        InputMethodManager imm =
-                                (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(edit_setpassword.getWindowToken(), 0);
+//
             }
         });
 //        edit_setpassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -127,13 +128,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>10){
-                    edit_resetpassword.setError("输入超长");
+                if (s.length()>=11){
+                    edit_resetpassword.setError("输入超长：请输入小于11位的密码！");
+                    InputMethodManager im =
+                            (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(edit_resetpassword.getWindowToken(), 0);
+                    edit_resetpassword.clearFocus();
                 }
-                edit_resetpassword.clearFocus();
-                InputMethodManager im =
-                        (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                im.hideSoftInputFromWindow(edit_resetpassword.getWindowToken(), 0);
             }
         });
 //        edit_resetpassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {

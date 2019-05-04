@@ -126,7 +126,6 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(SongListActivity.this,"是",Toast.LENGTH_SHORT).show();
                 startMusic();
-                musicService.playweb();
             }
         });
         normalDialog.setNeutralButton("否",new DialogInterface.OnClickListener(){
@@ -146,6 +145,7 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtras(bundle);
         getApplicationContext().startService(intent);
         MyApplication.setIsWeb(true);
+        musicService.playweb();
     }
 
     /**

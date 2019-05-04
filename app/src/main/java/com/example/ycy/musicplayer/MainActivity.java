@@ -45,6 +45,7 @@ import entity.Music;
 import fragment.LetworkFragment;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
+import manage.DBHelper;
 import manage.ExitApplication;
 import manage.FileProviderUtils;
 import manage.SystemProgramUtils;
@@ -80,6 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     TabLayout tablayout;
     private String[] titles = {"本地音乐","每日推荐歌单", "搜索"};
 
+    private DBHelper dbHelper;
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
     List<Music> musics;
@@ -136,6 +138,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //底部弹出框
         popwindow = new Popwindow(this);
         popwindow.setOnItemClickListener(this);
+
+        dbHelper = new DBHelper(this, "Data.db", null, 1);
     }
 
     /**
@@ -154,7 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         main_author = (TextView) findViewById(R.id.main_author);
         main_viewpager = (ViewPager) findViewById(R.id.main_viewpager);
         main_image = (CircleImageView) findViewById(R.id.main_image);
-        main_image.setImageDrawable(getResources().getDrawable(R.drawable.app));
+//        main_image.setImageDrawable(getResources().getDrawable(R.drawable.app));
         main_up = (ImageView) findViewById(R.id.main_up);
         main_pause_play = (ImageView) findViewById(R.id.main_pause_play);
         main_next = (ImageView) findViewById(R.id.main_next);

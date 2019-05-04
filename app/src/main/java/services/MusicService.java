@@ -112,11 +112,12 @@ public class MusicService extends Service {
         registerReceiver(mReceiver, mFilter);
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
+//            mediaPlayer.setLooping(true);
         }
         isWeb = false;
         isLoc = false;
 
-        //自动播放下一首
+//        自动播放下一首
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -186,19 +187,20 @@ public class MusicService extends Service {
 
     public void playweb() {
         Bundle bundle = new Bundle();
-        if (isWeb == true) {
+//        if (isWeb == true) {
             netMsuicList = (List<NetMusic.DataBean>) bundle.getSerializable("musicList");
-            try {
-                position = bundle.getInt("position");
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(netMsuicList.get(position).getUrl());
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-                state = 1;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+            Log.d(TAG,"ServiceMusic playweb");
+//            try {
+//                position = bundle.getInt("position");
+//                mediaPlayer.reset();
+//                mediaPlayer.setDataSource(netMsuicList.get(position).getUrl());
+//                mediaPlayer.prepare();
+//                mediaPlayer.start();
+//                state = 1;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     /**

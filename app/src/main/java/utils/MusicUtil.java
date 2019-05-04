@@ -99,9 +99,9 @@ public class MusicUtil {
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         //返回小图
         if (small) {
-            return BitmapFactory.decodeStream(context.getResources().openRawResource(R.drawable.music), null, opts);
+            return BitmapFactory.decodeStream(context.getResources().openRawResource(R.drawable.default_cover), null, opts);
         }
-        return BitmapFactory.decodeStream(context.getResources().openRawResource(R.drawable.music), null, opts);
+        return BitmapFactory.decodeStream(context.getResources().openRawResource(R.drawable.default_cover), null, opts);
     }
 
     /**
