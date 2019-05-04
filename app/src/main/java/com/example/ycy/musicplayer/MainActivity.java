@@ -45,6 +45,7 @@ import entity.Music;
 import fragment.LetworkFragment;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
+import fragment.SongSheetFragment;
 import manage.DBHelper;
 import manage.ExitApplication;
 import manage.FileProviderUtils;
@@ -126,7 +127,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         addTabToTabLayout();
         fragmentList = new ArrayList<>();
         fragmentList.add(new LocalFragment());
-        fragmentList.add(new LetworkFragment());
+        fragmentList.add(new SongSheetFragment());
         fragmentList.add(new NetworkFragment());
         //设置适配器
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
