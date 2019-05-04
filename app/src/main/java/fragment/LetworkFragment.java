@@ -136,7 +136,7 @@ public class LetworkFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905", 30, 0);
+        Call<LetMusic> musicCall = mApi.getLMusic("579621905", 30, 0,"new");
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {

@@ -15,7 +15,7 @@ public class HttpUtil {
     public static Api getWebMusic() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://api.bzqll.com/music/netease/")
+                .baseUrl("https://api.itooi.cn/music/netease/")
                 .build();
         Api mApi = retrofit.create(Api.class);
         return mApi;
