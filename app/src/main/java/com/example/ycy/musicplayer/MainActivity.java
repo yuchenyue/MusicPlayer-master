@@ -8,17 +8,13 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -35,14 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.FragmentAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 import entity.Music;
-import fragment.LetworkFragment;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
 import fragment.SongSheetFragment;
@@ -277,15 +271,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             //修改个人信息
-            Intent intent = new Intent(this, Main2Activity.class);
+            Intent intent = new Intent(this, UserNameActivity.class);
             startActivityForResult(intent, SUBACTIVITY);
         } else if (id == R.id.nav_manage) {
             //换头像
             popwindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-            Log.i(TAG, "切换头像");
         } else if (id == R.id.nav_share) {
             Theme.theme(this);
-            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         }

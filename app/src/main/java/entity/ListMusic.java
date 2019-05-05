@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * 网络列表
  * Created by Administrator on 2019/2/28.
  */
 

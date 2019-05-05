@@ -22,7 +22,7 @@ import com.example.ycy.musicplayer.SongListActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.HotRecyclerViewAdapter;
+import adapter.NewRecyclerViewAdapter;
 import entity.LetMusic;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -31,19 +31,21 @@ import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
 
-public class hotFragment extends Fragment {
-    private static final String TAG = "hotFragment";
+/**
+ * Created by Administrator on 2019/1/14.
+ */
+
+public class otherFragment extends Fragment {
+
+    private static final String TAG = "otherFragment";
     public List<LetMusic.DataBean> letMusicList = new ArrayList<LetMusic.DataBean>();
-    private HotRecyclerViewAdapter hadapter;
+    private NewRecyclerViewAdapter ladapter;
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
     public FastScrollManager layoutManager;
     MainActivity mainActivity;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
-
-    public hotFragment() {
-        // Required empty public constructor
-    }
+    String kind = "日语";
 
     @Override
     public void onAttach(Context context) {
@@ -74,7 +76,6 @@ public class hotFragment extends Fragment {
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     to_top.setVisibility(View.INVISIBLE);
                 }
-
             }
 
             @Override
@@ -99,7 +100,7 @@ public class hotFragment extends Fragment {
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-                getNetMusicList();
+                getNetMusicList(kind);
             }
         });
         to_top = view.findViewById(R.id.to_top);
@@ -110,8 +111,9 @@ public class hotFragment extends Fragment {
                 songsheet_fragment_list.smoothScrollToPosition(0);
             }
         });
-        songsheet_fragment_list.setLayoutManager(layoutManager);
-        getNetMusicList();
+
+        getNetMusicList(kind);
+
         return view;
     }
 
@@ -125,20 +127,20 @@ public class hotFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private void getNetMusicList() {
+    private void getNetMusicList(String kind) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905",null, 30, 0, "hot");
+        Call<LetMusic> musicCall = mApi.getLMusic("579621905", kind, 30, 0, "new");
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
                 letMusicList = response.body().getData();
-
-                hadapter = new HotRecyclerViewAdapter(getContext(), letMusicList);
-                songsheet_fragment_list.setAdapter(hadapter);
-                hadapter.setOnItemClickListener(MyItemClickListener);
+                songsheet_fragment_list.setLayoutManager(layoutManager);
+                ladapter = new NewRecyclerViewAdapter(getContext(), letMusicList);
+                songsheet_fragment_list.setAdapter(ladapter);
+                ladapter.setOnItemClickListener(MyItemClickListener);
                 let_list_refreshLayout.setRefreshing(false);
-                hadapter.notifyDataSetChanged();
-                Log.i(TAG, "热门歌曲显示了--" + letMusicList.size() + "首歌曲");
+                ladapter.notifyDataSetChanged();
+                Log.i(TAG, "日语歌曲显示了--" + letMusicList.size() + "首歌曲");
             }
 
             @Override
@@ -147,7 +149,8 @@ public class hotFragment extends Fragment {
         });
     }
 
-    private HotRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new HotRecyclerViewAdapter.OnItemClickListener() {
+
+    private NewRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new NewRecyclerViewAdapter.OnItemClickListener() {
 
         @Override
         public void onItemClick(View v, int position) {

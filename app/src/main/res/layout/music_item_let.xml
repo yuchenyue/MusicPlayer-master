@@ -15,40 +15,51 @@
             android:layout_height="70dp"
             android:layout_margin="5dp" />
 
-        <TextView
+        <manage.MyTextView
             android:id="@+id/let_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="100dp"
             android:layout_marginTop="5dp"
             android:text="专辑"
             android:textColor="@color/textcolor"
-            android:textSize="15dp"
-            android:textStyle="normal|bold|italic" />
+            android:textSize="13dp"
+            android:textStyle="normal|bold|italic"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:maxEms="12"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/let_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="创建者"
+            android:textSize="12dp"
             android:textColor="@color/textcolor"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/image_let"/>
+            android:layout_marginLeft="100dp"/>
 
         <TextView
             android:id="@+id/let_songnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="歌曲数"
+            android:textSize="12sp"
             android:textColor="@color/textcolor"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/image_let" />
+            android:layout_marginLeft="100dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/let_playnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="播放量"
+            android:textSize="12sp"
             android:textColor="@color/textcolor"
             android:layout_alignTop="@+id/let_songnum"
             android:layout_toEndOf="@+id/let_songnum"
@@ -57,7 +68,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignBottom="@+id/image_net"
             android:layout_marginLeft="60dp"
             android:background="#d7d5d5"
             android:id="@+id/view"/>

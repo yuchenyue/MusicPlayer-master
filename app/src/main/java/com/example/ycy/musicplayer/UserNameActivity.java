@@ -12,13 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.nio.file.FileStore;
-
 import manage.ExitApplication;
 
-public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
+public class UserNameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "Main2Activity";
+    private static final String TAG = "UserNameActivity";
 
     ImageView use_giveup, use_save;
     TextView tv_use_name;
@@ -27,7 +25,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_username);
         ExitApplication.getInstance().addActivity(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

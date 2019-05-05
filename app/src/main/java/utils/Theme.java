@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import manage.ExitApplication;
+import services.MusicService;
 
 public class Theme {
     public static void theme(final Context context){
@@ -14,6 +15,7 @@ public class Theme {
         builder.setNeutralButton("残忍退出",new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 ExitApplication.getInstance().exit(context);
             }
         });

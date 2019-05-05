@@ -8,20 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ycy.musicplayer.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import entity.LetMusic;
 
-public class LetRecyclerViewAdapter extends RecyclerView.Adapter<LetRecyclerViewAdapter.ViewHolder> {
+public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerViewAdapter.ViewHolder> {
 
 
     private static final String TAG = "WebRecyclerViewAdapter";
@@ -33,19 +30,19 @@ public class LetRecyclerViewAdapter extends RecyclerView.Adapter<LetRecyclerView
         return fadeTips;
     }
 
-    public LetRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
+    public NewRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
         this.context = context;
         this.letMusicList = letMusicList;
     }
 
     @Override
-    public LetRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_let, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(LetRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(NewRecyclerViewAdapter.ViewHolder holder, int position) {
         LetMusic.DataBean music = letMusicList.get(position);
         holder.let_name.setText(music.getTitle());
         holder.let_author.setText(music.getCreator());

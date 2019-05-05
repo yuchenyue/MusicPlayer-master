@@ -14,7 +14,7 @@ public interface Api {
     Call<NetMusic> getMusic(@Query("key") String key, @Query("s") String s, @Query("type") String type, @Query("limit") int limit, @Query("offset") int page);
 
     @POST("hotSongList")
-    Call<LetMusic> getLMusic(@Query("key") String key, @Query("limit") int limit, @Query("offset") int offset,@Query("order") String order);
+    Call<LetMusic> getLMusic(@Query("key") String key,@Query("cat") String cat, @Query("limit") int limit, @Query("offset") int offset,@Query("order") String order);
 
     @POST("songList")
     Call<ListMusic> getListMusic(@Query("key") String key, @Query("id") String id);

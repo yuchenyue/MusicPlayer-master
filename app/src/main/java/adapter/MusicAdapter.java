@@ -2,6 +2,7 @@ package adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class MusicAdapter extends BaseAdapter {
             view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.music_item_local, null);
             musicholder.albumImage = view.findViewById(R.id.albumImage);
             musicholder.t_song = view.findViewById(R.id.t_song);
+            musicholder.t_song.setSelected(true);
             musicholder.t_songer = view.findViewById(R.id.t_songer);
             musicholder.t_duration = view.findViewById(R.id.t_duration);
             view.setTag(musicholder);

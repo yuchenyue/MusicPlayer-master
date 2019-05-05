@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * 歌单
  * Created by Administrator on 2019/2/28.
  */
 

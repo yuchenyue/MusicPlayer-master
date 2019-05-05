@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -48,12 +47,12 @@ public class ChatListAdapter extends BaseAdapter {
         if (convertView == null) {
             // 通过ItemType加载不同的布局
             if (getItemViewType(position) == 0) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.left_item, parent, false);
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_left, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.chat_time = (TextView) convertView.findViewById(R.id.chat_left_time);
                 viewHolder.chat_message = (TextView) convertView.findViewById(R.id.chat_left_message);
             } else {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.right_item, parent, false);
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_right, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.chat_time = (TextView) convertView.findViewById(R.id.chat_right_time);
                 viewHolder.chat_message = (TextView) convertView.findViewById(R.id.chat_right_message);

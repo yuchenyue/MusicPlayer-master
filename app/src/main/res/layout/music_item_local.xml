@@ -18,22 +18,30 @@
             android:id="@+id/t_song"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="80dp"
             android:layout_marginTop="5dp"
             android:text="歌曲名"
             android:textColor="@color/textcolor"
             android:textSize="15dp"
-            android:textStyle="normal|bold|italic" />
+            android:textStyle="normal|bold|italic"
+            android:ellipsize="marquee"
+            android:focusable="false"
+            android:maxEms="8"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/t_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
-            android:layout_toRightOf="@+id/t_songer"
             android:text="时长"
-            android:textColor="@color/textcolor" />
+            android:textSize="12dp"
+            android:textColor="@color/textcolor"
+            android:layout_alignBottom="@+id/view_item"
+            android:layout_toEndOf="@+id/t_songer"
+            android:layout_marginStart="30dp" />
 
         <TextView
             android:id="@+id/t_songer"

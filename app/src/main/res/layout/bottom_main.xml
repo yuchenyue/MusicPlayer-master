@@ -17,15 +17,22 @@
         app:civ_border_width="2dp"/>
 
 
-    <TextView
+    <manage.MyTextView
         android:id="@+id/main_musicName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="70dp"
         android:layout_marginTop="5dp"
         android:text="~~~"
         android:textColor="@color/textcolor"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:maxEms="12"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/main_author"
@@ -33,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="70dp"
         android:text="~~~"
         android:textColor="@color/textcolor" />
 

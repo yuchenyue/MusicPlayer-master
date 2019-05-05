@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PointerIconCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.ycy.musicplayer.MainActivity;
@@ -27,31 +22,27 @@ import com.example.ycy.musicplayer.SongListActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.LetRecyclerViewAdapter;
-import adapter.WebRecyclerViewAdapter;
+import adapter.NewRecyclerViewAdapter;
 import entity.LetMusic;
-import entity.NetMusic;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import serviceApi.Api;
 import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
-import utils.Theme;
 
 /**
  * Created by Administrator on 2019/1/14.
  */
 
-public class LetworkFragment extends Fragment {
+public class newFragment extends Fragment {
 
-    private static final String TAG = "LetworkFragment";
+    private static final String TAG = "newFragment";
     public List<LetMusic.DataBean> letMusicList = new ArrayList<LetMusic.DataBean>();
-    private LetRecyclerViewAdapter ladapter;
+    private NewRecyclerViewAdapter ladapter;
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
-    public LinearLayoutManager layoutManager;
+    public FastScrollManager layoutManager;
     MainActivity mainActivity;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
 
@@ -63,8 +54,8 @@ public class LetworkFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.let_fragment, container, false);
-        layoutManager = new FastScrollManager(MyApplication.getContext(),LinearLayoutManager.VERTICAL,false);
+        View view = inflater.inflate(R.layout.fragment_new, container, false);
+        layoutManager = new FastScrollManager(MyApplication.getContext(), LinearLayoutManager.VERTICAL, false);
 
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -73,7 +64,7 @@ public class LetworkFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager = (FastScrollManager) recyclerView.getLayoutManager();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (firstVisibleItemPosition == 0) {
@@ -90,9 +81,9 @@ public class LetworkFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0){
+                if (dy > 0) {
                     isSlidingToLasst = true;
-                }else {
+                } else {
                     isSlidingToLasst = false;
                 }
             }
@@ -106,10 +97,10 @@ public class LetworkFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getNetMusicList();
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
+                getNetMusicList();
             }
         });
         to_top = view.findViewById(R.id.to_top);
@@ -120,6 +111,7 @@ public class LetworkFragment extends Fragment {
                 songsheet_fragment_list.smoothScrollToPosition(0);
             }
         });
+
         getNetMusicList();
         return view;
     }
@@ -136,19 +128,18 @@ public class LetworkFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905", 30, 0,"new");
+        Call<LetMusic> musicCall = mApi.getLMusic("579621905",null, 30, 0, "new");
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
-                Log.d(TAG, "LetworkFragment--9089--");
                 letMusicList = response.body().getData();
                 songsheet_fragment_list.setLayoutManager(layoutManager);
-                ladapter = new LetRecyclerViewAdapter(getContext(), letMusicList);
+                ladapter = new NewRecyclerViewAdapter(getContext(), letMusicList);
                 songsheet_fragment_list.setAdapter(ladapter);
                 ladapter.setOnItemClickListener(MyItemClickListener);
                 let_list_refreshLayout.setRefreshing(false);
                 ladapter.notifyDataSetChanged();
-                Log.i(TAG, "显示了--" + letMusicList.size() + "首歌曲");
+                Log.i(TAG, "最新歌曲显示了--" + letMusicList.size() + "首歌曲");
             }
 
             @Override
@@ -158,7 +149,7 @@ public class LetworkFragment extends Fragment {
     }
 
 
-    private LetRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new LetRecyclerViewAdapter.OnItemClickListener() {
+    private NewRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new NewRecyclerViewAdapter.OnItemClickListener() {
 
         @Override
         public void onItemClick(View v, int position) {

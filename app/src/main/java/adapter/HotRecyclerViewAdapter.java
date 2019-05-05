@@ -23,34 +23,34 @@ public class HotRecyclerViewAdapter extends RecyclerView.Adapter<HotRecyclerView
 
     private static final String TAG = "WebRecyclerViewAdapter";
     public Context context;
-    private List<LetMusic.DataBean> hotMusicList = new ArrayList<>();
+    private List<LetMusic.DataBean> letMusicList = new ArrayList<>();
     private boolean fadeTips = false;//是否隐藏了底部
 
     public boolean isFadeTips() {
         return fadeTips;
     }
 
-    public HotRecyclerViewAdapter(Context context, List<LetMusic.DataBean> hotMusicList) {
+    public HotRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
         this.context = context;
-        this.hotMusicList = hotMusicList;
+        this.letMusicList = letMusicList;
     }
 
     @Override
     public HotRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_hot, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_let, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(HotRecyclerViewAdapter.ViewHolder holder, int position) {
-        LetMusic.DataBean music = hotMusicList.get(position);
-        holder.hot_name.setText(music.getTitle());
-        holder.hot_author.setText(music.getCreator());
-        holder.hot_songnum.setText("歌曲数：" + music.getSongNum());
-        holder.hot_playnum.setText("播放量：" + music.getPlayCount());
+        LetMusic.DataBean music = letMusicList.get(position);
+        holder.let_name.setText(music.getTitle());
+        holder.let_author.setText(music.getCreator());
+        holder.let_songnum.setText("歌曲数：" + music.getSongNum());
+        holder.let_playnum.setText("播放量：" + music.getPlayCount());
         Glide.with(context)
                 .load(music.getCoverImgUrl())
-                .into(holder.image_hot);
+                .into(holder.image_let);
     }
 
 
@@ -61,25 +61,25 @@ public class HotRecyclerViewAdapter extends RecyclerView.Adapter<HotRecyclerView
 
     @Override
     public int getItemCount() {
-        return hotMusicList.size();
+        return letMusicList.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView hot_name, hot_author, hot_songnum, hot_playnum;
-        ImageView image_hot;
-        Button item_hot;
+        TextView let_name, let_author, let_songnum, let_playnum;
+        ImageView image_let;
+        Button item_let;
 
         public ViewHolder(View view) {
             super(view);
-            hot_name = view.findViewById(R.id.hot_name);
-            hot_author = view.findViewById(R.id.hot_author);
-            hot_songnum = view.findViewById(R.id.hot_songnum);
-            hot_playnum = view.findViewById(R.id.hot_playnum);
-            image_hot = view.findViewById(R.id.image_hot);
-            item_hot = view.findViewById(R.id.item_hot);
+            let_name = view.findViewById(R.id.let_name);
+            let_author = view.findViewById(R.id.let_author);
+            let_songnum = view.findViewById(R.id.let_songnum);
+            let_playnum = view.findViewById(R.id.let_playnum);
+            image_let = view.findViewById(R.id.image_let);
+            item_let = view.findViewById(R.id.item_let);
             view.setOnClickListener(this);
-            item_hot.setOnClickListener(this);
+            item_let.setOnClickListener(this);
         }
 
         @Override

@@ -21,8 +21,6 @@ import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import adapter.WebRecyclerViewAdapter;
@@ -64,7 +62,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.network_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_network, container, false);
         web_musicList = view.findViewById(R.id.web_musicList);
         layoutManager = new LinearLayoutManager(MyApplication.getContext());
         search_text = view.findViewById(R.id.search_text);

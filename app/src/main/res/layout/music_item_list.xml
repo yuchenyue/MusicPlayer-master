@@ -14,16 +14,23 @@
             android:layout_height="50dp"
             android:layout_margin="5dp" />
 
-        <TextView
+        <manage.MyTextView
             android:id="@+id/list_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="80dp"
             android:layout_marginTop="5dp"
             android:text="歌曲名称"
             android:textColor="@color/textcolor"
             android:textSize="15dp"
-            android:textStyle="normal|bold|italic" />
+            android:textStyle="normal|bold|italic"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:maxEms="12"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/list_author"
@@ -33,6 +40,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="80dp"
             android:text="歌手名称"
+            android:textSize="13sp"
             android:textColor="@color/textcolor" />
 
         <View

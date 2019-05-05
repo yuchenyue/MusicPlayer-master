@@ -30,6 +30,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import serviceApi.Api;
 import services.MusicService;
+import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
 
@@ -42,7 +43,7 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
     RecyclerView netsong_musicList;
     SwipeRefreshLayout song_list_refreshLayout;
     private List<ListMusic.DataBean.Song> listMusicList = new ArrayList<>();
-    public LinearLayoutManager layoutManager;
+    public FastScrollManager layoutManager;
     ListRecyclerViewAdapter lisadapter;
     String id, pic, description;
     private int position;
@@ -72,11 +73,17 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
         list_tv.setMovementMethod(ScrollingMovementMethod.getInstance());
         tv_empty_list = (TextView) findViewById(R.id.tv_empty_list);
         netsong_musicList = (RecyclerView) findViewById(R.id.netsong_musicList);
-        layoutManager = new LinearLayoutManager(MyApplication.getContext());
+        layoutManager = new FastScrollManager(MyApplication.getContext());
         song_list_refreshLayout = (SwipeRefreshLayout) findViewById(R.id.song_list_refreshLayout);
         song_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        song_list_refreshLayout.setRefreshing(false);
+                    }
+                },1500);
                 getNetMusicList();
 
             }
@@ -93,7 +100,12 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<ListMusic> call, Response<ListMusic> response) {
                 listMusicList = response.body().getData().getSongs();
-                handler.sendEmptyMessageDelayed(SEARCH_MUSICLIST, 500);
+                netsong_musicList.setLayoutManager(layoutManager);
+                lisadapter = new ListRecyclerViewAdapter(SongListActivity.this, listMusicList);
+                netsong_musicList.setAdapter(lisadapter);
+                lisadapter.setOnItemClickListener(MyItemClickListener);
+                tv_empty_list.setVisibility(View.GONE);
+
             }
             @Override
             public void onFailure(Call<ListMusic> call, Throwable t) {
@@ -101,17 +113,6 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
-    public Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            netsong_musicList.setLayoutManager(layoutManager);
-            lisadapter = new ListRecyclerViewAdapter(SongListActivity.this, listMusicList);
-            netsong_musicList.setAdapter(lisadapter);
-            lisadapter.setOnItemClickListener(MyItemClickListener);
-            tv_empty_list.setVisibility(View.GONE);
-            song_list_refreshLayout.setRefreshing(false);
-        }
-    };
 
     /**
      * 播放列表按钮

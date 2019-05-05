@@ -17,8 +17,8 @@ import java.util.List;
 import adapter.SongSheetFragmentAdapter;
 
 public class SongSheetFragment extends Fragment {
-    private static final String TAG = "fragment";
-    private String[] titles = {"最新", "热门"};
+    private static final String TAG = "SongSheetFragment";
+    private String[] titles = {"热门", "最新","选择分类"};
     private List<Fragment> fragments_song;
     private SongSheetFragmentAdapter adapter;
     private ViewPager viewPager;
@@ -34,7 +34,7 @@ public class SongSheetFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.songsheetfragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_songsheet, container, false);
         //实例化
         viewPager = view.findViewById(R.id.viewpager2);
         tabLayout = view.findViewById(R.id.tablayout2);
@@ -42,7 +42,8 @@ public class SongSheetFragment extends Fragment {
         //页面，数据源，里面是创建的三个页面（Fragment）
         fragments_song = new ArrayList<>();
         fragments_song.add(new hotFragment());
-        fragments_song.add(new LetworkFragment());
+        fragments_song.add(new newFragment());
+        fragments_song.add(new otherFragment());
         //ViewPager的适配器，获得Fragment管理器
         adapter = new SongSheetFragmentAdapter(getFragmentManager());
         adapter.addTitlesAndFragments(titles,fragments_song);

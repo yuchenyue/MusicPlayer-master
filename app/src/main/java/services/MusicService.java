@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
+import entity.LetMusic;
 import entity.NetMusic;
 import utils.MusicUtil;
 import entity.Music;
@@ -33,7 +34,7 @@ public class MusicService extends Service {
     private NetworkInfo info;
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-    List<NetMusic.DataBean> netMsuicList;
+    List<LetMusic.DataBean> letMsuicList;
     public int currentProgress;//歌曲位置
     private static int state = 2;
     public boolean isWeb;
@@ -188,7 +189,7 @@ public class MusicService extends Service {
     public void playweb() {
         Bundle bundle = new Bundle();
 //        if (isWeb == true) {
-            netMsuicList = (List<NetMusic.DataBean>) bundle.getSerializable("musicList");
+            letMsuicList = (List<LetMusic.DataBean>) bundle.getSerializable("musicList");
             Log.d(TAG,"ServiceMusic playweb");
 //            try {
 //                position = bundle.getInt("position");
