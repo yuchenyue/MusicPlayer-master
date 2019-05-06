@@ -43,4 +43,6 @@ dependencies {
     //圆形化图片
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
 }

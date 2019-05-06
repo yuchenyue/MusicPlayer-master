@@ -45,7 +45,7 @@ public class SongSheetFragment extends Fragment {
         fragments_song.add(new newFragment());
         fragments_song.add(new otherFragment());
         //ViewPager的适配器，获得Fragment管理器
-        adapter = new SongSheetFragmentAdapter(getFragmentManager());
+        adapter = new SongSheetFragmentAdapter(getChildFragmentManager());
         adapter.addTitlesAndFragments(titles,fragments_song);
         viewPager.setAdapter(adapter);
         //将TabLayout和ViewPager绑定在一起，一个动另一个也会跟着动

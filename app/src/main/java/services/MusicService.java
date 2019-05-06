@@ -34,7 +34,6 @@ public class MusicService extends Service {
     private NetworkInfo info;
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-    List<LetMusic.DataBean> letMsuicList;
     public int currentProgress;//歌曲位置
     private static int state = 2;
     public boolean isWeb;
@@ -170,6 +169,7 @@ public class MusicService extends Service {
      */
     public void play(int position) {
         musics = MusicUtil.getmusics(this);
+
         if (position >= 0 && position < musics.size()) {
             Music music = musics.get(position);
             try {
@@ -187,21 +187,7 @@ public class MusicService extends Service {
     }
 
     public void playweb() {
-        Bundle bundle = new Bundle();
-//        if (isWeb == true) {
-            letMsuicList = (List<LetMusic.DataBean>) bundle.getSerializable("musicList");
-            Log.d(TAG,"ServiceMusic playweb");
-//            try {
-//                position = bundle.getInt("position");
-//                mediaPlayer.reset();
-//                mediaPlayer.setDataSource(netMsuicList.get(position).getUrl());
-//                mediaPlayer.prepare();
-//                mediaPlayer.start();
-//                state = 1;
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
     }
 
     /**

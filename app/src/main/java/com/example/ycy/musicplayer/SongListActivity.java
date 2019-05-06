@@ -105,7 +105,6 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
                 netsong_musicList.setAdapter(lisadapter);
                 lisadapter.setOnItemClickListener(MyItemClickListener);
                 tv_empty_list.setVisibility(View.GONE);
-
             }
             @Override
             public void onFailure(Call<ListMusic> call, Throwable t) {
@@ -139,14 +138,14 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void startMusic() {
-        Intent intent = new Intent(getApplicationContext(), MusicService.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("position",position);
-        bundle.putSerializable("musiclist", (Serializable) listMusicList);
-        intent.putExtras(bundle);
-        getApplicationContext().startService(intent);
-        MyApplication.setIsWeb(true);
-        musicService.playweb();
+//        Intent intent = new Intent(getApplicationContext(), MusicService.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt("position",position);
+//        bundle.putSerializable("musiclist", (Serializable) listMusicList);
+//        intent.putExtras(bundle);
+//        getApplicationContext().startService(intent);
+//        MyApplication.setIsWeb(true);
+////        musicService.playweb();
     }
 
     /**

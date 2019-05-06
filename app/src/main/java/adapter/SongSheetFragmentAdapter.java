@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SongSheetFragmentAdapter extends FragmentPagerAdapter {
     private String []titles;
-    List<Fragment> fragmentList;
+    List<Fragment> fragments_song;
 
     public SongSheetFragmentAdapter(FragmentManager fm){
         super(fm);
@@ -16,7 +16,7 @@ public class SongSheetFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        return fragments_song.get(position);
     }
 
     @Override
@@ -30,9 +30,9 @@ public class SongSheetFragmentAdapter extends FragmentPagerAdapter {
     }
 
     //自定义一个添加title和fragment的方法，供Activity使用
-    public void addTitlesAndFragments(String []titles, List<Fragment> fragmentList) {
+    public void addTitlesAndFragments(String []titles, List<Fragment> fragments_song) {
         this.titles = titles;
-        this.fragmentList = fragmentList;
+        this.fragments_song = fragments_song;
     }
 
 }
