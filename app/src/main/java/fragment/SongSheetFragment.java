@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,5 +60,17 @@ public class SongSheetFragment extends Fragment {
         for (int i = 0; i < titles.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(titles[i]));
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG,"SongSheetFragment:onDestroyView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"SongSheetFragment:onDestroy");
+        super.onDestroy();
     }
 }

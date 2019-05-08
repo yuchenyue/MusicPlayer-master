@@ -34,7 +34,7 @@
         app:fab_icon="@drawable/to_top"
         />
     <TextView
-        android:id="@+id/tv_empty"
+        android:id="@+id/tv_empty_hot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

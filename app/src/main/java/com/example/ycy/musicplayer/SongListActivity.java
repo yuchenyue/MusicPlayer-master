@@ -68,6 +68,12 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
         Glide.with(getApplicationContext())
                 .load(pic)
                 .into(list_img);
+        list_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         list_tv = (TextView) findViewById(R.id.list_tv);
         list_tv.setText(description);
         list_tv.setMovementMethod(ScrollingMovementMethod.getInstance());

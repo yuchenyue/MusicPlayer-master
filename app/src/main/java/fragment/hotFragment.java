@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ycy.musicplayer.MainActivity;
@@ -37,6 +38,7 @@ public class hotFragment extends Fragment {
     private HotRecyclerViewAdapter hadapter;
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
+    TextView tv_empty;
     public FastScrollManager layoutManager;
     MainActivity mainActivity;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
@@ -53,10 +55,11 @@ public class hotFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new, container, false);
+        View view = inflater.inflate(R.layout.fragment_hot, container, false);
+        tv_empty = view.findViewById(R.id.tv_empty_hot);
         layoutManager = new FastScrollManager(MyApplication.getContext(), LinearLayoutManager.VERTICAL, false);
 
-        songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
+        songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list_hot);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLasst = false;
 
@@ -88,7 +91,7 @@ public class hotFragment extends Fragment {
             }
         });
         //下拉刷新
-        let_list_refreshLayout = view.findViewById(R.id.let_list_refreshLayout);
+        let_list_refreshLayout = view.findViewById(R.id.hot_list_refreshLayout);
         let_list_refreshLayout.setRefreshing(true);
         let_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -102,7 +105,7 @@ public class hotFragment extends Fragment {
                 getNetMusicList();
             }
         });
-        to_top = view.findViewById(R.id.to_top);
+        to_top = view.findViewById(R.id.to_top_hot);
         //点击返回顶部
         to_top.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,40 +113,55 @@ public class hotFragment extends Fragment {
                 songsheet_fragment_list.smoothScrollToPosition(0);
             }
         });
-        songsheet_fragment_list.setLayoutManager(layoutManager);
+
+
         getNetMusicList();
+
         return view;
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        Log.d(TAG, "hotFragment:onDestroy");
+        super.onDestroy();
     }
 
     @Override
     public void onDestroyView() {
+        Log.d(TAG, "hotFragment:onDestroyView");
         super.onDestroyView();
     }
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905",null, 30, 0, "hot");
+        Call<LetMusic> musicCall = mApi.getLMusic("579621905", null, 30, 0, "hot");
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
-                letMusicList = response.body().getData();
-
-                hadapter = new HotRecyclerViewAdapter(getContext(), letMusicList);
-                songsheet_fragment_list.setAdapter(hadapter);
-                hadapter.setOnItemClickListener(MyItemClickListener);
-                let_list_refreshLayout.setRefreshing(false);
-                hadapter.notifyDataSetChanged();
-                Log.i(TAG, "热门歌曲显示了--" + letMusicList.size() + "首歌曲");
+                if (response.code() == 200) {
+                    letMusicList = response.body().getData();
+                    if (letMusicList == null ) {
+                        tv_empty.setVisibility(View.VISIBLE);
+                    } else {
+                        songsheet_fragment_list.setLayoutManager(layoutManager);
+                        hadapter = new HotRecyclerViewAdapter(getContext(), letMusicList);
+                        songsheet_fragment_list.setAdapter(hadapter);
+                        hadapter.setOnItemClickListener(MyItemClickListener);
+                        let_list_refreshLayout.setRefreshing(false);
+                        hadapter.notifyDataSetChanged();
+                        Log.i(TAG, "热门歌曲显示了--" + letMusicList.size() + response.code() + "首歌曲");
+                    }
+                }else {
+//                    let_list_refreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(),"服务器离线",Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<LetMusic> call, Throwable t) {
+//                tv_empty.setVisibility(View.VISIBLE);
             }
+
         });
     }
 
@@ -167,7 +185,7 @@ public class hotFragment extends Fragment {
                     bundle.putString("description", letMusicList.get(position).getDescription());
                     intent.putExtras(bundle);
                     startActivity(intent);
-                    Toast.makeText(getContext(), "item" + (position + 1), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "item" + (position + 1), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

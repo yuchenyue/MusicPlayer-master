@@ -21,7 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.example.ycy.musicplayer.MainActivity;
+import com.example.ycy.musicplayer.MoreSongSheetActivity;
 import com.example.ycy.musicplayer.R;
 import com.example.ycy.musicplayer.SongListActivity;
 
@@ -51,7 +54,7 @@ public class otherFragment extends Fragment {
 
     private RecyclerView recLeft;
     private RecyclerView recRight;
-    private TextView rightTitle;
+    private TextView rightTitle,right_text;
     private List<String> left;
     private List<ScrollBean> right;
     private ScrollLeftAdapter leftAdapter;
@@ -69,12 +72,13 @@ public class otherFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = this.getContext();
+        mainActivity = (MainActivity) this.getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_other, container, false);
-
+        Log.d(TAG,"otherFragment:onCreateView");
         mContext = this.getContext();
         recLeft = view.findViewById(R.id.rec_left);
         recRight = view.findViewById(R.id.rec_right);
@@ -87,6 +91,19 @@ public class otherFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"otherFragment:onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG,"otherFragment:onDestroyView");
+        super.onDestroyView();
+    }
+
     private void initRight() {
 
         rightManager = new GridLayoutManager(mContext, 3);
@@ -102,6 +119,29 @@ public class otherFragment extends Fragment {
                             , 0
                             , dpToPx(mContext, getDimens(mContext, R.dimen.dp3))
                             , dpToPx(mContext, getDimens(mContext, R.dimen.dp3)));
+                }
+            });
+            recRight.addOnItemTouchListener(new OnItemChildClickListener() {
+                @Override
+                public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+                }
+
+                @Override
+                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                    super.onItemChildClick(adapter,view,position);
+                    right_text = view.findViewById(R.id.right_text);
+                    String s = (String) right_text.getText();
+                    switch (view.getId()){
+                        case R.id.right_text:
+                            Intent intent = new Intent(getContext(), MoreSongSheetActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("s",s);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            Log.d(TAG,"11"+ s);
+                            break;
+                    }
                 }
             });
             recRight.setAdapter(rightAdapter);
@@ -173,8 +213,6 @@ public class otherFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     private void initLeft() {
@@ -203,6 +241,8 @@ public class otherFragment extends Fragment {
             }
         });
     }
+
+
 
     //获取数据(若请求服务端数据,请求到的列表需有序排列)
     private void initData() {

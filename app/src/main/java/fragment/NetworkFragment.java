@@ -108,7 +108,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         musicCall.enqueue(new Callback<NetMusic>() {
             @Override
             public void onResponse(Call<NetMusic> call, final Response<NetMusic> response) {
-                if (response.code() != 400) {
+                if (response.code() == 200) {
                     Log.d(TAG, "NetworkFragment--87--");
                     netMusicList = response.body().getData();
                     //写个适配器
@@ -119,6 +119,8 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                     adapter.setOnItemClickListener(MyItemClickListener);
                     Log.i(TAG, "歌名--" + netMusicList.get(0).getName() + netMusicList.get(0).getSinger());
                     Log.i(TAG, "显示了--" + netMusicList.size() + "首歌曲");
+                }else {
+                    Toast.makeText(getContext(),"服务器离线",Toast.LENGTH_SHORT).show();
                 }
             }
 

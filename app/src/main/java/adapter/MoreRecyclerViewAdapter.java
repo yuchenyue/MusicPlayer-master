@@ -18,26 +18,26 @@ import java.util.List;
 
 import entity.LetMusic;
 
-public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerViewAdapter.ViewHolder> {
+public class MoreRecyclerViewAdapter extends RecyclerView.Adapter<MoreRecyclerViewAdapter.ViewHolder> {
 
 
     private static final String TAG = "WebRecyclerViewAdapter";
     public Context context;
     private List<LetMusic.DataBean> letMusicList = new ArrayList<>();
 
-    public NewRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
+    public MoreRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
         this.context = context;
         this.letMusicList = letMusicList;
     }
 
     @Override
-    public NewRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MoreRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.music_item_let, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(NewRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MoreRecyclerViewAdapter.ViewHolder holder, int position) {
         LetMusic.DataBean music = letMusicList.get(position);
         holder.let_name.setText(music.getTitle());
         holder.let_author.setText("by " + music.getCreator());

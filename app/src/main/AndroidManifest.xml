@@ -43,7 +43,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.ycy.musicplayer.fileprovider"
+            android:authorities="${applicationId}.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -53,7 +53,8 @@
 
         <activity android:name=".SongListActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MoreSongSheetActivity"></activity>
     </application>
 
 </manifest>

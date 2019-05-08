@@ -28,7 +28,7 @@
         android:textSize="15dp"
         android:ellipsize="marquee"
         android:focusable="true"
-        android:maxEms="12"
+        android:maxEms="7"
         android:focusableInTouchMode="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"

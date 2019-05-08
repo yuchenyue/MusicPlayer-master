@@ -282,8 +282,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
-        drawer.closeDrawer(GravityCompat.START);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -315,6 +315,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 File file = new File("/mnt/sdcard/tupian.jpg");
                 filtUri = FileProviderUtils.uriFromFile(MainActivity.this, file);
                 SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
+                Log.d(TAG,"REQUEST_CODE_PAIZHAO");
                 break;
             case SystemProgramUtils.REQUEST_CODE_ZHAOPIAN:
                 //相册选择图片完毕，进行图片裁切
@@ -323,6 +324,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 filtUri = data.getData();
                 SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
+                Log.d(TAG,"REQUEST_CODE_ZHAOPIAN");
                 break;
             case SystemProgramUtils.REQUEST_CODE_CAIQIE:
                 //图片裁切完成，显示裁切后的图片
@@ -330,6 +332,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Uri uri = Uri.fromFile(outputFile);
                     Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
                     iv_touxiang = (CircleImageView) findViewById(R.id.iv_touxiang);
+                    Log.d(TAG,"REQUEST_CODE_CAIQIE");
                     iv_touxiang.setImageBitmap(bitmap);
                 }catch (Exception ex){
                     ex.printStackTrace();
