@@ -60,6 +60,7 @@ public class MyApplication extends Application {
         MyApplication.listMusicList = listMusicList;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
