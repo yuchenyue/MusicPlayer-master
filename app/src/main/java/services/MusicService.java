@@ -22,6 +22,7 @@ import entity.LetMusic;
 import entity.NetMusic;
 import utils.MusicUtil;
 import entity.Music;
+import utils.MyApplication;
 
 /**
  * Created by Administrator on 2019/1/16.
@@ -168,8 +169,8 @@ public class MusicService extends Service {
      * @param position
      */
     public void play(int position) {
-        musics = MusicUtil.getmusics(this);
-
+//        musics = MusicUtil.getmusics(this);
+        musics = MyApplication.getMusics();
         if (position >= 0 && position < musics.size()) {
             Music music = musics.get(position);
             try {

@@ -120,13 +120,13 @@
             <!--android:text="自动登录"-->
             <!--android:id="@+id/checkBox2" />-->
 
-        <TextView
-            android:id="@+id/text_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:text="忘记密码？"
-            android:textColor="@color/textcolor"
-            android:layout_marginLeft="130dp" />
+        <!--<TextView-->
+            <!--android:id="@+id/text_msg"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:text="忘记密码？"-->
+            <!--android:textColor="@color/textcolor"-->
+            <!--android:layout_marginLeft="130dp" />-->
 
     </LinearLayout>
 

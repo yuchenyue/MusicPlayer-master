@@ -21,6 +21,7 @@ import java.util.List;
 import adapter.MusicAdapter;
 import entity.Music;
 import utils.MusicUtil;
+import utils.MyApplication;
 
 /**
  * Created by Administrator on 2019/1/14.
@@ -81,6 +82,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     //加载本地音乐列表
     public void loadData() {
         musics = MusicUtil.getmusics(mainActivity);
+        MyApplication.setMusics(musics);
         musicAdapter = new MusicAdapter(mainActivity, musics);
         local_fragment_list.setAdapter(musicAdapter);
         Log.i(TAG, "歌曲数量" + musics.size());

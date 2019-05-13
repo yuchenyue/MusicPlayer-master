@@ -58,7 +58,7 @@ public class newFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new, container, false);
         tv_empty = view.findViewById(R.id.tv_empty_new);
-        layoutManager = new FastScrollManager(MyApplication.getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new FastScrollManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -143,14 +143,14 @@ public class newFragment extends Fragment {
                         tv_empty.setVisibility(View.VISIBLE);
                     }
                     songsheet_fragment_list.setLayoutManager(layoutManager);
-                    ladapter = new NewRecyclerViewAdapter(getContext(), letMusicList);
+                    ladapter = new NewRecyclerViewAdapter(getActivity(), letMusicList);
                     songsheet_fragment_list.setAdapter(ladapter);
                     ladapter.setOnItemClickListener(MyItemClickListener);
                     let_list_refreshLayout.setRefreshing(false);
                     ladapter.notifyDataSetChanged();
                     Log.i(TAG, "最新歌曲显示了--" + letMusicList.size() + "首歌曲");
                 }else {
-                    Toast.makeText(getContext(),"服务器离线",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -168,21 +168,21 @@ public class newFragment extends Fragment {
         public void onItemClick(View v, int position) {
             switch (v.getId()) {
                 case R.id.item_let:
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setTitle(letMusicList.get(position).getTitle());
                     dialog.setMessage(letMusicList.get(position).getDescription());
                     dialog.setNegativeButton("好的", null);
                     dialog.show();
                     break;
                 default:
-                    Intent intent = new Intent(getContext(), SongListActivity.class);
+                    Intent intent = new Intent(getActivity(), SongListActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("id", letMusicList.get(position).getId());
                     bundle.putString("pic", letMusicList.get(position).getCoverImgUrl());
                     bundle.putString("description", letMusicList.get(position).getDescription());
                     intent.putExtras(bundle);
                     startActivity(intent);
-//                    Toast.makeText(getContext(), "item" + (position + 1), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "item" + (position + 1), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

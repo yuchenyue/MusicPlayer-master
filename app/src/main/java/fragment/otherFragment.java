@@ -71,7 +71,6 @@ public class otherFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = this.getContext();
         mainActivity = (MainActivity) this.getActivity();
     }
 
@@ -79,7 +78,7 @@ public class otherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_other, container, false);
         Log.d(TAG,"otherFragment:onCreateView");
-        mContext = this.getContext();
+        mContext = this.getActivity();
         recLeft = view.findViewById(R.id.rec_left);
         recRight = view.findViewById(R.id.rec_right);
         rightTitle = view.findViewById(R.id.right_title);

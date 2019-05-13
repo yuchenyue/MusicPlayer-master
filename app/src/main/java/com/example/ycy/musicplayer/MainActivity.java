@@ -351,11 +351,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void setOnItemClick(View v) {
         switch (v.getId()) {
             case R.id.bt_xiangji:
-                popwindow.dismiss();
                 SystemProgramUtils.paizhao(this,new File("/mnt/sdcard/tupian.jpg"));
+                popwindow.dismiss();
                 break;
             case R.id.bt_xiangce:
                 SystemProgramUtils.zhaopian(this);
+                popwindow.dismiss();
                 Log.i(TAG, "相册");
                 break;
             case R.id.bt_quxiao:

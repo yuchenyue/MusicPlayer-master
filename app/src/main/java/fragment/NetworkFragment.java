@@ -64,7 +64,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_network, container, false);
         web_musicList = view.findViewById(R.id.web_musicList);
-        layoutManager = new LinearLayoutManager(MyApplication.getContext());
+        layoutManager = new LinearLayoutManager(getActivity());
         search_text = view.findViewById(R.id.search_text);
         btn_search = view.findViewById(R.id.btn_search);
         btn_search.setOnClickListener(this);
@@ -80,7 +80,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_search:
                 search_s = search_text.getText().toString().trim();
                 if (TextUtils.isEmpty(search_s)) {
-//                    Toast.makeText(context, "可能没有这首歌", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "可能没有这首歌", Toast.LENGTH_SHORT).show();
                     netMusicList.clear();
                     tv_empty_net.setVisibility(View.VISIBLE);
                     Log.d(TAG, "可能没有这首歌" + search_s);
@@ -113,14 +113,14 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                     netMusicList = response.body().getData();
                     //写个适配器
                     web_musicList.setLayoutManager(layoutManager);
-                    adapter = new WebRecyclerViewAdapter(getContext(), netMusicList);
+                    adapter = new WebRecyclerViewAdapter(getActivity(), netMusicList);
                     web_musicList.setAdapter(adapter);
 
                     adapter.setOnItemClickListener(MyItemClickListener);
                     Log.i(TAG, "歌名--" + netMusicList.get(0).getName() + netMusicList.get(0).getSinger());
                     Log.i(TAG, "显示了--" + netMusicList.size() + "首歌曲");
                 }else {
-                    Toast.makeText(getContext(),"服务器离线",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -143,13 +143,13 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                     searchdialog(position);
                     break;
                 default:
-                    Toast.makeText(getContext(),"item"+(position+1),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"item"+(position+1),Toast.LENGTH_SHORT).show();
                     break;
             }
         }
 
         public void searchdialog(int position){
-            AlertDialog.Builder builder  = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder  = new AlertDialog.Builder(getActivity());
             builder.setTitle("是否下载歌曲？" ) ;
             builder.setMessage(netMusicList.get(position).getSinger() +"__"+ netMusicList.get(position).getName() ) ;
             builder.setPositiveButton("是", new DialogInterface.OnClickListener() {

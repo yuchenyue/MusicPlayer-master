@@ -40,17 +40,15 @@ import permission.requestresult.RequestPermissionsResultSetApp;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edit_account, edit_password;
-    private TextView text_msg;
+//    private TextView text_msg;
     private Button btn_login, btn_register;
-    private CheckBox checkBox,checkBox2;
+    private CheckBox checkBox;
     private ImageButton openpwd;
-    Context context;
     private boolean flag = false;
     private String account, password;
     private DBHelper dbHelper;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private boolean isRemember;
 
     IRequestPermissions requestPermissions = RequestPermissions.getInstance();//动态权限请求
     IRequestPermissionsResult requestPermissionsResult = RequestPermissionsResultSetApp.getInstance();//动态权限请求结果处理
@@ -96,12 +94,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         checkBox = (CheckBox) findViewById(R.id.checkBox);
-//        checkBox2 = (CheckBox) findViewById(R.id.checkBox2);
-        text_msg = (TextView) findViewById(R.id.text_msg);
+//        text_msg = (TextView) findViewById(R.id.text_msg);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_register = (Button) findViewById(R.id.btn_register);
         openpwd = (ImageButton) findViewById(R.id.btn_openpwd);
-        text_msg.setOnClickListener(this);
+//        text_msg.setOnClickListener(this);
         btn_login.setOnClickListener(this);
         btn_register.setOnClickListener(this);
         openpwd.setOnClickListener(this);
@@ -150,14 +147,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     openpwd.setBackgroundResource(R.drawable.invisible);
                 }
                 break;
-            case R.id.text_msg:
+//            case R.id.text_msg:
 
 //                Intent i = new Intent(LoginActivity.this, ForgotInfo_activity.class);
 //                startActivity(i);
-                break;
-            case R.id.checkBox:
-//                readUsersInfo();
-                break;
+//                break;
         }
     }
 

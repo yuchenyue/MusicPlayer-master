@@ -152,7 +152,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LetMusic> call, Throwable t) {
-                tv_empty.setVisibility(View.VISIBLE);
+//                tv_empty.setVisibility(View.VISIBLE);
             }
 
         });

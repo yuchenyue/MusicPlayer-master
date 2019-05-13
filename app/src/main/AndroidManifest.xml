@@ -15,21 +15,26 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name="utils.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/app"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".PlayActivity" />
-        <activity android:name=".RobotActivity" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PlayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RobotActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name="services.MusicService"
@@ -39,7 +44,8 @@
         <activity
             android:name=".UserNameActivity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -51,10 +57,14 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".SongListActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".MoreSongSheetActivity"></activity>
+        <activity android:name=".SongListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MoreSongSheetActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
