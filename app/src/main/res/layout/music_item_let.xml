@@ -41,7 +41,14 @@
             android:textSize="12dp"
             android:textColor="@color/textcolor"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="100dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:maxEms="12"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/let_songnum"

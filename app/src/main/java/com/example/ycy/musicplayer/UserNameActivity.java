@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import manage.ExitApplication;
+import utils.MyApplication;
 
 public class UserNameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,7 +26,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_username);
-        ExitApplication.getInstance().addActivity(this);
+        MyApplication.getInstance().addActivity(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("编辑");

@@ -51,7 +51,14 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="80dp"
             android:text="歌唱者"
-            android:textColor="@color/textcolor" />
+            android:textColor="@color/textcolor"
+            android:ellipsize="marquee"
+            android:focusable="false"
+            android:maxEms="8"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <View
             android:id="@+id/view_item"

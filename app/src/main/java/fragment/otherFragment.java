@@ -133,11 +133,15 @@ public class otherFragment extends Fragment {
                     String s = (String) right_text.getText();
                     switch (view.getId()){
                         case R.id.right_text:
-                            Intent intent = new Intent(getContext(), MoreSongSheetActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("s",s);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
+                            if (MyApplication.getLogin() == true){
+                                Intent intent = new Intent(getContext(), MoreSongSheetActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("s",s);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(getActivity(),"请先登录！",Toast.LENGTH_SHORT).show();
+                            }
                             Log.d(TAG,"11"+ s);
                             break;
                     }

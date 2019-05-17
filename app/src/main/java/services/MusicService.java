@@ -16,9 +16,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import entity.LetMusic;
+import entity.ListMusic;
 import entity.NetMusic;
 import utils.MusicUtil;
 import entity.Music;
@@ -35,6 +37,7 @@ public class MusicService extends Service {
     private NetworkInfo info;
     public MediaPlayer mediaPlayer;
     List<Music> musics;
+    private List<ListMusic.DataBean.Song> listMusicList = new ArrayList<>();
     public int currentProgress;//歌曲位置
     private static int state = 2;
     public boolean isWeb;
@@ -170,25 +173,59 @@ public class MusicService extends Service {
      */
     public void play(int position) {
 //        musics = MusicUtil.getmusics(this);
-        musics = MyApplication.getMusics();
-        if (position >= 0 && position < musics.size()) {
-            Music music = musics.get(position);
-            try {
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(this, Uri.parse(music.getUrl()));
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-                currentProgress = position;
-                state = 1;
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (MyApplication.getIsLoc() == true){
+            musics = MyApplication.getMusics();
+            if (position >= 0 && position < musics.size()) {
+                Music music = musics.get(position);
+                try {
+                    mediaPlayer.reset();
+                    mediaPlayer.setDataSource(this, Uri.parse(music.getUrl()));
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                    currentProgress = position;
+                    state = 1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else if (MyApplication.getIsWeb() == true){
+            listMusicList = MyApplication.getListMusicList();
+            if (position >= 0 && position < listMusicList.size()){
+                ListMusic.DataBean.Song listmusic = listMusicList.get(position);
+                try {
+                    mediaPlayer.reset();
+                    mediaPlayer.setDataSource(listmusic.getUrl());
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.start();
+                    currentProgress = position;
+                    state = 1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+
         chuandi();
     }
 
     public void playweb() {
-
+        if (MyApplication.getIsWeb() == true){
+            listMusicList = MyApplication.getListMusicList();
+            if (position >= 0 && position < listMusicList.size()){
+                ListMusic.DataBean.Song listmusic = listMusicList.get(position);
+                try {
+                    mediaPlayer.reset();
+                    mediaPlayer.setDataSource(listmusic.getUrl());
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.start();
+                    currentProgress = position;
+                    state = 1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**

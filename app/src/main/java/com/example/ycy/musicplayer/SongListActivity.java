@@ -2,6 +2,7 @@ package com.example.ycy.musicplayer;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,13 +21,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ListRecyclerViewAdapter;
 import entity.ListMusic;
-import manage.ExitApplication;
 import retrofit2.Call;
 import retrofit2.Response;
 import serviceApi.Api;
@@ -53,7 +55,7 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
-        ExitApplication.getInstance().addActivity(this);
+        MyApplication.getInstance().addActivity(this);
         id = getIntent().getStringExtra("id");//传进来的专辑的ID
         pic = getIntent().getStringExtra("pic");//传进来的专辑的图片
         description = getIntent().getStringExtra("description");//传进来的专辑的简介
@@ -131,7 +133,7 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(SongListActivity.this,"是",Toast.LENGTH_SHORT).show();
-                startMusic();
+                startMusic();//我想播放这个歌单的时候在吧这个列表传到MyApplicaton中
             }
         });
         normalDialog.setNeutralButton("否",new DialogInterface.OnClickListener(){
@@ -144,14 +146,16 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void startMusic() {
-//        Intent intent = new Intent(getApplicationContext(), MusicService.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("position",position);
-//        bundle.putSerializable("musiclist", (Serializable) listMusicList);
-//        intent.putExtras(bundle);
-//        getApplicationContext().startService(intent);
+//        if (MyApplication.listMusicList == null){
+//            MyApplication.setListMusicList(listMusicList);
+//        }else {
+//            MyApplication.listMusicList.clear();
+//            MyApplication.setListMusicList(listMusicList);
+//        }
+        MyApplication.setListMusicList(listMusicList);
+        Toast.makeText(getApplication(),listMusicList.size(),Toast.LENGTH_SHORT).show();
 //        MyApplication.setIsWeb(true);
-////        musicService.playweb();
+//        musicService.play(position);
     }
 
     /**
@@ -166,6 +170,18 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
                     showMultiBtnDialog(position);
                     break;
                 default:
+
+                    musicService.playweb();
+//                    MediaPlayer mediaPlayer = new MediaPlayer();
+//                    mediaPlayer.reset();
+//                    try {
+//                        mediaPlayer.setDataSource(listMusicList.get(position).getUrl());
+//                        mediaPlayer.prepare();
+//                        mediaPlayer.start();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    startMusic();
                     Toast.makeText(SongListActivity.this,listMusicList.get(position).getName(),Toast.LENGTH_SHORT).show();
                     break;
             }

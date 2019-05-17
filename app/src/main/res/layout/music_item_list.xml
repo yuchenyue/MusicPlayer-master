@@ -41,7 +41,14 @@
             android:layout_marginLeft="80dp"
             android:text="歌手名称"
             android:textSize="13sp"
-            android:textColor="@color/textcolor" />
+            android:textColor="@color/textcolor"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:maxEms="12"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <View
             android:layout_width="match_parent"

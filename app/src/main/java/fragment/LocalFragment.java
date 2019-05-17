@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ycy.musicplayer.MainActivity;
 import com.example.ycy.musicplayer.R;
@@ -60,7 +61,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                },2000);
+                }, 2000);
                 loadData();
             }
         });
@@ -82,7 +83,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     //加载本地音乐列表
     public void loadData() {
         musics = MusicUtil.getmusics(mainActivity);
-        MyApplication.setMusics(musics);
+
         musicAdapter = new MusicAdapter(mainActivity, musics);
         local_fragment_list.setAdapter(musicAdapter);
         Log.i(TAG, "歌曲数量" + musics.size());
@@ -91,13 +92,17 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mainActivity.design_bottom_sheet.setVisibility(View.VISIBLE);
-        mainActivity.musicService.play(position);
-//        MyApplication.setIsLoc(true);
+        if (musics != null){
+            MyApplication.setMusics(musics);
+            MyApplication.setIsLoc(true);
+            mainActivity.musicService.play(position);
+        }else {
+            Toast.makeText(getActivity(),"暂无本地歌曲",Toast.LENGTH_SHORT).show();
+        }
+
         state = 1;
         Log.i(TAG, "LocalFragment传出position----" + position);
     }
-
-
 
 
 }

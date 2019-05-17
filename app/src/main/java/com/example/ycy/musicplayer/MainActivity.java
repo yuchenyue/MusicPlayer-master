@@ -42,10 +42,10 @@ import fragment.LocalFragment;
 import fragment.NetworkFragment;
 import fragment.SongSheetFragment;
 import manage.DBHelper;
-import manage.ExitApplication;
 import manage.FileProviderUtils;
 import manage.SystemProgramUtils;
 import utils.MusicUtil;
+import utils.MyApplication;
 import utils.Theme;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Popwindow.OnItemClickListener {
@@ -246,7 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
-            ExitApplication.getInstance().exit(this);
+            MyApplication.getInstance().exit(this);
         }
     }
 

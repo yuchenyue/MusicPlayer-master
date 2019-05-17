@@ -30,12 +30,12 @@ import java.util.List;
 import java.util.Map;
 
 import manage.DBHelper;
-import manage.ExitApplication;
 import permission.PermissionUtils;
 import permission.request.IRequestPermissions;
 import permission.request.RequestPermissions;
 import permission.requestresult.IRequestPermissionsResult;
 import permission.requestresult.RequestPermissionsResultSetApp;
+import utils.MyApplication;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ExitApplication.getInstance().addActivity(this);
+        MyApplication.getInstance().addActivity(this);
         sharedPreferences = getSharedPreferences("remember",MODE_PRIVATE);
         editor = sharedPreferences.edit();
         dbHelper = new DBHelper(this, "Data.db", null, 1);
@@ -174,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "登陆成功！", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("Username", edit_account.getText().toString());
+            MyApplication.setLogin(true);
             startActivity(intent);
             finish();
         } else {
