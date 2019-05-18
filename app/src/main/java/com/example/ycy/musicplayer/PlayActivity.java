@@ -16,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
+import entity.ListMusic;
 import entity.Music;
 import utils.MusicUtil;
 import utils.MyApplication;
@@ -76,23 +79,57 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
             positions = position;
             Log.i(TAG, "PlayActivity得到的值" + position);
             Log.i(TAG, "PlayActivity得道的状态" + state_s);
-            if (position != -1) {
-                final Music music = musics.get(position);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listen_title_tv.setText(music.getSong());
-                        Listen_artist_tv.setText(music.getSonger());
-                        listen_length.setText(MusicUtil.formatTime(music.getDuration()));
-                        play_background.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
-                        if (state == 1) {
-                            listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
-                        } else {
-                            listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
-                        }
+            if (state == 1){
+                if (position != -1) {
+                    if (MyApplication.getIsLoc() == true){
+                        final Music music = musics.get(position);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listen_title_tv.setText(music.getSong());
+                                Listen_artist_tv.setText(music.getSonger());
+                                listen_length.setText(MusicUtil.formatTime(music.getDuration()));
+                                play_background.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                                if (state == 1) {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_play)
+                                            .into(listen_pause);
+                                } else {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_stop)
+                                            .into(listen_pause);
+                                }
+                            }
+                        });
+                    }else if (MyApplication.getIsWeb() == true){
+                        final ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(position);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listen_title_tv.setText(listMusic.getName());
+                                Listen_artist_tv.setText(listMusic.getSinger());
+                                Glide.with(getApplication())
+                                        .load(listMusic.getPic())
+                                        .into(play_background);
+//                                main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                                if (state == 1) {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_play)
+                                            .into(listen_pause);
+                                } else {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_stop)
+                                            .into(listen_pause);
+                                }
+
+                            }
+                        });
                     }
-                });
+
+
+                }
             }
+
 
         }
     }
@@ -161,11 +198,9 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
      * 实例化组件
      */
     private void initView() {
-        Music music = musics.get(positions);
+
         //唱片中间专辑图
         play_background = (ImageView) findViewById(R.id.play_background);
-        Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, false);
-        play_background.setImageBitmap(play_backgroundBitmap);
 
         imageView_back = (ImageView) findViewById(R.id.imageView_back);
         imageView_back.setOnClickListener(this);
@@ -174,17 +209,17 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         listen_changpian = (ImageView) findViewById(R.id.listen_changpian);
         //歌名
         listen_title_tv = (TextView) findViewById(R.id.listen_title_tv);
-        listen_title_tv.setText(music.getSong());
+//        listen_title_tv.setText(music.getSong());
         //歌手
         Listen_artist_tv = (TextView) findViewById(R.id.listen_artist_tv);
-        Listen_artist_tv.setText(music.getSonger());
+//        Listen_artist_tv.setText(music.getSonger());
         listen_current = (TextView) findViewById(R.id.listen_current);//目前播放时间
         //歌曲时长
         listen_length = (TextView) findViewById(R.id.listen_length);
-        listen_length.setText(MusicUtil.formatTime(music.getDuration()));
+//        listen_length.setText(MusicUtil.formatTime(music.getDuration()));
         //进度条
         listen_jindutiao = (SeekBar) findViewById(R.id.listen_jindutiao);
-        listen_jindutiao.setMax(music.getDuration());
+//        listen_jindutiao.setMax(music.getDuration());
         listen_jindutiao.setOnSeekBarChangeListener(this);
         mHandler.post(mRunnable);
 
@@ -196,6 +231,20 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         }
         listen_up = (ImageView) findViewById(R.id.listen_up);
         listen_next = (ImageView) findViewById(R.id.listen_next);
+
+        if (MyApplication.getIsLoc() == true){
+            Music music = musics.get(positions);
+            Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, false);
+            play_background.setImageBitmap(play_backgroundBitmap);
+            listen_title_tv.setText(music.getSong());
+            Listen_artist_tv.setText(music.getSonger());
+            listen_length.setText(MusicUtil.formatTime(music.getDuration()));
+            listen_jindutiao.setMax(music.getDuration());
+        }else if (MyApplication.getIsWeb() == true){
+            ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(positions);
+            Glide.with(getApplicationContext()).load(listMusic.getPic()).into(play_background);
+        }
+
         listen_pause.setOnClickListener(this);
         listen_up.setOnClickListener(this);
         listen_next.setOnClickListener(this);
@@ -250,7 +299,9 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
                     musicService.up();
                     state = 1;
                     onDraw_play();
-                    listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                    Glide.with(getApplication())
+                            .load(R.mipmap.ic_play)
+                            .into(listen_pause);
                 }
                 break;
             case R.id.listen_pause:
@@ -258,20 +309,26 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
                     animator.cancel();
                     animator_zz.reverse();
                     animator_pb.cancel();
-                    listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
+                    Glide.with(getApplication())
+                            .load(R.mipmap.ic_stop)
+                            .into(listen_pause);
                     musicService.pause();
                     state = 2;
                 } else {
                     if (musicService.isPause()) {
                         onDraw_play();
-                        listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                        Glide.with(getApplication())
+                                .load(R.mipmap.ic_play)
+                                .into(listen_pause);
                         musicService.start();
                         state = 1;
                     } else {
                         musicService.play(positions);
                         state = 1;
                         onDraw_play();
-                        listen_pause.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                        Glide.with(getApplication())
+                                .load(R.mipmap.ic_play)
+                                .into(listen_pause);
                     }
                 }
                 break;
@@ -297,14 +354,20 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
      * 中心旋转图随着歌曲切换而切换
      */
     public void change() {
-        Music music = musics.get(musicService.getCurrentProgress());
-        Log.i(TAG, "中心图的id---" + musicService.getCurrentProgress() + "歌曲ID" + music.getSong());
-        Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, true);
-        play_background.setImageBitmap(play_backgroundBitmap);
-        listen_title_tv.setText(music.getSong());
-        Listen_artist_tv.setText(music.getSonger());
-        listen_jindutiao.setProgress(0);
-        listen_jindutiao.setMax(music.getDuration());
+        if (MyApplication.getIsLoc() == true){
+            Music music = musics.get(musicService.getCurrentProgress());
+            Log.i(TAG, "中心图的id---" + musicService.getCurrentProgress() + "歌曲ID" + music.getSong());
+            Bitmap play_backgroundBitmap = MusicUtil.getArtwork(this, music.getId(), music.getAlbum_id(), true, true);
+            play_background.setImageBitmap(play_backgroundBitmap);
+            listen_title_tv.setText(music.getSong());
+            Listen_artist_tv.setText(music.getSonger());
+            listen_jindutiao.setProgress(0);
+            listen_jindutiao.setMax(music.getDuration());
+        }else if (MyApplication.getIsWeb() == true){
+            ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(positions);
+            Glide.with(getApplicationContext()).load(listMusic.getPic()).into(play_background);
+        }
+
     }
 
 }

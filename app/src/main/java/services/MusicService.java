@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.LetMusic;
 import entity.ListMusic;
-import entity.NetMusic;
-import utils.MusicUtil;
 import entity.Music;
 import utils.MyApplication;
 
@@ -40,8 +37,6 @@ public class MusicService extends Service {
     private List<ListMusic.DataBean.Song> listMusic = new ArrayList<>();
     public int currentProgress;//歌曲位置
     private static int state = 2;
-    public boolean isWeb;
-    public boolean isLoc;
     public boolean isPause = false;
 
     /**
@@ -117,8 +112,6 @@ public class MusicService extends Service {
             mediaPlayer = new MediaPlayer();
 //            mediaPlayer.setLooping(true);
         }
-        isWeb = false;
-        isLoc = false;
 
 //        自动播放下一首
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -187,14 +180,21 @@ public class MusicService extends Service {
                     e.printStackTrace();
                 }
             }
-        } else if (MyApplication.getIsWeb() == true) {
+        }
+        chuandi();
+    }
+
+    public void playweb(int position) {
+        if (MyApplication.getIsWeb() == true) {
             listMusic = MyApplication.getListMusicList();
-            if (position >= 0 && position < listMusic.size()) {
-                ListMusic.DataBean.Song listmusic = listMusic.get(position);
+            ListMusic.DataBean.Song song = listMusic.get(position);
+            if (listMusic == null) {
+                Toast.makeText(getApplication(), "MyApplication无歌曲", Toast.LENGTH_SHORT).show();
+            } else {
                 try {
                     mediaPlayer.reset();
-                    mediaPlayer.setDataSource(listmusic.getUrl());
-                    mediaPlayer.prepareAsync();
+                    mediaPlayer.setDataSource(song.getUrl());
+                    mediaPlayer.prepare();
                     mediaPlayer.start();
                     currentProgress = position;
                     state = 1;
@@ -203,30 +203,7 @@ public class MusicService extends Service {
                 }
             }
         }
-
-
         chuandi();
-    }
-
-    public void playweb() {
-        if (MyApplication.getIsWeb() == true) {
-            listMusic = MyApplication.getListMusicList();
-            if (listMusic == null) {
-                Toast.makeText(getApplication(), "MyApplication无歌曲", Toast.LENGTH_SHORT).show();
-            } else {
-//                ListMusic.DataBean.Song listmusic = listMusic.get(position);
-                Toast.makeText(getApplication(),listMusic.size(), Toast.LENGTH_SHORT).show();
-                try {
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(listMusic.get(1).getUrl());
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    state = 1;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -245,12 +222,22 @@ public class MusicService extends Service {
      * 下一首
      */
     public void next() {
-        if (currentProgress >= musics.size() - 1) {
-            currentProgress = 0;
-        } else {
-            currentProgress++;
+
+        if (MyApplication.getIsLoc() == true){
+            if (currentProgress >= musics.size() - 1) {
+                currentProgress = 0;
+            } else {
+                currentProgress++;
+            }
+            play(currentProgress);
+        }else if (MyApplication.getIsWeb() == true){
+            if (currentProgress >= listMusic.size() - 1) {
+                currentProgress = 0;
+            } else {
+                currentProgress++;
+            }
+            playweb(currentProgress);
         }
-        play(currentProgress);
         chuandi();
     }
 
@@ -281,7 +268,7 @@ public class MusicService extends Service {
     }
 
     /**
-     * 当播放改变是发送广播
+     * 当播放改变时发送广播
      */
     public void chuandi() {
         Intent intent = new Intent();

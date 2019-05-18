@@ -49,13 +49,14 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     ListRecyclerViewAdapter lisadapter;
     String id, pic, description;
     private int position;
-    MusicService musicService;
+//    MusicService musicService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         MyApplication.getInstance().addActivity(this);
+        bindMusicService();
         id = getIntent().getStringExtra("id");//传进来的专辑的ID
         pic = getIntent().getStringExtra("pic");//传进来的专辑的图片
         description = getIntent().getStringExtra("description");//传进来的专辑的简介
@@ -147,7 +148,6 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                 normalDialog.show();
                 break;
         }
-
     }
 
     public void startMusic() {
@@ -157,10 +157,16 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
             MyApplication.listMusicList.clear();
             MyApplication.setListMusicList(listMusicList);
         }
-//        MyApplication.setListMusicList(listMusicList);
-//        Toast.makeText(getApplication(),listMusicList.size(),Toast.LENGTH_SHORT).show();
+        MyApplication.setIsLoc(false);
         MyApplication.setIsWeb(true);
-        musicService.playweb();//这里一直是为空的
+        musicService.playweb(0);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindMusicService();
     }
 
     /**
@@ -175,17 +181,16 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                     showMultiBtnDialog(position);
                     break;
                 default:
-                    //在这里播放就可以
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.reset();
-                    try {
-                        mediaPlayer.setDataSource(listMusicList.get(position).getUrl());
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+//                    //在这里播放就可以
+//                    MediaPlayer mediaPlayer = new MediaPlayer();
+//                    mediaPlayer.reset();
+//                    try {
+//                        mediaPlayer.setDataSource(listMusicList.get(position).getUrl());
+//                        mediaPlayer.prepare();
+//                        mediaPlayer.start();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                     Toast.makeText(SongListActivity.this,listMusicList.get(position).getName(),Toast.LENGTH_SHORT).show();
                     break;
             }

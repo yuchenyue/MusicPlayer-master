@@ -83,7 +83,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     //加载本地音乐列表
     public void loadData() {
         musics = MusicUtil.getmusics(mainActivity);
-
+        MyApplication.setMusics(musics);
         musicAdapter = new MusicAdapter(mainActivity, musics);
         local_fragment_list.setAdapter(musicAdapter);
         Log.i(TAG, "歌曲数量" + musics.size());
@@ -91,9 +91,10 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mainActivity.design_bottom_sheet.setVisibility(View.VISIBLE);
+//        mainActivity.design_bottom_sheet.setVisibility(View.VISIBLE);
         if (musics != null){
             MyApplication.setMusics(musics);
+            MyApplication.setIsWeb(false);
             MyApplication.setIsLoc(true);
             mainActivity.musicService.play(position);
         }else {

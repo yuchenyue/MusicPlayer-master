@@ -21,7 +21,7 @@ public class MyApplication extends Application {
     }
 
     private static Boolean isWeb = false;
-    private static Boolean isLoc = false;
+    private static Boolean isLoc = true;
     private static Context context;
     private static int position;
     private static Boolean Login = false;

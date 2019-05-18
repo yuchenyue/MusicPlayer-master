@@ -31,12 +31,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.FragmentAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
+import entity.ListMusic;
 import entity.Music;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
@@ -66,7 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public RelativeLayout design_bottom_sheet;
     TabLayout tablayout;
-    private String[] titles = {"本地音乐","每日推荐歌单", "搜索"};
+    private String[] titles = {"本地音乐", "每日推荐歌单", "搜索"};
 
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
@@ -115,7 +118,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         fragmentList.add(new NetworkFragment());
         //设置适配器
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
-        fragmentAdapter.addTitlesAndFragments(titles,fragmentList);
+        fragmentAdapter.addTitlesAndFragments(titles, fragmentList);
         main_viewpager.setAdapter(fragmentAdapter);
         tablayout.setupWithViewPager(main_viewpager);
 //        musics = MusicUtil.getmusics(this);
@@ -135,6 +138,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             tablayout.addTab(tablayout.newTab().setText(titles[i]));
         }
     }
+
     //初始化控件
     private void initView() {
         tablayout = (TabLayout) findViewById(R.id.tablayout);
@@ -143,7 +147,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         main_author = (TextView) findViewById(R.id.main_author);
         main_viewpager = (ViewPager) findViewById(R.id.main_viewpager);
         main_image = (CircleImageView) findViewById(R.id.main_image);
-//        main_image.setImageDrawable(getResources().getDrawable(R.drawable.app));
         main_up = (ImageView) findViewById(R.id.main_up);
         main_pause_play = (ImageView) findViewById(R.id.main_pause_play);
         main_next = (ImageView) findViewById(R.id.main_next);
@@ -164,7 +167,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else if (musicService.isPause()) {
                     musicService.up();
                     state = 1;
-                    main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                    Glide.with(getApplication())
+                            .load(R.mipmap.ic_stop)
+                            .into(main_pause_play);
                 }
                 Log.d(TAG, "up");
                 break;
@@ -174,19 +179,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     musicService.pause();
                     Log.d(TAG, "pasue");
                     state = 1;
-                    main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
+                    Glide.with(getApplication())
+                            .load(R.mipmap.ic_stop)
+                            .into(main_pause_play);
                 } else {
                     if (musicService.isPause()) {
                         musicService.start();
                         Log.d(TAG, "play");
                         state = 1;
-                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
-                    } else {
-                        musicService.play(0);
-                        Log.d(TAG, "play0");
-                        state = 1;
-                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                        Glide.with(getApplication())
+                                .load(R.mipmap.ic_play)
+                                .into(main_pause_play);
                     }
+//                    else {
+//                        musicService.play(0);
+//                        Log.d(TAG, "play0");
+//                        state = 1;
+//                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+//                    }
                 }
                 break;
             //主界面下一首键
@@ -197,7 +207,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else if (musicService.isPause()) {
                     musicService.next();
                     state = 1;
-                    main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
+                    Glide.with(getApplication())
+                            .load(R.mipmap.ic_play)
+                            .into(main_pause_play);
                 }
                 Log.d(TAG, "next");
 
@@ -218,6 +230,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 按两次返回键退出程序
+     *
      * @param keyCode
      * @param event
      * @return
@@ -229,6 +242,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         return super.onKeyDown(keyCode, event);
     }
+
     private void exit() {
         if (!isExit) {
             isExit = true;
@@ -279,6 +293,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 子activity带回的信息更新
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -304,16 +319,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 File file = new File("/mnt/sdcard/tupian.jpg");
                 filtUri = FileProviderUtils.uriFromFile(MainActivity.this, file);
                 SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
-                Log.d(TAG,"REQUEST_CODE_PAIZHAO");
+                Log.d(TAG, "REQUEST_CODE_PAIZHAO");
                 break;
             case SystemProgramUtils.REQUEST_CODE_ZHAOPIAN:
                 //相册选择图片完毕，进行图片裁切
-                if (data == null ||  data.getData()==null) {
+                if (data == null || data.getData() == null) {
                     return;
                 }
                 filtUri = data.getData();
                 SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
-                Log.d(TAG,"REQUEST_CODE_ZHAOPIAN");
+                Log.d(TAG, "REQUEST_CODE_ZHAOPIAN");
                 break;
             case SystemProgramUtils.REQUEST_CODE_CAIQIE:
                 //图片裁切完成，显示裁切后的图片
@@ -321,9 +336,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Uri uri = Uri.fromFile(outputFile);
                     Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
                     iv_touxiang = (CircleImageView) findViewById(R.id.iv_touxiang);
-                    Log.d(TAG,"REQUEST_CODE_CAIQIE");
+                    Log.d(TAG, "REQUEST_CODE_CAIQIE");
                     iv_touxiang.setImageBitmap(bitmap);
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 break;
@@ -334,13 +349,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 切换头像事件
+     *
      * @param v
      */
     @Override
     public void setOnItemClick(View v) {
         switch (v.getId()) {
             case R.id.bt_xiangji:
-                SystemProgramUtils.paizhao(this,new File("/mnt/sdcard/tupian.jpg"));
+                SystemProgramUtils.paizhao(this, new File("/mnt/sdcard/tupian.jpg"));
                 popwindow.dismiss();
                 break;
             case R.id.bt_xiangce:
@@ -368,24 +384,56 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             p = position;
             Log.i(TAG, "MainActivity得到的值" + position);
             Log.i(TAG, "MainActivity得道的状态" + state_s);
-            if (position != -1) {
-                final Music music =  MusicUtil.getmusics(getApplicationContext()).get(position);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        main_musicName.setText(music.getSong());
-                        main_author.setText(music.getSonger());
-                        main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
-                        if (state == 1) {
-                            main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
-                        } else {
-                            main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
-                        }
+            if (state == 1) {
+                design_bottom_sheet.setVisibility(View.VISIBLE);
+                if (position != -1) {
+                    if (MyApplication.getIsLoc() == true) {
+                        final Music music = MusicUtil.getmusics(getApplicationContext()).get(position);
+//                final Music music = MyApplication.getMusics();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                main_musicName.setText(music.getSong());
+                                main_author.setText(music.getSonger());
+                                main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                                if (state == 1) {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_play)
+                                            .into(main_pause_play);
+                                } else {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_stop)
+                                            .into(main_pause_play);
+                                }
 
+                            }
+                        });
+                    } else if (MyApplication.getIsWeb() == true) {
+                        final ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(position);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                main_musicName.setText(listMusic.getName());
+                                main_author.setText(listMusic.getSinger());
+                                Glide.with(getApplication())
+                                        .load(listMusic.getPic())
+                                        .into(main_image);
+//                                main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                                if (state == 1) {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_play)
+                                            .into(main_pause_play);
+                                } else {
+                                    Glide.with(getApplication())
+                                            .load(R.mipmap.ic_stop)
+                                            .into(main_pause_play);
+                                }
+
+                            }
+                        });
                     }
-                });
+                }
             }
-
         }
     }
 
@@ -396,28 +444,59 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         IntentFilter filter = new IntentFilter();
         filter.addAction("services.MusicService");
         registerReceiver(receiver, filter);
+        design_bottom_sheet.setVisibility(View.VISIBLE);
         if (p != -1) {
             p = musicService.getCurrentProgress();
             Log.i(TAG, "MainActivity--runUiThread" + musicService.getCurrentProgress());
             state = musicService.getState();
             Log.i(TAG, "MainActivity--runUiThread" + musicService.getState());
+            if (MyApplication.getIsLoc() == true){
+                final Music music = MusicUtil.getmusics(getApplicationContext()).get(p);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "MainActivity--runUiThread---" + p);
+                        main_musicName.setText(music.getSong());
+                        main_author.setText(music.getSonger());
+                        main_image.setImageBitmap(MusicUtil.getArtwork(getApplicationContext(), music.getId(), music.getAlbum_id(), true, false));
+                        if (state == 1) {
+                            Glide.with(getApplication())
+                                    .load(R.mipmap.ic_play)
+                                    .into(main_pause_play);
+                        } else {
+                            Glide.with(getApplication())
+                                    .load(R.mipmap.ic_stop)
+                                    .into(main_pause_play);
+                        }
 
-            final Music music = MusicUtil.getmusics(getApplicationContext()).get(p);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "MainActivity--runUiThread---" + p);
-                    main_musicName.setText(music.getSong());
-                    main_author.setText(music.getSonger());
-                    main_image.setImageBitmap(MusicUtil.getArtwork(getApplicationContext(), music.getId(), music.getAlbum_id(), true, false));
-                    if (state == 1) {
-                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
-                    } else {
-                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_stop));
                     }
+                });
+            }else if (MyApplication.getIsWeb() == true){
 
-                }
-            });
+                final ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(p);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        main_musicName.setText(listMusic.getName());
+                        main_author.setText(listMusic.getSinger());
+                        Glide.with(getApplication())
+                                .load(listMusic.getPic())
+                                .into(main_image);
+//                                main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
+                        if (state == 1) {
+                            Glide.with(getApplication())
+                                    .load(R.mipmap.ic_play)
+                                    .into(main_pause_play);
+                        } else {
+                            Glide.with(getApplication())
+                                    .load(R.mipmap.ic_stop)
+                                    .into(main_pause_play);
+                        }
+
+                    }
+                });
+            }
+
         }
         Log.i(TAG, "MainActivity--restart");
     }
@@ -428,5 +507,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         unregisterReceiver(receiver);
         unbindMusicService();
         Log.i(TAG, "MainActivity--pause");
+    }
+
+    @Override
+    public void finish() {
+
     }
 }
