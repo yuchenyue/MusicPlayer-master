@@ -36,7 +36,7 @@ import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
 
-public class SongListActivity extends AppCompatActivity implements View.OnClickListener {
+public class SongListActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "SongListActivity";
     private static final int SEARCH_MUSICLIST = 0x1;
     ImageView list_img;//显示专辑图
@@ -52,7 +52,7 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
     MusicService musicService;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
         MyApplication.getInstance().addActivity(this);
@@ -127,35 +127,40 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
      */
     @Override
     public void onClick(View v) {
-        AlertDialog.Builder normalDialog = new AlertDialog.Builder(SongListActivity.this);
-        normalDialog.setTitle("是否播放当前列表");
-        normalDialog.setPositiveButton("是",new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SongListActivity.this,"是",Toast.LENGTH_SHORT).show();
-                startMusic();//我想播放这个歌单的时候在吧这个列表传到MyApplicaton中
-            }
-        });
-        normalDialog.setNeutralButton("否",new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SongListActivity.this,"否",Toast.LENGTH_SHORT).show();
-            }
-        });
-        normalDialog.show();
+        switch (v.getId()){
+            case R.id.list_button:
+                AlertDialog.Builder normalDialog = new AlertDialog.Builder(SongListActivity.this);
+                normalDialog.setTitle("是否播放当前列表");
+                normalDialog.setPositiveButton("是",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(SongListActivity.this,"是",Toast.LENGTH_SHORT).show();
+                        startMusic();//我想播放这个歌单的时候在吧这个列表传到MyApplicaton中
+                    }
+                });
+                normalDialog.setNeutralButton("否",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(SongListActivity.this,"否",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                normalDialog.show();
+                break;
+        }
+
     }
 
-    private void startMusic() {
-//        if (MyApplication.listMusicList == null){
-//            MyApplication.setListMusicList(listMusicList);
-//        }else {
-//            MyApplication.listMusicList.clear();
-//            MyApplication.setListMusicList(listMusicList);
-//        }
-        MyApplication.setListMusicList(listMusicList);
-        Toast.makeText(getApplication(),listMusicList.size(),Toast.LENGTH_SHORT).show();
-//        MyApplication.setIsWeb(true);
-//        musicService.play(position);
+    public void startMusic() {
+        if (MyApplication.listMusicList == null){
+            MyApplication.setListMusicList(listMusicList);
+        }else {
+            MyApplication.listMusicList.clear();
+            MyApplication.setListMusicList(listMusicList);
+        }
+//        MyApplication.setListMusicList(listMusicList);
+//        Toast.makeText(getApplication(),listMusicList.size(),Toast.LENGTH_SHORT).show();
+        MyApplication.setIsWeb(true);
+        musicService.playweb();//这里一直是为空的
     }
 
     /**
@@ -170,18 +175,17 @@ public class SongListActivity extends AppCompatActivity implements View.OnClickL
                     showMultiBtnDialog(position);
                     break;
                 default:
+                    //在这里播放就可以
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.reset();
+                    try {
+                        mediaPlayer.setDataSource(listMusicList.get(position).getUrl());
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    musicService.playweb();
-//                    MediaPlayer mediaPlayer = new MediaPlayer();
-//                    mediaPlayer.reset();
-//                    try {
-//                        mediaPlayer.setDataSource(listMusicList.get(position).getUrl());
-//                        mediaPlayer.prepare();
-//                        mediaPlayer.start();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    startMusic();
                     Toast.makeText(SongListActivity.this,listMusicList.get(position).getName(),Toast.LENGTH_SHORT).show();
                     break;
             }

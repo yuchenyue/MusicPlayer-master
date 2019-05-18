@@ -53,15 +53,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public static final String TAG = "MainActivity";
     private static final int SUBACTIVITY = 4;//子Activity回传标记
     private Popwindow popwindow;
-//    //相册请求码
-//    private static final int ALBUM_REQUEST_CODE = 1;
-//    //相机请求码
-//    private static final int CAMERA_REQUEST_CODE = 2;
-//    //剪裁请求码
-//    private static final int CROP_REQUEST_CODE = 3;
-    private File tempFile;
-    public Uri cropImageUri;
-
     public MyReceiver receiver = null;//广播
     int p;
     private static int state = 2;//播放状态
@@ -77,10 +68,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     TabLayout tablayout;
     private String[] titles = {"本地音乐","每日推荐歌单", "搜索"};
 
-    private DBHelper dbHelper;
     TextView tv_name;//侧滑界面昵称
     List<Fragment> fragmentList;
-    List<Music> musics;
     private static boolean isExit = false;
     Handler mHandler = new Handler() {
         @Override
@@ -135,7 +124,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         popwindow = new Popwindow(this);
         popwindow.setOnItemClickListener(this);
 
-        dbHelper = new DBHelper(this, "Data.db", null, 1);
+//        dbHelper = new DBHelper(this, "Data.db", null, 1);
     }
 
     /**
@@ -253,7 +242,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindMusicService();
+//        unbindMusicService();
         Log.i(TAG, "MainActivity--destroy");
     }
 

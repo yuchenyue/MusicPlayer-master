@@ -37,13 +37,12 @@ public class MusicService extends Service {
     private NetworkInfo info;
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-    private List<ListMusic.DataBean.Song> listMusicList = new ArrayList<>();
+    private List<ListMusic.DataBean.Song> listMusic = new ArrayList<>();
     public int currentProgress;//歌曲位置
     private static int state = 2;
     public boolean isWeb;
     public boolean isLoc;
     public boolean isPause = false;
-    private int position;
 
     /**
      * 暂停播放
@@ -173,7 +172,7 @@ public class MusicService extends Service {
      */
     public void play(int position) {
 //        musics = MusicUtil.getmusics(this);
-        if (MyApplication.getIsLoc() == true){
+        if (MyApplication.getIsLoc() == true) {
             musics = MyApplication.getMusics();
             if (position >= 0 && position < musics.size()) {
                 Music music = musics.get(position);
@@ -188,10 +187,10 @@ public class MusicService extends Service {
                     e.printStackTrace();
                 }
             }
-        }else if (MyApplication.getIsWeb() == true){
-            listMusicList = MyApplication.getListMusicList();
-            if (position >= 0 && position < listMusicList.size()){
-                ListMusic.DataBean.Song listmusic = listMusicList.get(position);
+        } else if (MyApplication.getIsWeb() == true) {
+            listMusic = MyApplication.getListMusicList();
+            if (position >= 0 && position < listMusic.size()) {
+                ListMusic.DataBean.Song listmusic = listMusic.get(position);
                 try {
                     mediaPlayer.reset();
                     mediaPlayer.setDataSource(listmusic.getUrl());
@@ -210,16 +209,18 @@ public class MusicService extends Service {
     }
 
     public void playweb() {
-        if (MyApplication.getIsWeb() == true){
-            listMusicList = MyApplication.getListMusicList();
-            if (position >= 0 && position < listMusicList.size()){
-                ListMusic.DataBean.Song listmusic = listMusicList.get(position);
+        if (MyApplication.getIsWeb() == true) {
+            listMusic = MyApplication.getListMusicList();
+            if (listMusic == null) {
+                Toast.makeText(getApplication(), "MyApplication无歌曲", Toast.LENGTH_SHORT).show();
+            } else {
+//                ListMusic.DataBean.Song listmusic = listMusic.get(position);
+                Toast.makeText(getApplication(),listMusic.size(), Toast.LENGTH_SHORT).show();
                 try {
                     mediaPlayer.reset();
-                    mediaPlayer.setDataSource(listmusic.getUrl());
-                    mediaPlayer.prepareAsync();
+                    mediaPlayer.setDataSource(listMusic.get(1).getUrl());
+                    mediaPlayer.prepare();
                     mediaPlayer.start();
-                    currentProgress = position;
                     state = 1;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -275,7 +276,7 @@ public class MusicService extends Service {
         }
     }
 
-    public void stop(){
+    public void stop() {
         mediaPlayer.stop();
     }
 
