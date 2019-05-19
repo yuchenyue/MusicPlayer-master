@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
+import com.example.ycy.musicplayer.MainActivity;
+
 public class Theme {
     public static void theme(final Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

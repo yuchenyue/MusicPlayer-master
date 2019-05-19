@@ -36,7 +36,7 @@ public class MusicService extends Service {
     List<Music> musics;
     private List<ListMusic.DataBean.Song> listMusic = new ArrayList<>();
     public int currentProgress;//歌曲位置
-    private static int state = 2;
+//    private static int state = 2;
     public boolean isPause = false;
 
     /**
@@ -93,14 +93,6 @@ public class MusicService extends Service {
     public MusicService() {
     }
 
-    /**
-     * 将播放状态暴露出去
-     *
-     * @return
-     */
-    public int getState() {
-        return state;
-    }
 
     @Override
     public void onCreate() {
@@ -175,7 +167,7 @@ public class MusicService extends Service {
                     mediaPlayer.prepare();
                     mediaPlayer.start();
                     currentProgress = position;
-                    state = 1;
+                    MyApplication.setState(true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -197,7 +189,7 @@ public class MusicService extends Service {
                     mediaPlayer.prepare();
                     mediaPlayer.start();
                     currentProgress = position;
-                    state = 1;
+                    MyApplication.setState(true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -213,7 +205,7 @@ public class MusicService extends Service {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             isPause = true;
-            state = 2;
+            MyApplication.setState(false);
         }
         chuandi();
     }
@@ -251,6 +243,7 @@ public class MusicService extends Service {
             currentProgress--;
         }
         play(currentProgress);
+        chuandi();
     }
 
     /**
@@ -259,8 +252,9 @@ public class MusicService extends Service {
     public void start() {
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
-            state = 1;
+            MyApplication.setState(true);
         }
+        chuandi();
     }
 
     public void stop() {
@@ -274,17 +268,17 @@ public class MusicService extends Service {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("count", currentProgress);
-        if (mediaPlayer.isPlaying()) {
-            state = 1;
-            bundle.putInt("state", state);
-        } else {
-            state = 2;
-            bundle.putInt("state", state);
-        }
+//        if (mediaPlayer.isPlaying()) {
+//            state = 1;
+//            bundle.putInt("state", state);
+//        } else {
+//            state = 2;
+//            bundle.putInt("state", state);
+//        }
         intent.putExtras(bundle);
         intent.setAction("services.MusicService");
         Log.i(TAG, "Service传出的currentPosition" + currentProgress);
-        Log.i(TAG, "Service传出的播放状态" + state);
+//        Log.i(TAG, "Service传出的播放状态" + state);
         sendBroadcast(intent);
     }
 

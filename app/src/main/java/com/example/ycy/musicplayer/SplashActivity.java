@@ -2,10 +2,12 @@ package com.example.ycy.musicplayer;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -43,8 +45,9 @@ public class SplashActivity extends FragmentActivity {
         button_splash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//               into();
                 InMainActivity = true;
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                startActivity(new Intent(SplashActivity.this,LoginActivity.class));
                 finish();
             }
         });
@@ -62,6 +65,7 @@ public class SplashActivity extends FragmentActivity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case START_ACTIVITY:
+//                        into();
                         startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                         finish();
                         break;

@@ -114,11 +114,11 @@
             android:text="记住密码"
             android:id="@+id/checkBox" />
 
-        <!--<CheckBox-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="自动登录"-->
-            <!--android:id="@+id/checkBox2" />-->
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="自动登录"
+            android:id="@+id/checkBox2" />
 
         <!--<TextView-->
             <!--android:id="@+id/text_msg"-->

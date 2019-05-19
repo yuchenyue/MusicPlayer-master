@@ -89,6 +89,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //侧滑
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("我的音乐");
         toolbar.setOnClickListener(this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -163,10 +165,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.main_up:
                 if (musicService.isPlaying()) {
                     musicService.up();
-                    state = 1;
+                    MyApplication.setState(true);
                 } else if (musicService.isPause()) {
                     musicService.up();
-                    state = 1;
+                    MyApplication.setState(true);
                     Glide.with(getApplication())
                             .load(R.mipmap.ic_stop)
                             .into(main_pause_play);
@@ -178,7 +180,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if (musicService.isPlaying()) {
                     musicService.pause();
                     Log.d(TAG, "pasue");
-                    state = 1;
+                    MyApplication.setState(false);
                     Glide.with(getApplication())
                             .load(R.mipmap.ic_stop)
                             .into(main_pause_play);
@@ -186,7 +188,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     if (musicService.isPause()) {
                         musicService.start();
                         Log.d(TAG, "play");
-                        state = 1;
+                        MyApplication.setState(true);
                         Glide.with(getApplication())
                                 .load(R.mipmap.ic_play)
                                 .into(main_pause_play);
@@ -203,10 +205,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.main_next:
                 if (musicService.isPlaying()) {
                     musicService.next();
-                    state = 1;
+                    MyApplication.setState(true);
                 } else if (musicService.isPause()) {
                     musicService.next();
-                    state = 1;
+                    MyApplication.setState(true);
                     Glide.with(getApplication())
                             .load(R.mipmap.ic_play)
                             .into(main_pause_play);
@@ -218,10 +220,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Log.d(TAG, "点击了图片");
                 Intent intent = new Intent(this, PlayActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("state", state);
+//                bundle.putInt("state", state);
                 bundle.putInt("po", p);
                 intent.putExtras(bundle);
-                Log.i(TAG, "----" + p + state);
+//                Log.i(TAG, "----" + p + state);
                 startActivity(intent);
             default:
                 break;
@@ -284,6 +286,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Theme.theme(this);
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this,LoginActivity.class));
         }
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
 //        drawer.closeDrawer(GravityCompat.START);
@@ -379,33 +382,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         public void onReceive(final Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             final int position = bundle.getInt("count");
-            final int state_s = bundle.getInt("state");
-            state = state_s;
             p = position;
             Log.i(TAG, "MainActivity得到的值" + position);
-            Log.i(TAG, "MainActivity得道的状态" + state_s);
-            if (state == 1) {
+            Log.i(TAG, "MainActivity得道的状态" + MyApplication.isState()+ "");
+            if (MyApplication.isState() == true) {
                 design_bottom_sheet.setVisibility(View.VISIBLE);
+                Glide.with(getApplication())
+                        .load(R.mipmap.ic_play)
+                        .into(main_pause_play);
                 if (position != -1) {
                     if (MyApplication.getIsLoc() == true) {
                         final Music music = MusicUtil.getmusics(getApplicationContext()).get(position);
-//                final Music music = MyApplication.getMusics();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 main_musicName.setText(music.getSong());
                                 main_author.setText(music.getSonger());
                                 main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
-                                if (state == 1) {
-                                    Glide.with(getApplication())
-                                            .load(R.mipmap.ic_play)
-                                            .into(main_pause_play);
-                                } else {
-                                    Glide.with(getApplication())
-                                            .load(R.mipmap.ic_stop)
-                                            .into(main_pause_play);
-                                }
-
                             }
                         });
                     } else if (MyApplication.getIsWeb() == true) {
@@ -418,99 +411,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 Glide.with(getApplication())
                                         .load(listMusic.getPic())
                                         .into(main_image);
-//                                main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
-                                if (state == 1) {
-                                    Glide.with(getApplication())
-                                            .load(R.mipmap.ic_play)
-                                            .into(main_pause_play);
-                                } else {
-                                    Glide.with(getApplication())
-                                            .load(R.mipmap.ic_stop)
-                                            .into(main_pause_play);
-                                }
-
                             }
                         });
                     }
                 }
+            }else {
+                Glide.with(getApplication())
+                        .load(R.mipmap.ic_stop)
+                        .into(main_pause_play);
             }
         }
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        receiver = new MyReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("services.MusicService");
-        registerReceiver(receiver, filter);
-        design_bottom_sheet.setVisibility(View.VISIBLE);
-        if (p != -1) {
-            p = musicService.getCurrentProgress();
-            Log.i(TAG, "MainActivity--runUiThread" + musicService.getCurrentProgress());
-            state = musicService.getState();
-            Log.i(TAG, "MainActivity--runUiThread" + musicService.getState());
-            if (MyApplication.getIsLoc() == true){
-                final Music music = MusicUtil.getmusics(getApplicationContext()).get(p);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i(TAG, "MainActivity--runUiThread---" + p);
-                        main_musicName.setText(music.getSong());
-                        main_author.setText(music.getSonger());
-                        main_image.setImageBitmap(MusicUtil.getArtwork(getApplicationContext(), music.getId(), music.getAlbum_id(), true, false));
-                        if (state == 1) {
-                            Glide.with(getApplication())
-                                    .load(R.mipmap.ic_play)
-                                    .into(main_pause_play);
-                        } else {
-                            Glide.with(getApplication())
-                                    .load(R.mipmap.ic_stop)
-                                    .into(main_pause_play);
-                        }
-
-                    }
-                });
-            }else if (MyApplication.getIsWeb() == true){
-
-                final ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(p);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        main_musicName.setText(listMusic.getName());
-                        main_author.setText(listMusic.getSinger());
-                        Glide.with(getApplication())
-                                .load(listMusic.getPic())
-                                .into(main_image);
-//                                main_image.setImageBitmap(MusicUtil.getArtwork(context, music.getId(), music.getAlbum_id(), true, false));
-                        if (state == 1) {
-                            Glide.with(getApplication())
-                                    .load(R.mipmap.ic_play)
-                                    .into(main_pause_play);
-                        } else {
-                            Glide.with(getApplication())
-                                    .load(R.mipmap.ic_stop)
-                                    .into(main_pause_play);
-                        }
-
-                    }
-                });
-            }
-
-        }
-        Log.i(TAG, "MainActivity--restart");
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
         unbindMusicService();
         Log.i(TAG, "MainActivity--pause");
     }
 
     @Override
     public void finish() {
-
+        Log.i(TAG, "MainActivity--finish");
     }
 }

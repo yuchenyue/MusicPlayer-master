@@ -40,6 +40,7 @@ public class ListMusic implements Serializable {
             private String pic;
             private String lrc;
             private String url;
+            private int time;
 
             public String getId() {
                 return id;
@@ -87,6 +88,14 @@ public class ListMusic implements Serializable {
 
             public void setUrl(String url) {
                 this.url = url;
+            }
+
+            public int getTime() {
+                return time;
+            }
+
+            public void setTime(int time) {
+                this.time = time;
             }
         }
 

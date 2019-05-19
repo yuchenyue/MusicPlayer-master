@@ -35,14 +35,15 @@ import permission.request.IRequestPermissions;
 import permission.request.RequestPermissions;
 import permission.requestresult.IRequestPermissionsResult;
 import permission.requestresult.RequestPermissionsResultSetApp;
+import retrofit2.http.GET;
 import utils.MyApplication;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edit_account, edit_password;
-//    private TextView text_msg;
+    //    private TextView text_msg;
     private Button btn_login, btn_register;
-    private CheckBox checkBox;
+    private CheckBox checkBox, checkBox2;
     private ImageButton openpwd;
     private boolean flag = false;
     private String account, password;
@@ -59,15 +60,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         MyApplication.getInstance().addActivity(this);
-        sharedPreferences = getSharedPreferences("remember",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("remember", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         dbHelper = new DBHelper(this, "Data.db", null, 1);
 
         initView();
         isRemember();
+//        isAutoLogin();
     }
-
-
 
     private void initView() {
         edit_account = (EditText) findViewById(R.id.edit_account);
@@ -94,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         checkBox = (CheckBox) findViewById(R.id.checkBox);
+        checkBox2 = (CheckBox) findViewById(R.id.checkBox);
 //        text_msg = (TextView) findViewById(R.id.text_msg);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_register = (Button) findViewById(R.id.btn_register);
@@ -117,11 +118,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+//    public void isAutoLogin(){
+//        SharedPreferences preferences = getSharedPreferences("islogin",MODE_PRIVATE);
+//        boolean islogin = preferences.getBoolean("islogin",false);
+//        if (islogin){
+//            startActivity(new Intent(getApplication(),MainActivity.class));
+//            finish();
+//            checkBox2.setChecked(true);
+//        }else {
+//            startActivity(new Intent(getApplication(), LoginActivity.class));
+//            finish();
+//            checkBox2.setChecked(false);
+//        }
+//    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
-                if (!requestPermissions()){
+                if (!requestPermissions()) {
                     return;
                 }
                 if (edit_account.getText().toString().trim().equals("") | edit_password.getText().
@@ -161,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void readUsersInfo() {
         SharedPreferences sharedPreferences = getSharedPreferences("UsersInfo", MODE_PRIVATE);
         String name = sharedPreferences.getString("username", "");
-        String passw= sharedPreferences.getString("password", "");
+        String passw = sharedPreferences.getString("password", "");
         edit_account.setText(name);
         edit_password.setText(passw);
     }
@@ -189,18 +204,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String sql = "Select * from usertable where username=? and password=?";
         Cursor cursor = db.rawQuery(sql, new String[]{username, password});
-        boolean login = false;
+        boolean rember = false;
         while (cursor.moveToFirst()) {
             cursor.close();
-            login = true;
-            if (login){
-                SharedPreferences.Editor editor = getSharedPreferences("remember",MODE_PRIVATE).edit();
-                if (checkBox.isChecked()){
-                    editor.putBoolean("remember",true);
-                    editor.putString("name",edit_account.getText().toString().trim());
-                    editor.putString("pass",edit_password.getText().toString().trim());
+            rember = true;
+            if (rember) {
+                SharedPreferences.Editor editor = getSharedPreferences("remember", MODE_PRIVATE).edit();
+                if (checkBox.isChecked()) {
+                    editor.putBoolean("remember", true);
+                    editor.putString("name", edit_account.getText().toString().trim());
+                    editor.putString("pass", edit_password.getText().toString().trim());
                     editor.commit();
-                }else {
+                } else {
                     editor.clear();
                 }
                 editor.commit();
@@ -214,26 +229,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * 申请权限
      */
-    private boolean requestPermissions(){
+    private boolean requestPermissions() {
         String[] permissions = new String[]{Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.INTERNET};
-        return requestPermissions.requestPermissions(this,permissions, PermissionUtils.ResultCode1);
+        return requestPermissions.requestPermissions(this, permissions, PermissionUtils.ResultCode1);
     }
+
     //用户授权操作结果（可能授权了，也可能未授权）
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //用户给APP授权的结果
         //判断grantResults是否已全部授权，如果是，执行相应操作，如果否，提醒开启权限
-        if(requestPermissionsResult.doRequestPermissionsResult(this, permissions, grantResults)){
+        if (requestPermissionsResult.doRequestPermissionsResult(this, permissions, grantResults)) {
             //请求的权限全部授权成功，此处可以做自己想做的事了
             //输出授权结果
-            Toast.makeText(LoginActivity.this,"授权成功，请重新点击刚才的操作！",Toast.LENGTH_LONG).show();
-        }else{
+            Toast.makeText(LoginActivity.this, "授权成功，请重新点击刚才的操作！", Toast.LENGTH_LONG).show();
+        } else {
             //输出授权结果
-            Toast.makeText(LoginActivity.this,"请给APP授权，否则功能无法正常使用！",Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, "请给APP授权，否则功能无法正常使用！", Toast.LENGTH_LONG).show();
         }
     }
 }

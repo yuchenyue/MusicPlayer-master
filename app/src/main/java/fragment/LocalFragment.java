@@ -37,7 +37,7 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     public List<Music> musics;
     public MusicAdapter musicAdapter;
     MainActivity mainActivity;
-    public static int state = 2;
+//    public static int state = 2;
 
     @Override
     public void onAttach(Context context) {
@@ -96,12 +96,12 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
             MyApplication.setMusics(musics);
             MyApplication.setIsWeb(false);
             MyApplication.setIsLoc(true);
+            MyApplication.setState(true);
             mainActivity.musicService.play(position);
         }else {
             Toast.makeText(getActivity(),"暂无本地歌曲",Toast.LENGTH_SHORT).show();
         }
-
-        state = 1;
+//        state = 1;
         Log.i(TAG, "LocalFragment传出position----" + position);
     }
 

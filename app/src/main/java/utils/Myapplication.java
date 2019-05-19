@@ -25,6 +25,15 @@ public class MyApplication extends Application {
     private static Context context;
     private static int position;
     private static Boolean Login = false;
+    private static boolean state = false;
+
+    public static boolean isState() {
+        return state;
+    }
+
+    public static void setState(boolean state) {
+        MyApplication.state = state;
+    }
 
     public static Boolean getLogin() {
         return Login;

@@ -160,7 +160,22 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
         MyApplication.setIsLoc(false);
         MyApplication.setIsWeb(true);
         musicService.playweb(0);
+    }
 
+    /**
+     * 转换歌曲时间的格式
+     *
+     * @param time
+     * @return
+     */
+    public static String formatTime(int time) {
+        if (time / 1000 % 60 < 10) {
+            String tt = time / 1000 / 60 + ":0" + time / 1000 % 60;
+            return tt;
+        } else {
+            String tt = time / 1000 / 60 + ":" + time / 1000 % 60;
+            return tt;
+        }
     }
 
     @Override
