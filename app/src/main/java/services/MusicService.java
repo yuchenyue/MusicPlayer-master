@@ -36,7 +36,7 @@ public class MusicService extends Service {
     List<Music> musics;
     private List<ListMusic.DataBean.Song> listMusic = new ArrayList<>();
     public int currentProgress;//歌曲位置
-//    private static int state = 2;
+    //    private static int state = 2;
     public boolean isPause = false;
 
     /**
@@ -159,18 +159,16 @@ public class MusicService extends Service {
 //        musics = MusicUtil.getmusics(this);
         if (MyApplication.getIsLoc() == true) {
             musics = MyApplication.getMusics();
-            if (position >= 0 && position < musics.size()) {
-                Music music = musics.get(position);
-                try {
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(this, Uri.parse(music.getUrl()));
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    currentProgress = position;
-                    MyApplication.setState(true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            Music music = musics.get(position);
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(music.getUrl());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+                currentProgress = position;
+                MyApplication.setState(true);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         chuandi();
@@ -215,14 +213,14 @@ public class MusicService extends Service {
      */
     public void next() {
 
-        if (MyApplication.getIsLoc() == true){
+        if (MyApplication.getIsLoc() == true) {
             if (currentProgress >= musics.size() - 1) {
                 currentProgress = 0;
             } else {
                 currentProgress++;
             }
             play(currentProgress);
-        }else if (MyApplication.getIsWeb() == true){
+        } else if (MyApplication.getIsWeb() == true) {
             if (currentProgress >= listMusic.size() - 1) {
                 currentProgress = 0;
             } else {
@@ -237,12 +235,22 @@ public class MusicService extends Service {
      * 上一首
      */
     public void up() {
-        if (currentProgress - 1 < 0) {
-            currentProgress = musics.size() - 1;
-        } else {
-            currentProgress--;
+        if (MyApplication.getIsLoc() == true) {
+            if (currentProgress - 1 < 0) {
+                currentProgress = musics.size() - 1;
+            } else {
+                currentProgress--;
+            }
+            play(currentProgress);
+        } else if (MyApplication.getIsWeb() == true) {
+            if (currentProgress - 1 < 0) {
+                currentProgress = listMusic.size() - 1;
+            } else {
+                currentProgress--;
+            }
+            playweb(currentProgress);
         }
-        play(currentProgress);
+
         chuandi();
     }
 
@@ -268,17 +276,8 @@ public class MusicService extends Service {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("count", currentProgress);
-//        if (mediaPlayer.isPlaying()) {
-//            state = 1;
-//            bundle.putInt("state", state);
-//        } else {
-//            state = 2;
-//            bundle.putInt("state", state);
-//        }
         intent.putExtras(bundle);
         intent.setAction("services.MusicService");
-        Log.i(TAG, "Service传出的currentPosition" + currentProgress);
-//        Log.i(TAG, "Service传出的播放状态" + state);
         sendBroadcast(intent);
     }
 

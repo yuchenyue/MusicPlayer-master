@@ -49,7 +49,6 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     ListRecyclerViewAdapter lisadapter;
     String id, pic, description;
     private int position;
-//    MusicService musicService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,11 +168,11 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
      * @return
      */
     public static String formatTime(int time) {
-        if (time / 1000 % 60 < 10) {
-            String tt = time / 1000 / 60 + ":0" + time / 1000 % 60;
+        if (time % 60 < 10) {
+            String tt = time / 60 + ":0" + time % 60;
             return tt;
         } else {
-            String tt = time / 1000 / 60 + ":" + time / 1000 % 60;
+            String tt = time / 60 + ":" + time % 60;
             return tt;
         }
     }
@@ -196,16 +195,6 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                     showMultiBtnDialog(position);
                     break;
                 default:
-//                    //在这里播放就可以
-//                    MediaPlayer mediaPlayer = new MediaPlayer();
-//                    mediaPlayer.reset();
-//                    try {
-//                        mediaPlayer.setDataSource(listMusicList.get(position).getUrl());
-//                        mediaPlayer.prepare();
-//                        mediaPlayer.start();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
                     Toast.makeText(SongListActivity.this,listMusicList.get(position).getName(),Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -221,12 +210,12 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                     Toast.makeText(SongListActivity.this,"下载",Toast.LENGTH_SHORT).show();
                 }
             });
-            normalDialog.setNeutralButton("收藏",new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SongListActivity.this,"收藏",Toast.LENGTH_SHORT).show();
-                }
-            });
+//            normalDialog.setNeutralButton("收藏",new DialogInterface.OnClickListener(){
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    Toast.makeText(SongListActivity.this,"收藏",Toast.LENGTH_SHORT).show();
+//                }
+//            });
             normalDialog.show();
         }
     };

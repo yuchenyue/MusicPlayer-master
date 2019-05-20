@@ -24,11 +24,6 @@ public class HotRecyclerViewAdapter extends RecyclerView.Adapter<HotRecyclerView
     private static final String TAG = "WebRecyclerViewAdapter";
     public Context context;
     private List<LetMusic.DataBean> letMusicList = new ArrayList<>();
-    private boolean fadeTips = false;//是否隐藏了底部
-
-    public boolean isFadeTips() {
-        return fadeTips;
-    }
 
     public HotRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
         this.context = context;

@@ -58,7 +58,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private Popwindow popwindow;
     public MyReceiver receiver = null;//广播
     int p;
-    private static int state = 2;//播放状态
     ViewPager main_viewpager;
     TextView main_musicName, main_author;
     CircleImageView main_image;//底部常驻栏图片
@@ -108,7 +107,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         IntentFilter filter = new IntentFilter();
         filter.addAction("services.MusicService");
         registerReceiver(receiver, filter);
-        Log.i(TAG, "MainActivity--create");
 
         //初始化控件
         initView();
@@ -173,13 +171,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             .load(R.mipmap.ic_stop)
                             .into(main_pause_play);
                 }
-                Log.d(TAG, "up");
                 break;
             //主界面暂停播放键
             case R.id.main_pause_play:
                 if (musicService.isPlaying()) {
                     musicService.pause();
-                    Log.d(TAG, "pasue");
                     MyApplication.setState(false);
                     Glide.with(getApplication())
                             .load(R.mipmap.ic_stop)
@@ -187,18 +183,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     if (musicService.isPause()) {
                         musicService.start();
-                        Log.d(TAG, "play");
                         MyApplication.setState(true);
                         Glide.with(getApplication())
                                 .load(R.mipmap.ic_play)
                                 .into(main_pause_play);
                     }
-//                    else {
-//                        musicService.play(0);
-//                        Log.d(TAG, "play0");
-//                        state = 1;
-//                        main_pause_play.setImageDrawable(getResources().getDrawable(R.mipmap.ic_play));
-//                    }
                 }
                 break;
             //主界面下一首键
@@ -213,17 +202,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             .load(R.mipmap.ic_play)
                             .into(main_pause_play);
                 }
-                Log.d(TAG, "next");
-
                 break;
             case R.id.main_image:
-                Log.d(TAG, "点击了图片");
                 Intent intent = new Intent(this, PlayActivity.class);
                 Bundle bundle = new Bundle();
-//                bundle.putInt("state", state);
                 bundle.putInt("po", p);
                 intent.putExtras(bundle);
-//                Log.i(TAG, "----" + p + state);
                 startActivity(intent);
             default:
                 break;
@@ -258,8 +242,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        unbindMusicService();
-        Log.i(TAG, "MainActivity--destroy");
     }
 
     /**
@@ -286,7 +268,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Theme.theme(this);
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this,LoginActivity.class));
         }
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
 //        drawer.closeDrawer(GravityCompat.START);
@@ -313,6 +294,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Uri uriData = data.getData();
                     tv_name = (TextView) findViewById(R.id.tv_name);
                     tv_name.setText(uriData.toString());
+
                 } else if (resultCode == Activity.RESULT_CANCELED) {
 
                 }
@@ -322,7 +304,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 File file = new File("/mnt/sdcard/tupian.jpg");
                 filtUri = FileProviderUtils.uriFromFile(MainActivity.this, file);
                 SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
-                Log.d(TAG, "REQUEST_CODE_PAIZHAO");
                 break;
             case SystemProgramUtils.REQUEST_CODE_ZHAOPIAN:
                 //相册选择图片完毕，进行图片裁切
@@ -331,7 +312,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 filtUri = data.getData();
                 SystemProgramUtils.Caiqie(MainActivity.this, filtUri, outputFile);
-                Log.d(TAG, "REQUEST_CODE_ZHAOPIAN");
                 break;
             case SystemProgramUtils.REQUEST_CODE_CAIQIE:
                 //图片裁切完成，显示裁切后的图片
@@ -339,7 +319,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Uri uri = Uri.fromFile(outputFile);
                     Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
                     iv_touxiang = (CircleImageView) findViewById(R.id.iv_touxiang);
-                    Log.d(TAG, "REQUEST_CODE_CAIQIE");
                     iv_touxiang.setImageBitmap(bitmap);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -365,11 +344,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.bt_xiangce:
                 SystemProgramUtils.zhaopian(this);
                 popwindow.dismiss();
-                Log.i(TAG, "相册");
                 break;
             case R.id.bt_quxiao:
                 popwindow.dismiss();
-                Log.i(TAG, "取消选择");
                 break;
             default:
                 break;
@@ -383,8 +360,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Bundle bundle = intent.getExtras();
             final int position = bundle.getInt("count");
             p = position;
-            Log.i(TAG, "MainActivity得到的值" + position);
-            Log.i(TAG, "MainActivity得道的状态" + MyApplication.isState()+ "");
             if (MyApplication.isState() == true) {
                 design_bottom_sheet.setVisibility(View.VISIBLE);
                 Glide.with(getApplication())
@@ -428,11 +403,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onPause() {
         super.onPause();
         unbindMusicService();
-        Log.i(TAG, "MainActivity--pause");
     }
 
     @Override
     public void finish() {
-        Log.i(TAG, "MainActivity--finish");
     }
 }
