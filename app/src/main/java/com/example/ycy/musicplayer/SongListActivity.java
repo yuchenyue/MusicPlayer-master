@@ -1,5 +1,6 @@
 package com.example.ycy.musicplayer;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -35,6 +36,7 @@ import services.MusicService;
 import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
+import utils.WeiboDialogUtils;
 
 public class SongListActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "SongListActivity";
@@ -49,6 +51,8 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     ListRecyclerViewAdapter lisadapter;
     String id, pic, description;
     private int position;
+    private Dialog mWeiboDialog;
+    private Handler xHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +138,6 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                 normalDialog.setPositiveButton("是",new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(SongListActivity.this,"是",Toast.LENGTH_SHORT).show();
                         startMusic();//我想播放这个歌单的时候在吧这个列表传到MyApplicaton中
                     }
                 });
@@ -150,15 +153,24 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void startMusic() {
-        if (MyApplication.listMusicList == null){
-            MyApplication.setListMusicList(listMusicList);
-        }else {
-            MyApplication.listMusicList.clear();
-            MyApplication.setListMusicList(listMusicList);
-        }
         MyApplication.setIsLoc(false);
         MyApplication.setIsWeb(true);
-        musicService.playweb(0);
+        mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this,"歌单添加中...");
+        xHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (MyApplication.listMusicList == null){
+                    MyApplication.setListMusicList(listMusicList);
+                }else {
+                    MyApplication.listMusicList.clear();
+                    MyApplication.setListMusicList(listMusicList);
+                }
+                musicService.playweb(0);
+                WeiboDialogUtils.closeDialog(mWeiboDialog);
+                Toast.makeText(SongListActivity.this,"由于各种原因，该歌单有"+MyApplication.getListMusicList().size()+"首歌曲可播放！",Toast.LENGTH_LONG).show();
+            }
+        },2000);
+
     }
 
     /**

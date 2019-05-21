@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
     ImageView use_giveup, use_save;
     TextView tv_use_name;
     EditText et_use_name;
+    Button login_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,13 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initView() {
+        login_button = (Button) findViewById(R.id.login_button);
+        if (MyApplication.getLogin() == true) {
+            login_button.setText("退出登录");
+        }else {
+            login_button.setText("登录");
+        }
+        login_button.setOnClickListener(this);
         et_use_name = (EditText) findViewById(R.id.et_use_name);
         tv_use_name = (TextView) findViewById(R.id.tv_use_name);
         use_giveup = (ImageView) findViewById(R.id.use_giveup);
@@ -62,7 +71,9 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                     finish();
                 }
                 Log.i(TAG, "用户信息" + usename);
-
+                break;
+            case R.id.login_button:
+                startActivity(new Intent(this,LoginActivity.class));
                 break;
             default:
                 break;

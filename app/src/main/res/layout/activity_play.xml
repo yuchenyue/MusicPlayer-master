@@ -55,66 +55,15 @@
         android:id="@+id/zhongxin"
         layout="@layout/cp_zz" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/listen_changpian"
-        android:layout_marginBottom="5dp">
-
-        <RelativeLayout
-            android:id="@+id/listen_play"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp">
-            //设置“暂停”
-
-            <ImageView
-                android:id="@+id/listen_pause"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/ic_play" />
-            //设置“上一首”
-
-            <ImageView
-                android:id="@+id/listen_up"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_toLeftOf="@id/listen_pause"
-                android:src="@mipmap/ic_up" />
-            //设置下一首
-
-            <ImageView
-                android:id="@+id/listen_next"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:layout_toRightOf="@id/listen_pause"
-                android:src="@mipmap/ic_next" />
-
-            <!--<ImageView-->
-                <!--android:id="@+id/listen_mode"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="30dp"-->
-                <!--android:layout_toRightOf="@id/listen_next"-->
-                <!--android:src="@drawable/mode_shun" />-->
-        </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/listen_play"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
@@ -144,6 +93,55 @@
                 android:text="00:00" />
         </LinearLayout>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/listen_play"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp">
+            //设置“暂停”
+
+            <ImageView
+                android:id="@+id/listen_pause"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/ic_play" />
+            //设置“上一首”
+
+            <ImageView
+                android:id="@+id/listen_up"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_toLeftOf="@id/listen_pause"
+                android:src="@mipmap/ic_up" />
+            //设置下一首
+
+            <ImageView
+                android:id="@+id/listen_next"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@id/listen_pause"
+                android:src="@mipmap/ic_next" />
+
+            <!--<ImageView-->
+            <!--android:id="@+id/listen_mode"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:layout_toRightOf="@id/listen_next"-->
+            <!--android:src="@drawable/mode_shun" />-->
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -267,7 +267,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else if (id == R.id.nav_share) {
             Theme.theme(this);
         } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "正在开发，等待下一版本···", Toast.LENGTH_SHORT).show();
+            Theme.tips(this);
         }
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
 //        drawer.closeDrawer(GravityCompat.START);

@@ -24,4 +24,12 @@ public class Theme {
         });
         builder.show();
     }
+
+    public static void tips(final Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("使用须知");
+        builder.setMessage("软件部分VIP以及付费歌曲能获取到但无法播放！！");
+        builder.setNegativeButton("bate-19.5.21",null);
+        builder.show();
+    }
 }

@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText edit_account, edit_password;
     //    private TextView text_msg;
+    private TextView nologin;
     private Button btn_login, btn_register;
     private CheckBox checkBox, checkBox2;
     private ImageButton openpwd;
@@ -65,8 +66,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dbHelper = new DBHelper(this, "Data.db", null, 1);
 
         initView();
-        isRemember();
+
 //        isAutoLogin();
+        if (!requestPermissions()) {
+            return;
+        }
+        isRemember();
     }
 
     private void initView() {
@@ -100,6 +105,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btn_register = (Button) findViewById(R.id.btn_register);
         openpwd = (ImageButton) findViewById(R.id.btn_openpwd);
 //        text_msg.setOnClickListener(this);
+        nologin = (TextView) findViewById(R.id.nologin);
+        nologin.setOnClickListener(this);
         btn_login.setOnClickListener(this);
         btn_register.setOnClickListener(this);
         openpwd.setOnClickListener(this);
@@ -161,6 +168,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     flag = true;
                     openpwd.setBackgroundResource(R.drawable.invisible);
                 }
+                break;
+            case R.id.nologin:
+                MyApplication.setLogin(false);
+                startActivity(new Intent(this,MainActivity.class));
                 break;
 //            case R.id.text_msg:
 
