@@ -1,16 +1,20 @@
 package fragment;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,6 +108,23 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
 //        state = 1;
         Log.i(TAG, "LocalFragment传出position----" + position);
     }
+//
+//    //发送自定义视图通知
+//    public void sendCustomViewNotification(View view) {
+//        //显示bigView的notification用到的视图
+//        RemoteViews bigView = new RemoteViews(getPackageName(), R.layout.notification);
+//
+//        Notification notification = new NotificationCompat.Builder(getContext())
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setTicker("开始播放啦~~")
+//                .setOngoing(true)
+//                .setCustomBigContentView(bigView)//设置显示bigView的notification视图
+//                .setPriority(NotificationCompat.PRIORITY_MAX)//设置最大优先级
+//                .build();
+//
+//        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        manager.notify(22, notification);
+//    }
 
 
 }

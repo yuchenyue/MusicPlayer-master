@@ -127,7 +127,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
 
     private void getNetMusicList(final String style) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905", style, 30, 0,null);
+        Call<LetMusic> musicCall = mApi.getLMusic(null,30,null,style);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
@@ -165,7 +165,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.item_let:
                     AlertDialog.Builder dialog = new AlertDialog.Builder(MoreSongSheetActivity.this);
-                    dialog.setTitle(letMusicList.get(position).getTitle());
+                    dialog.setTitle(letMusicList.get(position).getName());
                     dialog.setMessage(letMusicList.get(position).getDescription());
                     dialog.setNegativeButton("好的", null);
                     dialog.show();

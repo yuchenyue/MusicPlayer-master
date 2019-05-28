@@ -15,8 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -44,7 +42,6 @@ import entity.Music;
 import fragment.LocalFragment;
 import fragment.NetworkFragment;
 import fragment.SongSheetFragment;
-import manage.DBHelper;
 import manage.FileProviderUtils;
 import manage.SystemProgramUtils;
 import utils.MusicUtil;
@@ -377,7 +374,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             }
                         });
                     } else if (MyApplication.getIsWeb() == true) {
-                        final ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(position);
+                        final ListMusic.DataBean listMusic = MyApplication.getListMusicList().get(position);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

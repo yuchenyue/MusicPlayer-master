@@ -15,16 +15,16 @@ public class NetMusic implements Serializable {
      * data : [{"id":"471403427","name":"我喜欢上你时的内心活动","singer":"陈绮贞","pic":"https://api.bzqll.com/music/netease/pic?id=471403427&key=579621905","lrc":"https://api.bzqll.com/music/netease/lrc?id=471403427&key=579621905","url":"https://api.bzqll.com/music/netease/url?id=471403427&key=579621905"}]
      */
 
-    private String result;
+    private String msg;
     private int code;
     private List<DataBean> data;
 
-    public String getResult() {
-        return result;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public int getCode() {
@@ -56,6 +56,7 @@ public class NetMusic implements Serializable {
         private String id;
         private String name;
         private String singer;
+        private int time;
         private String pic;
         private String lrc;
         private String url;
@@ -106,6 +107,14 @@ public class NetMusic implements Serializable {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
+        public void setTime(int time) {
+            this.time = time;
         }
     }
 }

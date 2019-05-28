@@ -2,18 +2,14 @@ package com.example.ycy.musicplayer;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,16 +19,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ListRecyclerViewAdapter;
 import entity.ListMusic;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import serviceApi.Api;
-import services.MusicService;
 import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
@@ -46,7 +41,8 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     Button list_button;//播放列表按钮
     RecyclerView netsong_musicList;
     SwipeRefreshLayout song_list_refreshLayout;
-    private List<ListMusic.DataBean.Song> listMusicList = new ArrayList<>();
+    private List<ListMusic.DataBean> listMusicList = new ArrayList<>();
+    private List<ListMusic.DataBean> urllist = new ArrayList<>();
     public FastScrollManager layoutManager;
     ListRecyclerViewAdapter lisadapter;
     String id, pic, description;
@@ -107,11 +103,11 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
      */
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<ListMusic> musicCall = mApi.getListMusic("579621905", id);
+        Call<ListMusic> musicCall = mApi.getListMusic(id,1);
         musicCall.enqueue(new retrofit2.Callback<ListMusic>() {
             @Override
             public void onResponse(Call<ListMusic> call, Response<ListMusic> response) {
-                listMusicList = response.body().getData().getSongs();
+                listMusicList = response.body().getData();
                 netsong_musicList.setLayoutManager(layoutManager);
                 lisadapter = new ListRecyclerViewAdapter(SongListActivity.this, listMusicList);
                 netsong_musicList.setAdapter(lisadapter);

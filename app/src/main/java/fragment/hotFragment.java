@@ -30,7 +30,6 @@ import retrofit2.Response;
 import serviceApi.Api;
 import utils.FastScrollManager;
 import utils.HttpUtil;
-import utils.MyApplication;
 
 public class hotFragment extends Fragment {
     private static final String TAG = "hotFragment";
@@ -100,6 +99,7 @@ public class hotFragment extends Fragment {
                     @Override
                     public void run() {
                         let_list_refreshLayout.setRefreshing(false);
+
                     }
                 }, 2000);
                 getNetMusicList();
@@ -113,10 +113,7 @@ public class hotFragment extends Fragment {
                 songsheet_fragment_list.smoothScrollToPosition(0);
             }
         });
-
-
         getNetMusicList();
-
         return view;
     }
 
@@ -134,7 +131,8 @@ public class hotFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905", null, 30, 0, "hot");
+        Call<LetMusic> musicCall = mApi.getLMusic(null,30,"hot",null);
+        Log.i(TAG, "显示了--" + mApi);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
@@ -171,7 +169,7 @@ public class hotFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.item_let:
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setTitle(letMusicList.get(position).getTitle());
+                    dialog.setTitle(letMusicList.get(position).getName());
                     dialog.setMessage(letMusicList.get(position).getDescription());
                     dialog.setNegativeButton("好的", null);
                     dialog.show();

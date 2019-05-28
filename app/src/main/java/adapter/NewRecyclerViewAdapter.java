@@ -24,7 +24,6 @@ public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerView
     private static final String TAG = "WebRecyclerViewAdapter";
     public Context context;
     private List<LetMusic.DataBean> letMusicList = new ArrayList<>();
-
     public NewRecyclerViewAdapter(Context context, List<LetMusic.DataBean> letMusicList) {
         this.context = context;
         this.letMusicList = letMusicList;
@@ -39,9 +38,9 @@ public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerView
     @Override
     public void onBindViewHolder(NewRecyclerViewAdapter.ViewHolder holder, int position) {
         LetMusic.DataBean music = letMusicList.get(position);
-        holder.let_name.setText(music.getTitle());
-        holder.let_author.setText("by " + music.getCreator());
-        holder.let_songnum.setText("歌曲数：" + music.getSongNum());
+        holder.let_name.setText(music.getName());
+        holder.let_author.setText("by " + music.getCreater());
+        holder.let_songnum.setText("歌曲数：" + music.getTrackCount());
         holder.let_playnum.setText("播放量：" + music.getPlayCount());
         Glide.with(context)
                 .load(music.getCoverImgUrl())

@@ -133,7 +133,7 @@ public class newFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic("579621905",null, 30, 0, "new");
+        Call<LetMusic> musicCall = mApi.getLMusic(null,30,"new",null);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
@@ -169,7 +169,7 @@ public class newFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.item_let:
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setTitle(letMusicList.get(position).getTitle());
+                    dialog.setTitle(letMusicList.get(position).getName());
                     dialog.setMessage(letMusicList.get(position).getDescription());
                     dialog.setNegativeButton("好的", null);
                     dialog.show();

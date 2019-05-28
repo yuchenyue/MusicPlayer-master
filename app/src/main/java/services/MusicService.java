@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -21,6 +20,10 @@ import java.util.List;
 
 import entity.ListMusic;
 import entity.Music;
+import retrofit2.Call;
+import retrofit2.http.Url;
+import serviceApi.Api;
+import utils.HttpUtil;
 import utils.MyApplication;
 
 /**
@@ -34,7 +37,7 @@ public class MusicService extends Service {
     private NetworkInfo info;
     public MediaPlayer mediaPlayer;
     List<Music> musics;
-    private List<ListMusic.DataBean.Song> listMusic = new ArrayList<>();
+    private List<ListMusic.DataBean> listMusic = new ArrayList<>();
     public int currentProgress;//歌曲位置
     //    private static int state = 2;
     public boolean isPause = false;
@@ -177,7 +180,7 @@ public class MusicService extends Service {
     public void playweb(int position) {
         if (MyApplication.getIsWeb() == true) {
             listMusic = MyApplication.getListMusicList();
-            ListMusic.DataBean.Song song = listMusic.get(position);
+            ListMusic.DataBean song = listMusic.get(position);
             if (listMusic == null) {
                 Toast.makeText(getApplication(), "MyApplication无歌曲", Toast.LENGTH_SHORT).show();
             } else {
@@ -195,6 +198,7 @@ public class MusicService extends Service {
         }
         chuandi();
     }
+
 
     /**
      * 暂停

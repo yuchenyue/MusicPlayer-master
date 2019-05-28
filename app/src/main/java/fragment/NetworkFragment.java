@@ -104,7 +104,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
 
     private void getNetMusicList(String s) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<NetMusic> musicCall = mApi.getMusic("579621905", s, "song", 20, 0);
+        Call<NetMusic> musicCall = mApi.getMusic(s, "song",1);
         musicCall.enqueue(new Callback<NetMusic>() {
             @Override
             public void onResponse(Call<NetMusic> call, final Response<NetMusic> response) {

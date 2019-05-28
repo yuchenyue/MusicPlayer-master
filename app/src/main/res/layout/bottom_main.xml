@@ -56,7 +56,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_toLeftOf="@+id/main_next"
-
         android:src="@mipmap/ic_stop" />
 
     <ImageView

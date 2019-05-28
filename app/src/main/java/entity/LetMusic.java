@@ -15,19 +15,31 @@ public class LetMusic implements Serializable {
      * data :
      */
 
-    private String result;
+    private String msg;
     private int code;
     private List<DataBean> data;
 
     public class DataBean implements Serializable{
 
         private String id;
-        private String title;
-        private String creator;
+        private String name;
         private String description;
         private String coverImgUrl;
-        private String songNum;
+        private String trackCount;
         private String playCount;
+        private List<Creater> creater;
+
+        public class Creater implements Serializable{
+            private String nickname;
+
+            public String getNickname() {
+                return nickname;
+            }
+
+            public void setNickname(String nickname) {
+                this.nickname = nickname;
+            }
+        }
 
         public String getId() {
             return id;
@@ -37,20 +49,12 @@ public class LetMusic implements Serializable {
             this.id = id;
         }
 
-        public String getTitle() {
-            return title;
+        public String getName() {
+            return name;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getCreator() {
-            return creator;
-        }
-
-        public void setCreator(String creator) {
-            this.creator = creator;
+        public void setName(String name) {
+            this.name = name;
         }
 
         public String getDescription() {
@@ -69,12 +73,12 @@ public class LetMusic implements Serializable {
             this.coverImgUrl = coverImgUrl;
         }
 
-        public String getSongNum() {
-            return songNum;
+        public String getTrackCount() {
+            return trackCount;
         }
 
-        public void setSongNum(String songNum) {
-            this.songNum = songNum;
+        public void setTrackCount(String trackCount) {
+            this.trackCount = trackCount;
         }
 
         public String getPlayCount() {
@@ -84,14 +88,22 @@ public class LetMusic implements Serializable {
         public void setPlayCount(String playCount) {
             this.playCount = playCount;
         }
+
+        public List<Creater> getCreater() {
+            return creater;
+        }
+
+        public void setCreater(List<Creater> creater) {
+            this.creater = creater;
+        }
     }
 
-    public String getResult() {
-        return result;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public int getCode() {

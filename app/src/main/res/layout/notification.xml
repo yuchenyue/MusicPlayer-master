@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/default_cover"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_song_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="歌名"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tv_song_singer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:text="歌名"
+            android:textSize="12sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:layout_marginEnd="10dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_up"/>
+
+            <ImageButton
+                android:layout_marginEnd="10dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_play"/>
+
+            <ImageButton
+                android:layout_marginEnd="10dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_next"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

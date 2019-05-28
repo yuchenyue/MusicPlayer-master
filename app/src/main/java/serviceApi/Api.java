@@ -5,17 +5,18 @@ import entity.LetMusic;
 import entity.ListMusic;
 import entity.NetMusic;
 import retrofit2.Call;
-import retrofit2.http.POST;
+import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface Api {
 
-    @POST("search")
-    Call<NetMusic> getMusic(@Query("key") String key, @Query("s") String s, @Query("type") String type, @Query("limit") int limit, @Query("offset") int page);
+    @GET("netease/search")
+    Call<NetMusic> getMusic(@Query("keyword") String keyword, @Query("type") String type, @Query("format") int format);
 
-    @POST("hotSongList")
-    Call<LetMusic> getLMusic(@Query("key") String key,@Query("cat") String cat, @Query("limit") int limit, @Query("offset") int offset,@Query("order") String order);
+    @GET("netease/songList/hot")
+    Call<LetMusic> getLMusic(@Query("cat") String cat, @Query("pageSize") int pageSize, @Query("orderType") String orderType, @Query("categoryType") String categoryType);
 
-    @POST("songList")
-    Call<ListMusic> getListMusic(@Query("key") String key, @Query("id") String id);
+    @GET("netease/songList")
+    Call<ListMusic> getListMusic(@Query("id") String id, @Query("format") int format);
+
 }

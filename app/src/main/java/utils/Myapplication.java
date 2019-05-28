@@ -80,13 +80,13 @@ public class MyApplication extends Application {
         MyApplication.musics = musics;
     }
 
-    public static List<ListMusic.DataBean.Song> listMusicList;
+    public static List<ListMusic.DataBean> listMusicList;
 
-    public static List<ListMusic.DataBean.Song> getListMusicList() {
+    public static List<ListMusic.DataBean> getListMusicList() {
         return listMusicList;
     }
 
-    public static void setListMusicList(List<ListMusic.DataBean.Song> listMusicList) {
+    public static void setListMusicList(List<ListMusic.DataBean> listMusicList) {
         MyApplication.listMusicList = listMusicList;
     }
 

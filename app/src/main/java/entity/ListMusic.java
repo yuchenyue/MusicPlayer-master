@@ -10,142 +10,98 @@ import java.util.List;
 
 public class ListMusic implements Serializable {
     /**
-     * result : SUCCESS
-     * code : 200
-     * data :
-     *        id: "6813301314",
-     *        name: "放松大脑，开始卷入一次神游",
-     *        creator: "就是一个听歌der",
-     *        createTime: "2019-03-27",
-     *        pic: "http://p.qpic.cn/music_cover/Fe6emiag6IuVbMib3oN6yctTaRvSyia4OdJgboa93hE3bAUyeDgmgMDibA/600?n=1",
-     *        playCount: "557036"
+     * code: 200,
+     msg: "OK",
+     timestamp: 1559022207666,
+     data: [
+     {
+     singer: "李佳薇",
+     name: "大火",
+     id: "274696",
+     time: 324,
+     pic: "http://p2.music.126.net/6VshvgnaD5VBs_z4j1QKlA==/109951163188719203.jpg",
+     lrc: "http://v1.itooi.cn/netease/lrc?id=274696",
+     url: "http://v1.itooi.cn/netease/url?id=274696"
+     }
      */
 
-    private String result;
+    private String msg;
     private int code;
-    private DataBean data;
+    private List<DataBean> data;
 
-    public class DataBean implements Serializable{
+    public class DataBean implements Serializable {
 
-        private String songListId;
-        private String songListName;
-        private String songListPic;
-        private String songListDescription;
-        private List<Song> songs;
+        private String id;
+        private String name;
+        private String singer;
+        private String pic;
+        private String lrc;
+        private String url;
+        private int time;
 
-        public class Song implements Serializable{
-            private String id;
-            private String name;
-            private String singer;
-            private String pic;
-            private String lrc;
-            private String url;
-            private int time;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getSinger() {
-                return singer;
-            }
-
-            public void setSinger(String singer) {
-                this.singer = singer;
-            }
-
-            public String getPic() {
-                return pic;
-            }
-
-            public void setPic(String pic) {
-                this.pic = pic;
-            }
-
-            public String getLrc() {
-                return lrc;
-            }
-
-            public void setLrc(String lrc) {
-                this.lrc = lrc;
-            }
-
-            public String getUrl() {
-                return url;
-            }
-
-            public void setUrl(String url) {
-                this.url = url;
-            }
-
-            public int getTime() {
-                return time;
-            }
-
-            public void setTime(int time) {
-                this.time = time;
-            }
+        public String getId() {
+            return id;
         }
 
-        public String getSongListId() {
-            return songListId;
+        public void setId(String id) {
+            this.id = id;
         }
 
-        public void setSongListId(String songListId) {
-            this.songListId = songListId;
+        public String getName() {
+            return name;
         }
 
-        public String getSongListName() {
-            return songListName;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public void setSongListName(String songListName) {
-            this.songListName = songListName;
+        public String getSinger() {
+            return singer;
         }
 
-        public String getSongListPic() {
-            return songListPic;
+        public void setSinger(String singer) {
+            this.singer = singer;
         }
 
-        public void setSongListPic(String songListPic) {
-            this.songListPic = songListPic;
+        public String getPic() {
+            return pic;
         }
 
-        public String getSongListDescription() {
-            return songListDescription;
+        public void setPic(String pic) {
+            this.pic = pic;
         }
 
-        public void setSongListDescription(String songListDescription) {
-            this.songListDescription = songListDescription;
+        public String getLrc() {
+            return lrc;
         }
 
-        public List<Song> getSongs() {
-            return songs;
+        public void setLrc(String lrc) {
+            this.lrc = lrc;
         }
 
-        public void setSongs(List<Song> songs) {
-            this.songs = songs;
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
+        public void setTime(int time) {
+            this.time = time;
         }
     }
 
-    public String getResult() {
-        return result;
+    public List<DataBean> getData() {
+        return data;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setData(List<DataBean> data) {
+        this.data = data;
     }
 
     public int getCode() {
@@ -156,11 +112,11 @@ public class ListMusic implements Serializable {
         this.code = code;
     }
 
-    public DataBean getData() {
-        return data;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

@@ -22,9 +22,9 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
 
     private static final String TAG = "ListRecyclerViewAdapter";
     public Context context;
-    private List<ListMusic.DataBean.Song> listMusicList = new ArrayList<>();
+    private List<ListMusic.DataBean> listMusicList = new ArrayList<>();
 
-    public ListRecyclerViewAdapter(Context context, List<ListMusic.DataBean.Song> listMusicList) {
+    public ListRecyclerViewAdapter(Context context, List<ListMusic.DataBean> listMusicList) {
         this.context = context;
         this.listMusicList = listMusicList;
     }
@@ -37,7 +37,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
 
     @Override
     public void onBindViewHolder(ListRecyclerViewAdapter.ViewHolder holder, int position) {
-        ListMusic.DataBean.Song music = listMusicList.get(position);
+        ListMusic.DataBean music = listMusicList.get(position);
         holder.list_name.setText(music.getName());
         holder.list_author.setText(music.getSinger());
         Glide.with(context)

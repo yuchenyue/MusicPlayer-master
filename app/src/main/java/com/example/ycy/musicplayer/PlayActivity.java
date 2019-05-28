@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
@@ -87,7 +86,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
                             }
                         });
                     } else if (MyApplication.getIsWeb() == true) {
-                        final ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(position);
+                        final ListMusic.DataBean listMusic = MyApplication.getListMusicList().get(position);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -211,7 +210,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
             listen_length.setText(MusicUtil.formatTime(music.getDuration()));
             listen_jindutiao.setMax(music.getDuration());
         } else if (MyApplication.getIsWeb() == true) {
-            ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(positions);
+            ListMusic.DataBean listMusic = MyApplication.getListMusicList().get(positions);
             listen_title_tv.setText(listMusic.getName());
             Listen_artist_tv.setText(listMusic.getSinger());
             listen_length.setText(SongListActivity.formatTime(listMusic.getTime()));
@@ -344,7 +343,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
             listen_jindutiao.setProgress(0);
             listen_jindutiao.setMax(music.getDuration());
         } else if (MyApplication.getIsWeb() == true) {
-            ListMusic.DataBean.Song listMusic = MyApplication.getListMusicList().get(positions);
+            ListMusic.DataBean listMusic = MyApplication.getListMusicList().get(positions);
             listen_title_tv.setText(listMusic.getName());
             Listen_artist_tv.setText(listMusic.getSinger());
             listen_jindutiao.setProgress(0);
