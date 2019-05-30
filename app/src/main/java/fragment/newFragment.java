@@ -59,7 +59,6 @@ public class newFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new, container, false);
         tv_empty = view.findViewById(R.id.tv_empty_new);
         layoutManager = new FastScrollManager(getActivity(),3);
-
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLasst = false;
@@ -100,10 +99,11 @@ public class newFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        getNetMusicList();
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-                getNetMusicList();
+
             }
         });
         to_top = view.findViewById(R.id.to_top);

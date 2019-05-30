@@ -58,7 +58,8 @@ public class hotFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_hot, container, false);
         tv_empty = view.findViewById(R.id.tv_empty_hot);
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list_hot);
-        layoutManager = new FastScrollManager(getActivity(),3);
+        layoutManager = new FastScrollManager(getActivity(), 3);
+        songsheet_fragment_list.setAdapter(hadapter);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLasst = false;
 
@@ -99,7 +100,6 @@ public class hotFragment extends Fragment {
                     @Override
                     public void run() {
                         let_list_refreshLayout.setRefreshing(false);
-
                     }
                 }, 2000);
                 getNetMusicList();
@@ -131,14 +131,14 @@ public class hotFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null,15,"hot",null);
+        Call<LetMusic> musicCall = mApi.getLMusic(null, 15, "hot", null);
         Log.i(TAG, "显示了--" + mApi);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
                 if (response.code() == 200) {
                     letMusicList = response.body().getData();
-                    if (letMusicList == null ) {
+                    if (letMusicList == null) {
                         tv_empty.setVisibility(View.VISIBLE);
                     } else {
                         songsheet_fragment_list.setLayoutManager(layoutManager);
@@ -149,9 +149,9 @@ public class hotFragment extends Fragment {
                         hadapter.notifyDataSetChanged();
                         Log.i(TAG, "热门歌曲显示了--" + letMusicList.size() + response.code() + "首歌曲");
                     }
-                }else {
+                } else {
                     let_list_refreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(),"服务器离线",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "服务器离线", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -161,6 +161,7 @@ public class hotFragment extends Fragment {
 
         });
     }
+
 
     private HotRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new HotRecyclerViewAdapter.OnItemClickListener() {
 

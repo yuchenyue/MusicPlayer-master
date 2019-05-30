@@ -21,18 +21,6 @@ public class FastScrollManager extends GridLayoutManager {
     public FastScrollManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
-//    public FastScrollManager(Context context, int orientation, boolean reverseLayout) {
-//        super(context, orientation, reverseLayout);
-//    }
-
-
-//    public FastScrollManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//        super(context, attrs, defStyleAttr, defStyleRes);
-//    }
-
-//    public FastScrollManager(Context context) {
-//        super(context);
-//    }
 
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position){
         LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()){

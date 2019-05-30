@@ -44,6 +44,7 @@ public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerView
         holder.let_playnum.setText("播放量：" + music.getPlayCount());
         Glide.with(context)
                 .load(music.getCoverImgUrl())
+                .error(R.drawable.default_cover)
                 .into(holder.image_let);
     }
 

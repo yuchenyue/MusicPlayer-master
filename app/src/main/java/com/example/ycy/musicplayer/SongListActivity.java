@@ -70,6 +70,7 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
         list_img = (ImageView) findViewById(R.id.list_img);
         Glide.with(getApplicationContext())
                 .load(pic)
+                .error(R.drawable.default_cover)
                 .into(list_img);
         list_img.setOnClickListener(new View.OnClickListener() {
             @Override
