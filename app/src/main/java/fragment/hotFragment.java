@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -56,9 +57,8 @@ public class hotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_hot, container, false);
         tv_empty = view.findViewById(R.id.tv_empty_hot);
-        layoutManager = new FastScrollManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list_hot);
+        layoutManager = new FastScrollManager(getActivity(),3);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLasst = false;
 
@@ -131,7 +131,7 @@ public class hotFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null,30,"hot",null);
+        Call<LetMusic> musicCall = mApi.getLMusic(null,15,"hot",null);
         Log.i(TAG, "显示了--" + mApi);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override

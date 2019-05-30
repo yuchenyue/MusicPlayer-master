@@ -58,7 +58,7 @@ public class newFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new, container, false);
         tv_empty = view.findViewById(R.id.tv_empty_new);
-        layoutManager = new FastScrollManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new FastScrollManager(getActivity(),3);
 
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -133,7 +133,7 @@ public class newFragment extends Fragment {
 
     private void getNetMusicList() {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null,30,"new",null);
+        Call<LetMusic> musicCall = mApi.getLMusic(null,15,"new",null);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -43,7 +44,7 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     SwipeRefreshLayout song_list_refreshLayout;
     private List<ListMusic.DataBean> listMusicList = new ArrayList<>();
     private List<ListMusic.DataBean> urllist = new ArrayList<>();
-    public FastScrollManager layoutManager;
+    public LinearLayoutManager layoutManager;
     ListRecyclerViewAdapter lisadapter;
     String id, pic, description;
     private int position;
@@ -81,7 +82,7 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
         list_tv.setMovementMethod(ScrollingMovementMethod.getInstance());
         tv_empty_list = (TextView) findViewById(R.id.tv_empty_list);
         netsong_musicList = (RecyclerView) findViewById(R.id.netsong_musicList);
-        layoutManager = new FastScrollManager(MyApplication.getContext());
+        layoutManager = new LinearLayoutManager(MyApplication.getContext());
         song_list_refreshLayout = (SwipeRefreshLayout) findViewById(R.id.song_list_refreshLayout);
         song_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

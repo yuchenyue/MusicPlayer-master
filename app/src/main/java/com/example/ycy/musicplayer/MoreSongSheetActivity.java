@@ -45,7 +45,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_song_sheet);
-        layoutManager = new FastScrollManager(this, LinearLayoutManager.VERTICAL, false);
+        layoutManager = new FastScrollManager(this,3);
         Intent intent = getIntent();
         style = intent.getStringExtra("s");
         if (style == null){

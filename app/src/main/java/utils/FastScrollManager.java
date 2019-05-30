@@ -2,24 +2,37 @@ package utils;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 
-public class FastScrollManager extends LinearLayoutManager {
-    public FastScrollManager(Context context, int orientation, boolean reverseLayout) {
-        super(context, orientation, reverseLayout);
+public class FastScrollManager extends GridLayoutManager {
+    public FastScrollManager(Context context, int spanCount, int orientation, boolean reverseLayout) {
+        super(context, spanCount, orientation, reverseLayout);
+    }
+
+    public FastScrollManager(Context context, int spanCount) {
+        super(context, spanCount);
     }
 
     public FastScrollManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+//    public FastScrollManager(Context context, int orientation, boolean reverseLayout) {
+//        super(context, orientation, reverseLayout);
+//    }
 
-    public FastScrollManager(Context context) {
-        super(context);
-    }
+
+//    public FastScrollManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        super(context, attrs, defStyleAttr, defStyleRes);
+//    }
+
+//    public FastScrollManager(Context context) {
+//        super(context);
+//    }
 
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position){
         LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()){
