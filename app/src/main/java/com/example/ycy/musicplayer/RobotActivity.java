@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -33,7 +34,7 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
     private ListView lv_chat_list;
     private EditText et_send;
     private Button btn_send;
-    private ImageView robot_back;
+//    private ImageView robot_back;
     private ChatListAdapter chatAdapter;
     private Handler mHandler = new Handler() {
         @Override
@@ -51,6 +52,18 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_robot);
         MyApplication.getInstance().addActivity(this);
+        Toolbar mToolbar=(Toolbar)findViewById(R.id.toolbar_robot);
+        setSupportActionBar(mToolbar);
+        //设置是否有返回箭头
+        getSupportActionBar().setTitle("小助手");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         initView();
         initDate();
 
@@ -71,8 +84,8 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
         et_send = (EditText) findViewById(R.id.et_send);
         btn_send = (Button) findViewById(R.id.btn_send);
         btn_send.setOnClickListener(this);
-        robot_back = (ImageView) findViewById(R.id.robot_back);
-        robot_back.setOnClickListener(this);
+//        robot_back = (ImageView) findViewById(R.id.robot_back);
+//        robot_back.setOnClickListener(this);
     }
 
     @Override
@@ -89,9 +102,6 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_send:
                 send();
-                break;
-            case R.id.robot_back:
-                finish();
                 break;
             default:
                 break;

@@ -22,7 +22,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabIndicatorHeight="3dp"
             app:tabTextColor="@android:color/black"
