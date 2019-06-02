@@ -118,13 +118,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         fragmentAdapter.addTitlesAndFragments(titles, fragmentList);
         main_viewpager.setAdapter(fragmentAdapter);
         tablayout.setupWithViewPager(main_viewpager);
-//        musics = MusicUtil.getmusics(this);
 
         //底部弹出框
         popwindow = new Popwindow(this);
         popwindow.setOnItemClickListener(this);
 
-//        dbHelper = new DBHelper(this, "Data.db", null, 1);
     }
 
     /**

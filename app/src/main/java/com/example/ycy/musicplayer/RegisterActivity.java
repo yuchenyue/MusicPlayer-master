@@ -147,19 +147,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
-    /**
-     * 利用SharedPreferences进行默认登陆设置
-     */
-    private void saveUsersInfo() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UsersInfo", MODE_APPEND);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", edit_register.getText().toString());
-        //判断注册时的两次密码是否相同
-        if (edit_setpassword.getText().toString().equals(edit_resetpassword.getText().toString())) {
-            editor.putString("password", edit_setpassword.getText().toString());
-        }
-        editor.commit();
-    }
+
     /**
      * 利用sql创建嵌入式数据库进行注册访问
      */

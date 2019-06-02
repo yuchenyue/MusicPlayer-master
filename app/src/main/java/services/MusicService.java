@@ -20,10 +20,6 @@ import java.util.List;
 
 import entity.ListMusic;
 import entity.Music;
-import retrofit2.Call;
-import retrofit2.http.Url;
-import serviceApi.Api;
-import utils.HttpUtil;
 import utils.MyApplication;
 
 /**
@@ -39,7 +35,6 @@ public class MusicService extends Service {
     List<Music> musics;
     private List<ListMusic.DataBean> listMusic = new ArrayList<>();
     public int currentProgress;//歌曲位置
-    //    private static int state = 2;
     public boolean isPause = false;
 
     /**
@@ -105,7 +100,6 @@ public class MusicService extends Service {
         registerReceiver(mReceiver, mFilter);
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
-//            mediaPlayer.setLooping(true);
         }
 
 //        自动播放下一首
@@ -159,7 +153,6 @@ public class MusicService extends Service {
      * @param position
      */
     public void play(int position) {
-//        musics = MusicUtil.getmusics(this);
         if (MyApplication.getIsLoc() == true) {
             musics = MyApplication.getMusics();
             Music music = musics.get(position);
@@ -293,15 +286,12 @@ public class MusicService extends Service {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                Log.d(TAG, "网络状态已经改变");
                 connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 info = connectivityManager.getActiveNetworkInfo();
                 if (info != null && info.isAvailable()) {
                     String name = info.getTypeName();
-                    Log.d(TAG, "当前网络名称：" + name);
-                    //doSomething()
+                    Toast.makeText(context, "当前网络名称：" + name, Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d(TAG, "没有可用网络");
                     Toast.makeText(context, "当前无可用网络，请检查网络状态！", Toast.LENGTH_SHORT).show();
                 }
             }

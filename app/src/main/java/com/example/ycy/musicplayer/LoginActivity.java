@@ -41,10 +41,9 @@ import utils.MyApplication;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edit_account, edit_password;
-    //    private TextView text_msg;
     private TextView nologin;
     private Button btn_login, btn_register;
-    private CheckBox checkBox, checkBox2;
+    private CheckBox checkBox;
     private ImageButton openpwd;
     private boolean flag = false;
     private String account, password;
@@ -67,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         initView();
 
-//        isAutoLogin();
         if (!requestPermissions()) {
             return;
         }
@@ -99,12 +97,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         checkBox = (CheckBox) findViewById(R.id.checkBox);
-//        checkBox2 = (CheckBox) findViewById(R.id.checkBox);
-//        text_msg = (TextView) findViewById(R.id.text_msg);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_register = (Button) findViewById(R.id.btn_register);
         openpwd = (ImageButton) findViewById(R.id.btn_openpwd);
-//        text_msg.setOnClickListener(this);
         nologin = (TextView) findViewById(R.id.nologin);
         nologin.setOnClickListener(this);
         btn_login.setOnClickListener(this);
@@ -125,19 +120,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-//    public void isAutoLogin(){
-//        SharedPreferences preferences = getSharedPreferences("islogin",MODE_PRIVATE);
-//        boolean islogin = preferences.getBoolean("islogin",false);
-//        if (islogin){
-//            startActivity(new Intent(getApplication(),MainActivity.class));
-//            finish();
-//            checkBox2.setChecked(true);
-//        }else {
-//            startActivity(new Intent(getApplication(), LoginActivity.class));
-//            finish();
-//            checkBox2.setChecked(false);
-//        }
-//    }
 
     @Override
     public void onClick(View v) {
@@ -173,24 +155,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 MyApplication.setLogin(false);
                 startActivity(new Intent(this,MainActivity.class));
                 break;
-//            case R.id.text_msg:
-
-//                Intent i = new Intent(LoginActivity.this, ForgotInfo_activity.class);
-//                startActivity(i);
-//                break;
         }
     }
 
-    /**
-     * 读取SharedPreferences存储的键值对
-     */
-    public void readUsersInfo() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UsersInfo", MODE_PRIVATE);
-        String name = sharedPreferences.getString("username", "");
-        String passw = sharedPreferences.getString("password", "");
-        edit_account.setText(name);
-        edit_password.setText(passw);
-    }
 
     /**
      * 读取UserData.db中的用户信息

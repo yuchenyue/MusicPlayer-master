@@ -81,7 +81,6 @@ public class UserNameActivity extends AppCompatActivity implements View.OnClickL
                     setResult(RESULT_OK, intent);
                     finish();
                 }
-                Log.i(TAG, "用户信息" + usename);
                 break;
             default:
                 break;

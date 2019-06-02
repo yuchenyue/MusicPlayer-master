@@ -34,7 +34,6 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
     private ListView lv_chat_list;
     private EditText et_send;
     private Button btn_send;
-//    private ImageView robot_back;
     private ChatListAdapter chatAdapter;
     private Handler mHandler = new Handler() {
         @Override
@@ -84,8 +83,6 @@ public class RobotActivity extends AppCompatActivity implements View.OnClickList
         et_send = (EditText) findViewById(R.id.et_send);
         btn_send = (Button) findViewById(R.id.btn_send);
         btn_send.setOnClickListener(this);
-//        robot_back = (ImageView) findViewById(R.id.robot_back);
-//        robot_back.setOnClickListener(this);
     }
 
     @Override

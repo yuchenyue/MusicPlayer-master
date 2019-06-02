@@ -57,7 +57,6 @@ public class RobotUtils {
     public static String doGet(String message) {
         String result = "";
         String url = setParmat(message);
-        System.out.println("------------url = " + url);
         InputStream is = null;
         ByteArrayOutputStream baos = null;
         try {
@@ -74,7 +73,6 @@ public class RobotUtils {
             while ((len = is.read(buff)) != -1) {
                 baos.write(buff, 0, len);
             }
-            System.out.println("------------result = " + baos.size());
             baos.flush();
             result = new String(baos.toByteArray());
         } catch (Exception e) {
@@ -95,7 +93,6 @@ public class RobotUtils {
                 }
             }
         }
-        System.out.println("------------result = " + result);
         return result;
     }
 

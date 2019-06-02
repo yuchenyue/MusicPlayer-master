@@ -23,7 +23,8 @@
             android:fitsSystemWindows="true"
             app:contentScrim="@color/toolbar_color"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutTextSize"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:title="推荐歌单">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/song_list_toolbar"

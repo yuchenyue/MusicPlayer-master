@@ -58,8 +58,10 @@ public class newFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new, container, false);
         tv_empty = view.findViewById(R.id.tv_empty_new);
-        layoutManager = new FastScrollManager(getActivity(),3);
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list);
+        layoutManager = new FastScrollManager(getActivity(),3);
+        songsheet_fragment_list.setLayoutManager(layoutManager);
+
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLasst = false;
 
@@ -99,11 +101,11 @@ public class newFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getNetMusicList();
+
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-
+                getNetMusicList();
             }
         });
         to_top = view.findViewById(R.id.to_top);
@@ -121,13 +123,11 @@ public class newFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"newFragment:onDestroy");
         super.onDestroy();
     }
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG,"newFragment:onDestroyView");
         super.onDestroyView();
     }
 
@@ -142,13 +142,12 @@ public class newFragment extends Fragment {
                     if (letMusicList == null){
                         tv_empty.setVisibility(View.VISIBLE);
                     }
-                    songsheet_fragment_list.setLayoutManager(layoutManager);
+
                     ladapter = new NewRecyclerViewAdapter(getActivity(), letMusicList);
                     songsheet_fragment_list.setAdapter(ladapter);
                     ladapter.setOnItemClickListener(MyItemClickListener);
                     let_list_refreshLayout.setRefreshing(false);
                     ladapter.notifyDataSetChanged();
-                    Log.i(TAG, "最新歌曲显示了--" + letMusicList.size() + "首歌曲");
                 }else {
                     Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
                 }
@@ -180,9 +179,9 @@ public class newFragment extends Fragment {
                     bundle.putString("id", letMusicList.get(position).getId());
                     bundle.putString("pic", letMusicList.get(position).getCoverImgUrl());
                     bundle.putString("description", letMusicList.get(position).getDescription());
+                    bundle.putString("name",letMusicList.get(position).getName());
                     intent.putExtras(bundle);
                     startActivity(intent);
-//                    Toast.makeText(getActivity(), "item" + (position + 1), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

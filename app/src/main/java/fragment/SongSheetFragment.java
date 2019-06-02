@@ -64,13 +64,11 @@ public class SongSheetFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG,"SongSheetFragment:onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"SongSheetFragment:onDestroy");
         super.onDestroy();
     }
 }

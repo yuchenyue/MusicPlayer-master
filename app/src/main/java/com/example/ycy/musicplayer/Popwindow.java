@@ -58,15 +58,6 @@ public class Popwindow extends PopupWindow implements View.OnClickListener{
         });
 
     }
-    public void showPopupWindow(View parent) {
-
-        if (!this.isShowing()) {
-            this.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
-        } else {
-            this.dismiss();
-
-        }
-    }
 
     /**
      * 定义一个接口，公布出去 在Activity中操作按钮的单击事件
@@ -80,7 +71,6 @@ public class Popwindow extends PopupWindow implements View.OnClickListener{
     }
 
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         if (mListener != null) {
             mListener.setOnItemClick(v);
         }

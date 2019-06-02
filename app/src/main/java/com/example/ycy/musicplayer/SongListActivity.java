@@ -3,11 +3,8 @@ package com.example.ycy.musicplayer;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,20 +13,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +28,8 @@ import adapter.ListRecyclerViewAdapter;
 import entity.ListMusic;
 import manage.FastBlurUtil;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import serviceApi.Api;
-import utils.FastScrollManager;
 import utils.HttpUtil;
 import utils.MyApplication;
 import utils.WeiboDialogUtils;
@@ -103,7 +92,11 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
         list_text = (TextView) findViewById(R.id.list_text);
-        list_text.setText(description);
+        if (description != null){
+            list_text.setText(description);
+        }else {
+            list_text.setText("暂无介绍");
+        }
         tv_empty_list = (TextView) findViewById(R.id.tv_empty_list);
         netsong_musicList = (RecyclerView) findViewById(R.id.netsong_musicList);
         layoutManager = new LinearLayoutManager(MyApplication.getContext());
@@ -171,7 +164,12 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                 normalDialog.show();
                 break;
             case R.id.song_list_toolbarLayout:
-                mWeiboDialog = WeiboDialogUtils.createMesgDialog(this,description+"");
+                if (description != null){
+                    mWeiboDialog = WeiboDialogUtils.createMesgDialog(this,description+"");
+                }else {
+                    mWeiboDialog = WeiboDialogUtils.createMesgDialog(this,"暂无介绍");
+                }
+
                 break;
             default:
                 break;

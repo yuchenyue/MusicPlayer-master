@@ -179,18 +179,13 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener, 
         listen_changpian = (ImageView) findViewById(R.id.listen_changpian);
         //歌名
         listen_title_tv = (TextView) findViewById(R.id.listen_title_tv);
-//        listen_title_tv.setText(music.getSong());
         //歌手
         Listen_artist_tv = (TextView) findViewById(R.id.listen_artist_tv);
-//        Listen_artist_tv.setText(music.getSonger());
         listen_current = (TextView) findViewById(R.id.listen_current);//目前播放时间
         //歌曲时长
         listen_length = (TextView) findViewById(R.id.listen_length);
-//        listen_length.setText(MusicUtil.formatTime(music.getDuration()));
         //进度条
         listen_jindutiao = (SeekBar) findViewById(R.id.listen_jindutiao);
-//        listen_jindutiao.setMax(music.getDuration());
-
 
         listen_pause = (ImageView) findViewById(R.id.listen_pause);
         if (MyApplication.isState() == true) {

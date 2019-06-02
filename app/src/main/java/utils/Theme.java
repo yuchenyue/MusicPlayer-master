@@ -29,7 +29,7 @@ public class Theme {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("使用须知");
         builder.setMessage("软件部分VIP以及付费歌曲能获取到但无法播放！！");
-        builder.setNegativeButton("bate-19.5.21",null);
+        builder.setNegativeButton("bate-19.6.2",null);
         builder.show();
     }
 }

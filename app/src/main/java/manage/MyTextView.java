@@ -1,7 +1,6 @@
 package manage;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -23,6 +22,4 @@ public class MyTextView extends TextView {
     public boolean isFocused(){
         return true;
     }
-//    protected void onFocusChanged(boolean focused, int direction,Rect previouslyFocusedRect) {
-//    }
 }

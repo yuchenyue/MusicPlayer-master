@@ -6,8 +6,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +19,6 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.HotRecyclerViewAdapter;
 import adapter.MoreRecyclerViewAdapter;
 import entity.LetMusic;
 import retrofit2.Call;
@@ -36,7 +35,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
     TextView tv_empty,text_style;
-    Button style_back;
+//    Button style_back;
     public FastScrollManager layoutManager;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
     String style;
@@ -49,24 +48,38 @@ public class MoreSongSheetActivity extends AppCompatActivity {
         Intent intent = getIntent();
         style = intent.getStringExtra("s");
         if (style == null){
+            tv_empty.setVisibility(View.VISIBLE);
             Log.i(TAG,"选择有误，请重新选择种类");
         }
+        Toolbar mToolbar=(Toolbar)findViewById(R.id.toolbar_more);
+        setSupportActionBar(mToolbar);
+        //设置是否有返回箭头
+        getSupportActionBar().setTitle(style);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         initView();
 
     }
 
     private void initView() {
-        text_style = (TextView) findViewById(R.id.text_style);
-        text_style.setText(style);
-        style_back = (Button) findViewById(R.id.style_back);
-        style_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        text_style = (TextView) findViewById(R.id.text_style);
+//        text_style.setText(style);
+//        style_back = (Button) findViewById(R.id.style_back);
+//        style_back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
         songsheet_fragment_list = (RecyclerView) findViewById(R.id.songsheet_fragment_list_more);
+        songsheet_fragment_list.setLayoutManager(layoutManager);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLasst = false;
 
@@ -136,23 +149,20 @@ public class MoreSongSheetActivity extends AppCompatActivity {
                     if (letMusicList == null ) {
                         tv_empty.setVisibility(View.VISIBLE);
                     } else {
-                        songsheet_fragment_list.setLayoutManager(layoutManager);
                         madapter = new MoreRecyclerViewAdapter(MoreSongSheetActivity.this, letMusicList);
                         songsheet_fragment_list.setAdapter(madapter);
                         madapter.setOnItemClickListener(MyItemClickListener);
                         let_list_refreshLayout.setRefreshing(false);
                         madapter.notifyDataSetChanged();
-                        Log.i(TAG, style + "歌曲显示了--" + letMusicList.size() + "首歌曲" + response.code());
                     }
                 }else {
-//                    let_list_refreshLayout.setRefreshing(false);
                     Toast.makeText(MoreSongSheetActivity.this,"服务器离线",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LetMusic> call, Throwable t) {
-//                tv_empty.setVisibility(View.VISIBLE);
+                tv_empty.setVisibility(View.VISIBLE);
             }
 
         });
@@ -176,9 +186,9 @@ public class MoreSongSheetActivity extends AppCompatActivity {
                     bundle.putString("id", letMusicList.get(position).getId());
                     bundle.putString("pic", letMusicList.get(position).getCoverImgUrl());
                     bundle.putString("description", letMusicList.get(position).getDescription());
+                    bundle.putString("name",letMusicList.get(position).getName());
                     intent.putExtras(bundle);
                     startActivity(intent);
-//                    Toast.makeText(MoreSongSheetActivity.this, "item" + (position + 1), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

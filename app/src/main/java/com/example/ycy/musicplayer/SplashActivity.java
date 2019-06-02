@@ -45,7 +45,6 @@ public class SplashActivity extends FragmentActivity {
         button_splash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//               into();
                 InMainActivity = true;
                 startActivity(new Intent(SplashActivity.this,LoginActivity.class));
                 finish();
@@ -65,7 +64,6 @@ public class SplashActivity extends FragmentActivity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case START_ACTIVITY:
-//                        into();
                         startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                         finish();
                         break;

@@ -1,20 +1,16 @@
 package fragment;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +37,6 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
     public List<Music> musics;
     public MusicAdapter musicAdapter;
     MainActivity mainActivity;
-//    public static int state = 2;
 
     @Override
     public void onAttach(Context context) {
@@ -95,7 +90,6 @@ public class LocalFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        mainActivity.design_bottom_sheet.setVisibility(View.VISIBLE);
         if (musics != null){
             MyApplication.setMusics(musics);
             MyApplication.setIsWeb(false);

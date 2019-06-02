@@ -30,7 +30,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import serviceApi.Api;
 import utils.HttpUtil;
-import utils.MyApplication;
 
 /**
  * Created by Administrator on 2019/1/14.
@@ -65,6 +64,7 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_network, container, false);
         web_musicList = view.findViewById(R.id.web_musicList);
         layoutManager = new LinearLayoutManager(getActivity());
+        web_musicList.setLayoutManager(layoutManager);
         search_text = view.findViewById(R.id.search_text);
         btn_search = view.findViewById(R.id.btn_search);
         btn_search.setOnClickListener(this);
@@ -72,6 +72,17 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
         item_search = view.findViewById(R.id.item_search);
         return view;
 
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     @Override
@@ -83,7 +94,6 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "可能没有这首歌", Toast.LENGTH_SHORT).show();
                     netMusicList.clear();
                     tv_empty_net.setVisibility(View.VISIBLE);
-                    Log.d(TAG, "可能没有这首歌" + search_s);
                 } else {
                     if (netMusicList == null) {
                         tv_empty_net.setVisibility(View.GONE);
@@ -93,14 +103,13 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
                         getNetMusicList(search_s);
                     }
                 }
-
-                Log.d(TAG, "NetworkFragment--22--" + search_s);
                 break;
             default:
                 break;
         }
 
     }
+
 
     private void getNetMusicList(String s) {
         Api mApi = HttpUtil.getWebMusic();
@@ -109,16 +118,10 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<NetMusic> call, final Response<NetMusic> response) {
                 if (response.code() == 200) {
-                    Log.d(TAG, "NetworkFragment--87--");
                     netMusicList = response.body().getData();
-                    //写个适配器
-                    web_musicList.setLayoutManager(layoutManager);
                     adapter = new WebRecyclerViewAdapter(getActivity(), netMusicList);
                     web_musicList.setAdapter(adapter);
-
                     adapter.setOnItemClickListener(MyItemClickListener);
-                    Log.i(TAG, "歌名--" + netMusicList.get(0).getName() + netMusicList.get(0).getSinger());
-                    Log.i(TAG, "显示了--" + netMusicList.size() + "首歌曲");
                 }else {
                     Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
                 }
@@ -126,13 +129,11 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(Call<NetMusic> call, Throwable t) {
+                Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void setNetMusicList(String s) {
-        getNetMusicList(s);
-    }
 
     private WebRecyclerViewAdapter.OnItemClickListener MyItemClickListener = new WebRecyclerViewAdapter.OnItemClickListener(){
 
