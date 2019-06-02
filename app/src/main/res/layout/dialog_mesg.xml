@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_mesg_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+
+        <LinearLayout
+            android:id="@+id/Lin"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tipTextView_mesg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxHeight="300dp"
+                    android:text="加载中..."
+                    android:textColor="#f0f0f0"
+                    android:textSize="15sp"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="#b3505050"
+                    android:scrollbars="vertical"/>
+        </LinearLayout>
+
+
+</LinearLayout>

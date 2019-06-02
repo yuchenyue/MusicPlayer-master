@@ -39,8 +39,7 @@ public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerView
     public void onBindViewHolder(NewRecyclerViewAdapter.ViewHolder holder, int position) {
         LetMusic.DataBean music = letMusicList.get(position);
         holder.let_name.setText(music.getName());
-        holder.let_author.setText("by " + music.getCreater());
-//        holder.let_songnum.setText("歌曲数：" + music.getTrackCount());
+        holder.let_songnum.setText("歌曲数：" + music.getTrackCount());
         holder.let_playnum.setText("播放量：" + music.getPlayCount());
         Glide.with(context)
                 .load(music.getCoverImgUrl())
@@ -61,15 +60,14 @@ public class NewRecyclerViewAdapter extends RecyclerView.Adapter<NewRecyclerView
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView let_name, let_author, let_songnum, let_playnum;
+        TextView let_name,let_songnum, let_playnum;
         ImageView image_let;
         Button item_let;
 
         public ViewHolder(View view) {
             super(view);
             let_name = view.findViewById(R.id.let_name);
-            let_author = view.findViewById(R.id.let_author);
-//            let_songnum = view.findViewById(R.id.let_songnum);
+            let_songnum = view.findViewById(R.id.let_songnum);
             let_playnum = view.findViewById(R.id.let_playnum);
             image_let = view.findViewById(R.id.image_let);
             item_let = view.findViewById(R.id.item_let);

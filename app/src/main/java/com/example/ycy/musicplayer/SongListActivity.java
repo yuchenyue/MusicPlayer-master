@@ -2,22 +2,32 @@ package com.example.ycy.musicplayer;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +35,7 @@ import java.util.List;
 
 import adapter.ListRecyclerViewAdapter;
 import entity.ListMusic;
+import manage.FastBlurUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,17 +47,15 @@ import utils.WeiboDialogUtils;
 
 public class SongListActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "SongListActivity";
-    private static final int SEARCH_MUSICLIST = 0x1;
-    ImageView list_img;//显示专辑图
-    TextView list_tv, tv_empty_list;//显示专辑简介
+    CollapsingToolbarLayout song_list_toolbarLayout;
+    TextView tv_empty_list,list_text;//显示专辑简介
     Button list_button;//播放列表按钮
     RecyclerView netsong_musicList;
     SwipeRefreshLayout song_list_refreshLayout;
     private List<ListMusic.DataBean> listMusicList = new ArrayList<>();
-    private List<ListMusic.DataBean> urllist = new ArrayList<>();
     public LinearLayoutManager layoutManager;
     ListRecyclerViewAdapter lisadapter;
-    String id, pic, description;
+    String id, pic, description,name;
     private int position;
     private Dialog mWeiboDialog;
     private Handler xHandler = new Handler();
@@ -60,6 +69,20 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
         id = getIntent().getStringExtra("id");//传进来的专辑的ID
         pic = getIntent().getStringExtra("pic");//传进来的专辑的图片
         description = getIntent().getStringExtra("description");//传进来的专辑的简介
+        name = getIntent().getStringExtra("name");//传进来的歌单名
+        Toolbar song_list_toolbar = (Toolbar) findViewById(R.id.song_list_toolbar);
+        setSupportActionBar(song_list_toolbar);
+        song_list_toolbar.setTitle("歌单");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        song_list_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        song_list_toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.song_list_toolbarLayout);
+        song_list_toolbarLayout.setTitle(name);
         intView();
         getNetMusicList();
     }
@@ -67,20 +90,20 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
     private void intView() {
         list_button = (Button) findViewById(R.id.list_button);
         list_button.setOnClickListener(this);
-        list_img = (ImageView) findViewById(R.id.list_img);
+        song_list_toolbarLayout.setOnClickListener(this);
         Glide.with(getApplicationContext())
                 .load(pic)
-                .error(R.drawable.default_cover)
-                .into(list_img);
-        list_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        list_tv = (TextView) findViewById(R.id.list_tv);
-        list_tv.setText(description);
-        list_tv.setMovementMethod(ScrollingMovementMethod.getInstance());
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        Bitmap bitmap = FastBlurUtil.doBlur(resource,25,false);
+                        Drawable drawable = new BitmapDrawable(bitmap);
+                        song_list_toolbarLayout.setBackground(drawable);
+                    }
+                });
+        list_text = (TextView) findViewById(R.id.list_text);
+        list_text.setText(description);
         tv_empty_list = (TextView) findViewById(R.id.tv_empty_list);
         netsong_musicList = (RecyclerView) findViewById(R.id.netsong_musicList);
         layoutManager = new LinearLayoutManager(MyApplication.getContext());
@@ -136,7 +159,7 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                 normalDialog.setPositiveButton("是",new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startMusic();//我想播放这个歌单的时候在吧这个列表传到MyApplicaton中
+                        startMusic();
                     }
                 });
                 normalDialog.setNeutralButton("否",new DialogInterface.OnClickListener(){
@@ -146,6 +169,11 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
                 normalDialog.show();
+                break;
+            case R.id.song_list_toolbarLayout:
+                mWeiboDialog = WeiboDialogUtils.createMesgDialog(this,description+"");
+                break;
+            default:
                 break;
         }
     }
@@ -167,7 +195,7 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                 WeiboDialogUtils.closeDialog(mWeiboDialog);
                 Toast.makeText(SongListActivity.this,"由于各种原因，该歌单有"+MyApplication.getListMusicList().size()+"首歌曲可播放！",Toast.LENGTH_LONG).show();
             }
-        },2000);
+        },3000);
 
     }
 

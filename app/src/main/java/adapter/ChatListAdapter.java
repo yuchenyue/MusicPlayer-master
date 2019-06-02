@@ -14,6 +14,9 @@ import java.util.List;
 
 import entity.ChatMessage;
 
+/**
+ * 机器人对话列表的适配器
+ */
 public class ChatListAdapter extends BaseAdapter {
 
     private List<ChatMessage> mList;
@@ -49,13 +52,13 @@ public class ChatListAdapter extends BaseAdapter {
             if (getItemViewType(position) == 0) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_left, parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.chat_time = (TextView) convertView.findViewById(R.id.chat_left_time);
-                viewHolder.chat_message = (TextView) convertView.findViewById(R.id.chat_left_message);
+                viewHolder.chat_time = convertView.findViewById(R.id.chat_left_time);
+                viewHolder.chat_message = convertView.findViewById(R.id.chat_left_message);
             } else {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_right, parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.chat_time = (TextView) convertView.findViewById(R.id.chat_right_time);
-                viewHolder.chat_message = (TextView) convertView.findViewById(R.id.chat_right_message);
+                viewHolder.chat_time = convertView.findViewById(R.id.chat_right_time);
+                viewHolder.chat_message = convertView.findViewById(R.id.chat_right_message);
             }
             convertView.setTag(viewHolder);
         } else {

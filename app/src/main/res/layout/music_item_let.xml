@@ -33,10 +33,10 @@
             android:singleLine="true"/>
 
         <TextView
-            android:id="@+id/let_author"
+            android:id="@+id/let_songnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="创建者"
+            android:text="歌曲数"
             android:textSize="12dp"
             android:textColor="@color/textcolor"
             android:layout_gravity="left|bottom"
@@ -50,17 +50,6 @@
             android:scrollHorizontally="true"
             android:singleLine="true"/>
 
-        <!--<TextView-->
-            <!--android:id="@+id/let_songnum"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="歌曲数"-->
-            <!--android:textSize="12sp"-->
-            <!--android:textColor="@color/textcolor"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_marginLeft="100dp"-->
-            <!--android:layout_marginBottom="5dp"/>-->
-
         <TextView
             android:id="@+id/let_playnum"
             android:layout_width="90dp"
@@ -73,17 +62,11 @@
             android:layout_centerHorizontal="true"
             android:paddingLeft="5dp"/>
 
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:layout_marginLeft="60dp"-->
-            <!--android:background="#d7d5d5"-->
-            <!--android:id="@+id/view"/>-->
         <Button
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:id="@+id/item_let"
-            android:layout_alignBottom="@+id/let_author"
+            android:layout_alignBottom="@+id/let_songnum"
             android:layout_alignEnd="@+id/image_let"
             android:background="@drawable/ic_music_list_icon_more"/>
 

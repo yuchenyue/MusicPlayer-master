@@ -181,6 +181,7 @@ public class hotFragment extends Fragment {
                     bundle.putString("id", letMusicList.get(position).getId());
                     bundle.putString("pic", letMusicList.get(position).getCoverImgUrl());
                     bundle.putString("description", letMusicList.get(position).getDescription());
+                    bundle.putString("name",letMusicList.get(position).getName());
                     intent.putExtras(bundle);
                     startActivity(intent);
                     Toast.makeText(getActivity(), "item" + (position + 1), Toast.LENGTH_SHORT).show();

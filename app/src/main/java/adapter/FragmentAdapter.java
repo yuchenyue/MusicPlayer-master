@@ -11,6 +11,7 @@ import entity.Music;
 
 /**
  * Created by Administrator on 2019/1/16.
+ * 主界面（MainActivity）中Fragment适配器
  */
 
 public class FragmentAdapter extends FragmentPagerAdapter {
