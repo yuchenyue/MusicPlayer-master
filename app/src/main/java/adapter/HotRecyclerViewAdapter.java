@@ -47,7 +47,7 @@ public class HotRecyclerViewAdapter extends RecyclerView.Adapter<HotRecyclerView
                 .into(holder.image_let);
     }
 
-
+    
 
     @Override
     public long getItemId(int position) {

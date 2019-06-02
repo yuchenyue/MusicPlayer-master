@@ -81,7 +81,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
         songsheet_fragment_list = (RecyclerView) findViewById(R.id.songsheet_fragment_list_more);
         songsheet_fragment_list.setLayoutManager(layoutManager);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            boolean isSlidingToLasst = false;
+            boolean isSlidingToLast = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -104,9 +104,9 @@ public class MoreSongSheetActivity extends AppCompatActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    isSlidingToLasst = true;
+                    isSlidingToLast = true;
                 } else {
-                    isSlidingToLasst = false;
+                    isSlidingToLast = false;
                 }
             }
         });
@@ -122,7 +122,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-                getNetMusicList(style);
+                getNetMusicList(style,0);
             }
         });
         to_top = (FloatingActionButton) findViewById(R.id.to_top_more);
@@ -134,13 +134,13 @@ public class MoreSongSheetActivity extends AppCompatActivity {
             }
         });
 
-        getNetMusicList(style);
+        getNetMusicList(style,0);
     }
 
 
-    private void getNetMusicList(final String style) {
+    private void getNetMusicList(final String style,int page) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null,30,null,style);
+        Call<LetMusic> musicCall = mApi.getLMusic(null,30,null,style,page);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {

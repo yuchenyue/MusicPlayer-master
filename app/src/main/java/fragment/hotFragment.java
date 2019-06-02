@@ -31,7 +31,8 @@ import utils.HttpUtil;
 
 public class hotFragment extends Fragment {
     private static final String TAG = "hotFragment";
-    public List<LetMusic.DataBean> letMusicList = new ArrayList<LetMusic.DataBean>();
+    View view;
+    public List<LetMusic.DataBean> letMusicList = new ArrayList<>();
     private HotRecyclerViewAdapter hadapter;
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
@@ -39,6 +40,7 @@ public class hotFragment extends Fragment {
     public FastScrollManager layoutManager;
     MainActivity mainActivity;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
+    int page = 0;
 
     public hotFragment() {
     }
@@ -51,24 +53,43 @@ public class hotFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hot, container, false);
+        view = inflater.inflate(R.layout.fragment_hot, container, false);
+//        letMusicList = null;
         tv_empty = view.findViewById(R.id.tv_empty_hot);
         songsheet_fragment_list = view.findViewById(R.id.songsheet_fragment_list_hot);
         layoutManager = new FastScrollManager(getActivity(), 3);
         songsheet_fragment_list.setLayoutManager(layoutManager);
+
+
+        let_list_refreshLayout = view.findViewById(R.id.hot_list_refreshLayout);
+        initView();
+        getNetMusicList(page);
+
+
+
+        return view;
+    }
+
+    public void initView() {
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            boolean isSlidingToLasst = false;
+            boolean isSlidingToLast = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 layoutManager = (FastScrollManager) recyclerView.getLayoutManager();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (firstVisibleItemPosition == 0) {
                         to_top.setVisibility(View.INVISIBLE);
                     } else {
                         to_top.setVisibility(View.VISIBLE);
+                    }
+                    if (lastVisibleItemPosition == (layoutManager.getItemCount() - 4) && isSlidingToLast == true) {
+                        page = page + 30;
+                        getNetMusicList(page);
+                        Toast.makeText(getContext(), "上拉加载", Toast.LENGTH_SHORT).show();
                     }
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     to_top.setVisibility(View.INVISIBLE);
@@ -80,14 +101,14 @@ public class hotFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    isSlidingToLasst = true;
+                    isSlidingToLast = true;
                 } else {
-                    isSlidingToLasst = false;
+                    isSlidingToLast = false;
                 }
             }
         });
+
         //下拉刷新
-        let_list_refreshLayout = view.findViewById(R.id.hot_list_refreshLayout);
         let_list_refreshLayout.setRefreshing(true);
         let_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -98,7 +119,7 @@ public class hotFragment extends Fragment {
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-                getNetMusicList();
+                getNetMusicList(page);
             }
         });
         to_top = view.findViewById(R.id.to_top_hot);
@@ -109,9 +130,8 @@ public class hotFragment extends Fragment {
                 songsheet_fragment_list.smoothScrollToPosition(0);
             }
         });
-        getNetMusicList();
-        return view;
     }
+
 
     @Override
     public void onDestroy() {
@@ -123,9 +143,9 @@ public class hotFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private void getNetMusicList() {
+    private void getNetMusicList(int page) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null, 15, "hot", null);
+        Call<LetMusic> musicCall = mApi.getLMusic(null, 30 + page, "hot", null, 0);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
@@ -172,7 +192,7 @@ public class hotFragment extends Fragment {
                     bundle.putString("id", letMusicList.get(position).getId());
                     bundle.putString("pic", letMusicList.get(position).getCoverImgUrl());
                     bundle.putString("description", letMusicList.get(position).getDescription());
-                    bundle.putString("name",letMusicList.get(position).getName());
+                    bundle.putString("name", letMusicList.get(position).getName());
                     intent.putExtras(bundle);
                     startActivity(intent);
                     break;

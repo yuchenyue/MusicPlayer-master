@@ -14,7 +14,7 @@ public interface Api {
     Call<NetMusic> getMusic(@Query("keyword") String keyword, @Query("type") String type, @Query("format") int format);
 
     @GET("netease/songList/hot")
-    Call<LetMusic> getLMusic(@Query("cat") String cat, @Query("pageSize") int pageSize, @Query("orderType") String orderType, @Query("categoryType") String categoryType);
+    Call<LetMusic> getLMusic(@Query("cat") String cat, @Query("pageSize") int pageSize, @Query("orderType") String orderType, @Query("categoryType") String categoryType, @Query("page") int page);
 
     @GET("netease/songList")
     Call<ListMusic> getListMusic(@Query("id") String id, @Query("format") int format);

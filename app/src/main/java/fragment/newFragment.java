@@ -63,7 +63,7 @@ public class newFragment extends Fragment {
         songsheet_fragment_list.setLayoutManager(layoutManager);
 
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            boolean isSlidingToLasst = false;
+            boolean isSlidingToLast = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -86,9 +86,9 @@ public class newFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    isSlidingToLasst = true;
+                    isSlidingToLast = true;
                 } else {
-                    isSlidingToLasst = false;
+                    isSlidingToLast = false;
                 }
             }
         });
@@ -105,7 +105,7 @@ public class newFragment extends Fragment {
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-                getNetMusicList();
+                getNetMusicList(0);
             }
         });
         to_top = view.findViewById(R.id.to_top);
@@ -117,7 +117,7 @@ public class newFragment extends Fragment {
             }
         });
 
-        getNetMusicList();
+        getNetMusicList(0);
         return view;
     }
 
@@ -131,9 +131,9 @@ public class newFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private void getNetMusicList() {
+    private void getNetMusicList(int page) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null,15,"new",null);
+        Call<LetMusic> musicCall = mApi.getLMusic(null,20,"new",null,page);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
