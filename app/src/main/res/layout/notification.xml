@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="110dp"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
@@ -21,9 +22,17 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="歌名"
-            android:textSize="15sp"/>
+            android:textColor="@color/textcolor"
+            android:textSize="15sp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:maxEms="5"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/tv_song_singer"
@@ -33,6 +42,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:text="歌名"
+            android:textColor="@color/textcolor"
             android:textSize="12sp"/>
 
         <LinearLayout
@@ -54,8 +64,8 @@
 
             <ImageButton
                 android:layout_marginEnd="10dp"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/ic_play"/>

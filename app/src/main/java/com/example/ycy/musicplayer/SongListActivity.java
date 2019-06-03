@@ -197,7 +197,6 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                 Toast.makeText(SongListActivity.this,"由于各种原因，该歌单有"+MyApplication.getListMusicList().size()+"首歌曲可播放！",Toast.LENGTH_LONG).show();
             }
         },3000);
-
     }
 
     /**

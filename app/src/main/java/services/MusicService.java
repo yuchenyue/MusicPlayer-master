@@ -1,5 +1,6 @@
 package services;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,8 +12,14 @@ import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import com.example.ycy.musicplayer.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -276,6 +283,7 @@ public class MusicService extends Service {
         intent.putExtras(bundle);
         intent.setAction("services.MusicService");
         sendBroadcast(intent);
+        sendCustomViewNotification();
     }
 
     /**
@@ -298,5 +306,34 @@ public class MusicService extends Service {
         }
     };
 
+    /**
+     * 监听播放，发送通知
+     */
+
+    //发送自定义视图通知
+    public void sendCustomViewNotification() {
+        //普通notification用到的视图
+        NotificationManagerCompat manager = NotificationManagerCompat.from(getBaseContext());
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+
+        RemoteViews normalView = new RemoteViews(getBaseContext().getPackageName(), R.layout.notification);
+//        normalView.setTextViewText(R.id.tv_song_name,);
+//        normalView.setTextViewText(R.id.tv_song_singer,musics.get(position).songer);
+//        normalView.setImageViewBitmap(R.id.no_imag,MusicUtil.getArtwork(getContext(),musics.get(position).getId(),musics.get(position).getAlbum_id(),true,true));
+
+        builder.setWhen(SystemClock.currentThreadTimeMillis())
+                .setSmallIcon(R.drawable.app)
+                .setCustomBigContentView(normalView)
+                .setOngoing(true)
+                .setWhen(System.currentTimeMillis())
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+//                .setContentIntent(pi)
+                .setAutoCancel(true);
+//                .setLargeIcon(MusicUtil.getArtwork(getContext(),musics.get(position).getId(),musics.get(position).getAlbum_id(),true,true))
+//                .setContentTitle(musics.get(position).song);
+
+
+        manager.notify(30, builder.build());
+    }
 
 }
