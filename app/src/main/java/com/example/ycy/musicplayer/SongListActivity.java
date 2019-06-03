@@ -100,6 +100,10 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
         tv_empty_list = (TextView) findViewById(R.id.tv_empty_list);
         netsong_musicList = (RecyclerView) findViewById(R.id.netsong_musicList);
         layoutManager = new LinearLayoutManager(MyApplication.getContext());
+        netsong_musicList.setLayoutManager(layoutManager);
+        lisadapter = new ListRecyclerViewAdapter(SongListActivity.this, listMusicList);
+        netsong_musicList.setAdapter(lisadapter);
+        lisadapter.setOnItemClickListener(MyItemClickListener);
         song_list_refreshLayout = (SwipeRefreshLayout) findViewById(R.id.song_list_refreshLayout);
         song_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -125,12 +129,11 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
         musicCall.enqueue(new retrofit2.Callback<ListMusic>() {
             @Override
             public void onResponse(Call<ListMusic> call, Response<ListMusic> response) {
-                listMusicList = response.body().getData();
-                netsong_musicList.setLayoutManager(layoutManager);
-                lisadapter = new ListRecyclerViewAdapter(SongListActivity.this, listMusicList);
-                netsong_musicList.setAdapter(lisadapter);
-                lisadapter.setOnItemClickListener(MyItemClickListener);
-                tv_empty_list.setVisibility(View.GONE);
+                listMusicList.addAll(response.body().getData());
+                lisadapter.notifyDataSetChanged();
+                if (listMusicList.size()!=0){
+                    tv_empty_list.setVisibility(View.GONE);
+                }
             }
             @Override
             public void onFailure(Call<ListMusic> call, Throwable t) {

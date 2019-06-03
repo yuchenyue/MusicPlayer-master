@@ -34,11 +34,11 @@ public class MoreSongSheetActivity extends AppCompatActivity {
     private MoreRecyclerViewAdapter madapter;
     RecyclerView songsheet_fragment_list;
     SwipeRefreshLayout let_list_refreshLayout;
-    TextView tv_empty,text_style;
-//    Button style_back;
+    TextView tv_empty;
     public FastScrollManager layoutManager;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
     String style;
+    int page = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +69,11 @@ public class MoreSongSheetActivity extends AppCompatActivity {
     }
 
     private void initView() {
-//        text_style = (TextView) findViewById(R.id.text_style);
-//        text_style.setText(style);
-//        style_back = (Button) findViewById(R.id.style_back);
-//        style_back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
         songsheet_fragment_list = (RecyclerView) findViewById(R.id.songsheet_fragment_list_more);
         songsheet_fragment_list.setLayoutManager(layoutManager);
+        madapter = new MoreRecyclerViewAdapter(MoreSongSheetActivity.this, letMusicList);
+        songsheet_fragment_list.setAdapter(madapter);
+        madapter.setOnItemClickListener(MyItemClickListener);
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLast = false;
 
@@ -88,11 +82,17 @@ public class MoreSongSheetActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
                 layoutManager = (FastScrollManager) recyclerView.getLayoutManager();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (firstVisibleItemPosition == 0) {
                         to_top.setVisibility(View.INVISIBLE);
                     } else {
                         to_top.setVisibility(View.VISIBLE);
+                    }
+                    if (lastVisibleItemPosition == (layoutManager.getItemCount() - 1) && isSlidingToLast == true) {
+                        page = page + 20;
+                        getNetMusicList(style,page);
+                        Toast.makeText(getApplicationContext(), "上拉加载", Toast.LENGTH_SHORT).show();
                     }
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     to_top.setVisibility(View.INVISIBLE);
@@ -122,7 +122,7 @@ public class MoreSongSheetActivity extends AppCompatActivity {
                         let_list_refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
-                getNetMusicList(style,0);
+                getNetMusicList(style,page);
             }
         });
         to_top = (FloatingActionButton) findViewById(R.id.to_top_more);
@@ -140,20 +140,16 @@ public class MoreSongSheetActivity extends AppCompatActivity {
 
     private void getNetMusicList(final String style,int page) {
         Api mApi = HttpUtil.getWebMusic();
-        Call<LetMusic> musicCall = mApi.getLMusic(null,30,null,style,page);
+        Call<LetMusic> musicCall = mApi.getLMusic(null,20,null,style,page);
         musicCall.enqueue(new retrofit2.Callback<LetMusic>() {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
                 if (response.code() == 200) {
-                    letMusicList = response.body().getData();
+                    letMusicList.addAll(response.body().getData());
+                    let_list_refreshLayout.setRefreshing(false);
+                    madapter.notifyDataSetChanged();
                     if (letMusicList == null ) {
                         tv_empty.setVisibility(View.VISIBLE);
-                    } else {
-                        madapter = new MoreRecyclerViewAdapter(MoreSongSheetActivity.this, letMusicList);
-                        songsheet_fragment_list.setAdapter(madapter);
-                        madapter.setOnItemClickListener(MyItemClickListener);
-                        let_list_refreshLayout.setRefreshing(false);
-                        madapter.notifyDataSetChanged();
                     }
                 }else {
                     Toast.makeText(MoreSongSheetActivity.this,"服务器离线",Toast.LENGTH_SHORT).show();

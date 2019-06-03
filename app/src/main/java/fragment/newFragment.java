@@ -47,6 +47,7 @@ public class newFragment extends Fragment {
     public FastScrollManager layoutManager;
     MainActivity mainActivity;
     com.getbase.floatingactionbutton.FloatingActionButton to_top;
+    int page = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -62,6 +63,21 @@ public class newFragment extends Fragment {
         layoutManager = new FastScrollManager(getActivity(),3);
         songsheet_fragment_list.setLayoutManager(layoutManager);
 
+        ladapter = new NewRecyclerViewAdapter(getActivity(), letMusicList);
+        songsheet_fragment_list.setAdapter(ladapter);
+        ladapter.setOnItemClickListener(MyItemClickListener);
+
+        let_list_refreshLayout = view.findViewById(R.id.let_list_refreshLayout);
+        let_list_refreshLayout.setRefreshing(true);
+
+        to_top = view.findViewById(R.id.to_top);
+
+        initView();
+        getNetMusicList(page);
+        return view;
+    }
+
+    public void  initView(){
         songsheet_fragment_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isSlidingToLast = false;
 
@@ -70,11 +86,17 @@ public class newFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 layoutManager = (FastScrollManager) recyclerView.getLayoutManager();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (firstVisibleItemPosition == 0) {
                         to_top.setVisibility(View.INVISIBLE);
                     } else {
                         to_top.setVisibility(View.VISIBLE);
+                    }
+                    if (lastVisibleItemPosition == (layoutManager.getItemCount() - 1) && isSlidingToLast == true) {
+                        page = page + 20;
+                        getNetMusicList(page);
+                        Toast.makeText(getContext(), "上拉加载", Toast.LENGTH_SHORT).show();
                     }
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     to_top.setVisibility(View.INVISIBLE);
@@ -93,8 +115,6 @@ public class newFragment extends Fragment {
             }
         });
         //下拉刷新
-        let_list_refreshLayout = view.findViewById(R.id.let_list_refreshLayout);
-        let_list_refreshLayout.setRefreshing(true);
         let_list_refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -108,7 +128,6 @@ public class newFragment extends Fragment {
                 getNetMusicList(0);
             }
         });
-        to_top = view.findViewById(R.id.to_top);
         //点击返回顶部
         to_top.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,9 +135,6 @@ public class newFragment extends Fragment {
                 songsheet_fragment_list.smoothScrollToPosition(0);
             }
         });
-
-        getNetMusicList(0);
-        return view;
     }
 
     @Override
@@ -138,16 +154,12 @@ public class newFragment extends Fragment {
             @Override
             public void onResponse(Call<LetMusic> call, Response<LetMusic> response) {
                 if (response.code() == 200) {
-                    letMusicList = response.body().getData();
+                    letMusicList.addAll(response.body().getData());
+                    let_list_refreshLayout.setRefreshing(false);
+                    ladapter.notifyDataSetChanged();
                     if (letMusicList == null){
                         tv_empty.setVisibility(View.VISIBLE);
                     }
-
-                    ladapter = new NewRecyclerViewAdapter(getActivity(), letMusicList);
-                    songsheet_fragment_list.setAdapter(ladapter);
-                    ladapter.setOnItemClickListener(MyItemClickListener);
-                    let_list_refreshLayout.setRefreshing(false);
-                    ladapter.notifyDataSetChanged();
                 }else {
                     Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
                 }

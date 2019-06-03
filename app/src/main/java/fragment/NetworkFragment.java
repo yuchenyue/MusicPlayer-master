@@ -63,13 +63,17 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_network, container, false);
         web_musicList = view.findViewById(R.id.web_musicList);
-        layoutManager = new LinearLayoutManager(getActivity());
-        web_musicList.setLayoutManager(layoutManager);
         search_text = view.findViewById(R.id.search_text);
         btn_search = view.findViewById(R.id.btn_search);
-        btn_search.setOnClickListener(this);
         tv_empty_net = view.findViewById(R.id.tv_empty_net);
         item_search = view.findViewById(R.id.item_search);
+
+        layoutManager = new LinearLayoutManager(getActivity());
+        web_musicList.setLayoutManager(layoutManager);
+        adapter = new WebRecyclerViewAdapter(getActivity(), netMusicList);
+        web_musicList.setAdapter(adapter);
+        adapter.setOnItemClickListener(MyItemClickListener);
+        btn_search.setOnClickListener(this);
         return view;
 
     }
@@ -91,17 +95,18 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_search:
                 search_s = search_text.getText().toString().trim();
                 if (TextUtils.isEmpty(search_s)) {
-                    Toast.makeText(getActivity(), "可能没有这首歌", Toast.LENGTH_SHORT).show();
-                    netMusicList.clear();
+                    Toast.makeText(getActivity(), "请输入搜索内容", Toast.LENGTH_SHORT).show();
                     tv_empty_net.setVisibility(View.VISIBLE);
                 } else {
-                    if (netMusicList == null) {
-                        tv_empty_net.setVisibility(View.GONE);
-                        getNetMusicList(search_s);
-                    } else {
-                        tv_empty_net.setVisibility(View.GONE);
-                        getNetMusicList(search_s);
-                    }
+                    netMusicList.clear();
+                    getNetMusicList(search_s);
+//                    if (netMusicList == null) {
+//                        tv_empty_net.setVisibility(View.GONE);
+//                        getNetMusicList(search_s);
+//                    } else {
+//                        tv_empty_net.setVisibility(View.GONE);
+//                        getNetMusicList(search_s);
+//                    }
                 }
                 break;
             default:
@@ -118,18 +123,21 @@ public class NetworkFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<NetMusic> call, final Response<NetMusic> response) {
                 if (response.code() == 200) {
-                    netMusicList = response.body().getData();
-                    adapter = new WebRecyclerViewAdapter(getActivity(), netMusicList);
-                    web_musicList.setAdapter(adapter);
-                    adapter.setOnItemClickListener(MyItemClickListener);
+                    netMusicList.addAll(response.body().getData());
+                    adapter.notifyDataSetChanged();
+                    if (netMusicList.size() != 0){
+                        tv_empty_net.setVisibility(View.GONE);
+                    }
                 }else {
-                    Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged();
+                    tv_empty_net.setVisibility(View.VISIBLE);
+                    Toast.makeText(getActivity(),"暂无搜索结果",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<NetMusic> call, Throwable t) {
-                Toast.makeText(getActivity(),"服务器离线",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"服务器离线1",Toast.LENGTH_SHORT).show();
             }
         });
     }
