@@ -22,8 +22,10 @@ public class Music {
     public String album;
     //专辑图片ID
     public long album_id;
+    //歌词
+    public String lrc;
 
-    public Music(long id, String song, String songer, String url, int duration, long size, String album, long album_id) {
+    public Music(long id, String song, String songer, String url, int duration, long size, String album, long album_id,String lrc) {
         super();
         this.id = id;
         this.song = song;
@@ -33,6 +35,7 @@ public class Music {
         this.size = size;
         this.album = album;
         this.album_id = album_id;
+        this.lrc = lrc;
     }
 
     public Music() {
@@ -101,5 +104,13 @@ public class Music {
 
     public void setAlbum_id(long album_id) {
         this.album_id = album_id;
+    }
+
+    public String getLrc() {
+        return lrc;
+    }
+
+    public void setLrc(String lrc) {
+        this.lrc = lrc;
     }
 }

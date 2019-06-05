@@ -283,7 +283,7 @@ public class MusicService extends Service {
         intent.putExtras(bundle);
         intent.setAction("services.MusicService");
         sendBroadcast(intent);
-        sendCustomViewNotification();
+//        sendCustomViewNotification();
     }
 
     /**

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -233,6 +234,7 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
                     showMultiBtnDialog(position);
                     break;
                 default:
+                    showlrc(position);
                     Toast.makeText(SongListActivity.this,listMusicList.get(position).getName(),Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -254,6 +256,20 @@ public class SongListActivity extends BaseActivity implements View.OnClickListen
 //                    Toast.makeText(SongListActivity.this,"收藏",Toast.LENGTH_SHORT).show();
 //                }
 //            });
+            normalDialog.show();
+        }
+
+        public void showlrc(final int position){
+            AlertDialog.Builder normalDialog = new AlertDialog.Builder(SongListActivity.this);
+            normalDialog.setTitle(listMusicList.get(position).getName());
+            normalDialog.setMessage(listMusicList.get(position).getLrc());
+            Log.d(TAG,listMusicList.get(position).getLrc()+"");
+            normalDialog.setPositiveButton("下载",new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(SongListActivity.this,"下载",Toast.LENGTH_SHORT).show();
+                }
+            });
             normalDialog.show();
         }
     };
