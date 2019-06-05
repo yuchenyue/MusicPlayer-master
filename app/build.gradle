@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "27.0.3"
+//    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.example.ycy.musicplayer"
         minSdkVersion 23
@@ -20,29 +20,24 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    compile 'com.android.support:design:26.0.0-alpha1'
-    testCompile 'junit:junit:4.12'
-    compile 'com.getbase:floatingactionbutton:1.9.0'
-    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    implementation 'com.android.support:appcompat-v7:26.0.0'
+    implementation 'com.android.support:design:26.0.0'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.getbase:floatingactionbutton:1.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.1.2'
     // Retrofit库
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.2'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.0.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
 
-    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-    compile 'org.adw.library:discrete-seekbar:1.0.0'
-    compile 'com.google.code.gson:gson:2.7'
+    implementation 'com.android.support:recyclerview-v7:26.0.0'
+    implementation 'org.adw.library:discrete-seekbar:1.0.0'
     //圆形化图片
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
 }
