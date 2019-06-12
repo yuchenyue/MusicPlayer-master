@@ -298,7 +298,7 @@ public class MusicService extends Service {
                 info = connectivityManager.getActiveNetworkInfo();
                 if (info != null && info.isAvailable()) {
                     String name = info.getTypeName();
-                    Toast.makeText(context, "当前网络名称：" + name, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "当前网络名称：" + name, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "当前无可用网络，请检查网络状态！", Toast.LENGTH_SHORT).show();
                 }
