@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import services.MusicService;
 import utils.MyApplication;
@@ -21,6 +22,7 @@ public class SplashActivity extends FragmentActivity {
 
     private static final String TAG = "SplashActivity";
     private Button button_splash;
+    private ImageView splash_imageView;
     private boolean InMainActivity = false;
     private static final int START_ACTIVITY = 0x1;
 
@@ -50,6 +52,7 @@ public class SplashActivity extends FragmentActivity {
                 finish();
             }
         });
+        splash_imageView = findViewById(R.id.splash_imageView);
         handler.sendEmptyMessageDelayed(START_ACTIVITY, 3000);
     }
 

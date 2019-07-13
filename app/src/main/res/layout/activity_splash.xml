@@ -4,8 +4,13 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/huanying1"
     tools:context="com.example.ycy.musicplayer.SplashActivity">
+
+    <ImageView
+        android:id="@+id/splash_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/huanying1"/>
 
     <Button
         android:id="@+id/button_splash"
